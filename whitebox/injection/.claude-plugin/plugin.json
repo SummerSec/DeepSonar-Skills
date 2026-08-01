@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepFlowHunter"
+               },
+    "description":  "白盒注入审计（SQL/命令/NoSQL/LDAP）",
+    "name":  "whitebox-injection",
+    "version":  "0.1.0"
+}

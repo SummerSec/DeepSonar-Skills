@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepFlowHunter"
+               },
+    "description":  "黑盒任意文件读写与危险上传挖掘",
+    "name":  "blackbox-file-access",
+    "version":  "0.1.0"
+}

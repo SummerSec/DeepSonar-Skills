@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepFlowHunter"
+               },
+    "description":  "白盒远程代码执行审计",
+    "name":  "whitebox-rce",
+    "version":  "0.1.0"
+}

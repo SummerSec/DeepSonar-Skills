@@ -1,0 +1,111 @@
+{
+  "name": "dfh-security-skills",
+  "description": "DeepFlowHunter security skills: vulnerability definitions module + whitebox/blackbox plugins by vuln type (report Critical/High only).",
+  "owner": {
+    "name": "DeepFlowHunter"
+  },
+  "plugins": [
+    {
+      "name": "vuln-definitions",
+      "description": "漏洞定义模块：每类漏洞定义与严重/高危/中危/无危害判定标准（白盒黑盒共用）。",
+      "version": "0.1.0",
+      "source": "./vuln-definitions"
+    },
+    {
+      "name": "whitebox-injection",
+      "description": "白盒注入审计（SQL/命令/NoSQL/LDAP）",
+      "version": "0.1.0",
+      "source": "./whitebox/injection"
+    },
+    {
+      "name": "blackbox-injection",
+      "description": "黑盒注入挖掘（SQL/命令/NoSQL）",
+      "version": "0.1.0",
+      "source": "./blackbox/injection"
+    },
+    {
+      "name": "whitebox-rce",
+      "description": "白盒远程代码执行审计",
+      "version": "0.1.0",
+      "source": "./whitebox/rce"
+    },
+    {
+      "name": "blackbox-rce",
+      "description": "黑盒远程代码执行挖掘",
+      "version": "0.1.0",
+      "source": "./blackbox/rce"
+    },
+    {
+      "name": "whitebox-ssrf",
+      "description": "白盒 SSRF 审计",
+      "version": "0.1.0",
+      "source": "./whitebox/ssrf"
+    },
+    {
+      "name": "blackbox-ssrf",
+      "description": "黑盒 SSRF 挖掘",
+      "version": "0.1.0",
+      "source": "./blackbox/ssrf"
+    },
+    {
+      "name": "whitebox-authz",
+      "description": "白盒鉴权与认证绕过审计",
+      "version": "0.1.0",
+      "source": "./whitebox/authz"
+    },
+    {
+      "name": "blackbox-authz",
+      "description": "黑盒鉴权与认证绕过挖掘",
+      "version": "0.1.0",
+      "source": "./blackbox/authz"
+    },
+    {
+      "name": "whitebox-deserialization",
+      "description": "白盒不安全反序列化审计",
+      "version": "0.1.0",
+      "source": "./whitebox/deserialization"
+    },
+    {
+      "name": "blackbox-deserialization",
+      "description": "黑盒不安全反序列化挖掘",
+      "version": "0.1.0",
+      "source": "./blackbox/deserialization"
+    },
+    {
+      "name": "whitebox-file-access",
+      "description": "白盒任意文件读写与危险上传审计",
+      "version": "0.1.0",
+      "source": "./whitebox/file-access"
+    },
+    {
+      "name": "blackbox-file-access",
+      "description": "黑盒任意文件读写与危险上传挖掘",
+      "version": "0.1.0",
+      "source": "./blackbox/file-access"
+    },
+    {
+      "name": "whitebox-xxe",
+      "description": "白盒 XXE 审计",
+      "version": "0.1.0",
+      "source": "./whitebox/xxe"
+    },
+    {
+      "name": "blackbox-xxe",
+      "description": "黑盒 XXE 挖掘",
+      "version": "0.1.0",
+      "source": "./blackbox/xxe"
+    },
+    {
+      "name": "whitebox-secrets",
+      "description": "白盒高危密钥与凭据暴露审计",
+      "version": "0.1.0",
+      "source": "./whitebox/secrets"
+    },
+    {
+      "name": "blackbox-secrets",
+      "description": "黑盒高危密钥与凭据暴露挖掘",
+      "version": "0.1.0",
+      "source": "./blackbox/secrets"
+    }
+  ]
+}

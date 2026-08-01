@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepFlowHunter"
+               },
+    "description":  "白盒鉴权与认证绕过审计",
+    "name":  "whitebox-authz",
+    "version":  "0.1.0"
+}

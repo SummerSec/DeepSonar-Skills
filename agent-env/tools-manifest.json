@@ -1,0 +1,99 @@
+{
+  "version": "0.1.0",
+  "description": "黑盒 agent 镜像预装工具清单。DeepFlowHunter / agentbox 构建时按此安装；skill 不得假设可任意联网装包。",
+  "base_image": "debian:bookworm-slim",
+  "path_hint": "/opt/dfh-tools/bin",
+  "tools": [
+    {
+      "name": "curl",
+      "purpose": "HTTP 手工请求",
+      "install": "apt",
+      "plugins": ["*"]
+    },
+    {
+      "name": "httpx",
+      "purpose": "探活、指纹、批量 HTTP",
+      "install": "go-install-or-release",
+      "source": "projectdiscovery/httpx",
+      "plugins": ["*"]
+    },
+    {
+      "name": "ffuf",
+      "purpose": "scope 内目录/参数 fuzz",
+      "install": "go-install-or-release",
+      "source": "ffuf/ffuf",
+      "plugins": ["injection", "authz", "file-access", "ssrf", "rce"]
+    },
+    {
+      "name": "nuclei",
+      "purpose": "模板扫描（结果必须人工升到 Critical/High）",
+      "install": "go-install-or-release",
+      "source": "projectdiscovery/nuclei",
+      "plugins": ["*"]
+    },
+    {
+      "name": "sqlmap",
+      "purpose": "已授权 SQL 注入验证",
+      "install": "pip-or-apt",
+      "source": "sqlmapproject/sqlmap",
+      "plugins": ["injection"]
+    },
+    {
+      "name": "interactsh-client",
+      "purpose": "OOB 回调（SSRF/XXE/RCE 盲测）",
+      "install": "go-install-or-release",
+      "source": "projectdiscovery/interactsh",
+      "plugins": ["ssrf", "xxe", "rce", "injection"]
+    },
+    {
+      "name": "jwt_tool",
+      "purpose": "JWT 算法/密钥问题验证",
+      "install": "pip",
+      "source": "ticarpi/jwt_tool",
+      "plugins": ["authz"]
+    },
+    {
+      "name": "gitleaks",
+      "purpose": "响应/JS/泄露文件中的密钥扫描",
+      "install": "release",
+      "source": "gitleaks/gitleaks",
+      "plugins": ["secrets"]
+    },
+    {
+      "name": "trufflehog",
+      "purpose": "密钥有效性检测（慎用，遵守授权）",
+      "install": "release",
+      "source": "trufflesecurity/trufflehog",
+      "plugins": ["secrets"]
+    },
+    {
+      "name": "ysoserial",
+      "purpose": "Java 反序列化 gadget 生成（仅验证环境）",
+      "install": "jar-release",
+      "source": "frohoff/ysoserial",
+      "plugins": ["deserialization"]
+    },
+    {
+      "name": "jq",
+      "purpose": "JSON 处理",
+      "install": "apt",
+      "plugins": ["*"]
+    },
+    {
+      "name": "python3",
+      "purpose": "轻量验证脚本",
+      "install": "apt",
+      "plugins": ["*"]
+    },
+    {
+      "name": "ripgrep",
+      "purpose": "响应与本地缓存文本搜索",
+      "install": "apt",
+      "plugins": ["*"]
+    }
+  ],
+  "network_policy": {
+    "default": "allow-target-and-oob-only",
+    "notes": "生产调度器应限制出网到目标 scope + OOB 域名；禁止随意访问公网软件源以外的目标。"
+  }
+}

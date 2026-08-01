@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepFlowHunter"
+               },
+    "description":  "白盒任意文件读写与危险上传审计",
+    "name":  "whitebox-file-access",
+    "version":  "0.1.0"
+}

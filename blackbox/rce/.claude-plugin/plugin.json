@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepFlowHunter"
+               },
+    "description":  "黑盒远程代码执行挖掘",
+    "name":  "blackbox-rce",
+    "version":  "0.1.0"
+}

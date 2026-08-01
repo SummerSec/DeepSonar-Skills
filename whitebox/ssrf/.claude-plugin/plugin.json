@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepFlowHunter"
+               },
+    "description":  "白盒 SSRF 审计",
+    "name":  "whitebox-ssrf",
+    "version":  "0.1.0"
+}
