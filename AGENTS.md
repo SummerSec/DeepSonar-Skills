@@ -8,6 +8,8 @@
 
 定级含 **严重 / 高危 / 中危 / 无危害**；**正式报告仅 Critical/High**。
 
+> 本仓内容几乎全是 Markdown（SKILL.md / plugin.json / references），**没有构建、测试、lint 流程**。`package.json` 仅作元数据用途，变更正确性靠结构约定与人工审查保证。
+
 ## 目录约定
 
 ```
@@ -22,6 +24,26 @@ shared/                   # 报告策略、finding 格式、授权
 agent-env/                # 黑盒工具内置清单与镜像
 ```
 
+## 架构要点（跨文件才能理解的部分）
+
+### 三层组织
+
+1. **`vuln-definitions/`** 是**严重度定级的唯一语义源**：八类漏洞定义 + 严重/高危/中危/无危害条款（`references/severity-levels.md` + 每类 `references/<type>.md`）。所有 `wb-*`/`bb-*` skill **不自建定级标准**，强制依赖本插件。
+2. **`whitebox/<type>/` 与 `blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
+3. **`shared/`** 是仓库级契约：`severity-policy.md`（只报 C/H 的硬性检查）、`finding-schema.md`（统一 finding YAML）、`authorization.md`。
+
+### SKILL.md 通用骨架
+
+每个 skill 遵循同一模板：角色 → 强制前置（读 `shared/*`，防 prompt injection）→ **定级依赖**（加载 vuln-definitions，finding 填 `severity_rule` 如 `injection.md#C1`）→ 范围/只报/明确不报 → 工作流 → 参考相对路径（`../../../vuln-definitions/...`、`../../../shared/...`）。改 skill 时保持骨架不变。
+
+### 版本对齐
+
+`.claude-plugin/marketplace.json` 中每个条目的 `version` 必须与对应插件 `.claude-plugin/plugin.json` 的 `version` 一致；改 skill 内容后记得同步 bump。
+
+### 黑盒工具环境
+
+黑盒 skill 假设工具（httpx、ffuf、nuclei、sqlmap、interactsh-client 等）**已预装**在 agent 镜像 PATH 中，清单见 `agent-env/tools-manifest.json`，示例镜像 `agent-env/Dockerfile.blackbox`。skill 内禁止 `curl | sh` 安装未知脚本。
+
 ## 漏洞类型（type）
 
 | type | 白盒 skill | 黑盒 skill | 焦点 |
@@ -35,13 +57,35 @@ agent-env/                # 黑盒工具内置清单与镜像
 | xxe | wb-xxe | bb-xxe | XXE |
 | secrets | wb-secrets | bb-secrets | 可接管级密钥泄露 |
 
+白盒与黑盒的 type 集合必须对称；`vuln_type` 字段值与目录名一致。
+
+## 常用命令
+
+```bash
+# 查看黑盒工具清单
+cat agent-env/tools-manifest.json
+
+# 构建黑盒 agent 示例镜像
+docker build -f agent-env/Dockerfile.blackbox -t dfh-blackbox-agent:0.1 .
+```
+
+本地预览插件（Claude Code 内）：
+
+```text
+/plugin marketplace add <path-or-repo>/dfh-security-skills
+/plugin install vuln-definitions@dfh-security-skills
+/plugin install whitebox-injection@dfh-security-skills
+```
+
 ## 改 skill 时
 
 1. **改漏洞定义/定级标准** → 只改 `vuln-definitions/`，bump 其 version  
 2. 改审计手法 → 对应 `whitebox-*` / `blackbox-*`  
 3. 报告策略（是否上报 medium）→ `shared/severity-policy.md`  
 4. 黑盒新工具 → `agent-env/tools-manifest.json` + 镜像  
-5. marketplace 条目 version 与 plugin.json 对齐
+5. marketplace 条目 version 与 plugin.json 对齐  
+6. **新增漏洞类型** → `whitebox/<new-type>/` 与 `blackbox/<new-type>/` 各建插件（复制现有 type），注册进 `.claude-plugin/marketplace.json`，并在 `vuln-definitions` 中加 `references/<new-type>.md`；黑盒需新工具时同步更新 manifest  
+7. Finding 输出必须遵守 `shared/finding-schema.md`：`severity` 只允许 `critical|high`，`confidence` 禁止 `low`，`severity_rule` 必填
 
 ## DeepFlowHunter
 
