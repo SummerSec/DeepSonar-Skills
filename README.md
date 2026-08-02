@@ -1,6 +1,6 @@
-# dfh-security-skills
+# DeepSonar-Skills
 
-DeepFlowHunter / Agent 用的 **高危安全技能仓**（单仓库）：
+DeepSonar / Agent 用的 **高危安全技能仓**（单仓库）：
 
 | 维度 | 说明 |
 |------|------|
@@ -17,7 +17,7 @@ DeepFlowHunter / Agent 用的 **高危安全技能仓**（单仓库）：
 ## 仓库结构
 
 ```
-dfh-security-skills/
+DeepSonar-Skills/
 ├── vuln-definitions/            # 【独立插件】漏洞定义模块（必装）
 │   └── skills/vuln-definitions/
 │       ├── SKILL.md
@@ -71,20 +71,20 @@ dfh-security-skills/
 ### Claude Code marketplace
 
 ```text
-/plugin marketplace add <your-org>/dfh-security-skills
-/plugin install vuln-definitions@dfh-security-skills   # 必装：定级基线
-/plugin install whitebox-injection@dfh-security-skills
-/plugin install blackbox-injection@dfh-security-skills
+/plugin marketplace add <your-org>/DeepSonar-Skills
+/plugin install vuln-definitions@DeepSonar-Skills   # 必装：定级基线
+/plugin install whitebox-injection@DeepSonar-Skills
+/plugin install blackbox-injection@DeepSonar-Skills
 # 按需安装其他 type
 ```
 
-### DeepFlowHunter skill_sources
+### DeepSonar skill_sources
 
 ```http
 POST /skill-sources
 {
-  "name": "dfh-security-skills",
-  "repo_url": "https://github.com/<org>/dfh-security-skills.git",
+  "name": "DeepSonar-Skills",
+  "repo_url": "https://github.com/<org>/DeepSonar-Skills.git",
   "branch": "main"
 }
 ```
@@ -97,7 +97,7 @@ POST /skill-sources
 ### 本地 skills CLI
 
 ```bash
-npx skills add <org>/dfh-security-skills --skill wb-injection
+npx skills add <org>/DeepSonar-Skills --skill wb-injection
 ```
 
 ---
@@ -123,7 +123,7 @@ npx skills add <org>/dfh-security-skills --skill wb-injection
 cat agent-env/tools-manifest.json
 
 # 构建示例镜像（请在 CI 中 pin 版本并校验）
-docker build -f agent-env/Dockerfile.blackbox -t dfh-blackbox-agent:0.1 .
+docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 ```
 
 白盒审计可继续使用 **断网** 沙箱；黑盒必须使用带工具且可访问目标的镜像。

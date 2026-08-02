@@ -1,8 +1,8 @@
 {
   "version": "0.1.0",
-  "description": "黑盒 agent 镜像预装工具清单。DeepFlowHunter / agentbox 构建时按此安装；skill 不得假设可任意联网装包。",
+  "description": "黑盒 agent 镜像预装工具清单。DeepSonar / agentbox 构建时按此安装；skill 不得假设可任意联网装包。",
   "base_image": "debian:bookworm-slim",
-  "path_hint": "/opt/dfh-tools/bin",
+  "path_hint": "/opt/deepsonar-tools/bin",
   "tools": [
     {
       "name": "curl",

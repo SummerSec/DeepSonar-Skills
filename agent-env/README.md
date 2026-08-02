@@ -7,10 +7,10 @@
 | 文件 | 用途 |
 |------|------|
 | `tools-manifest.json` | 工具清单、用途、关联 plugin |
-| `Dockerfile.blackbox` | 示例镜像；可并入 DFH `agent-harness/image.mjs` |
+| `Dockerfile.blackbox` | 示例镜像；可并入 DeepSonar `agent-harness/image.mjs` |
 | `install-tools.sh` | 可选：在已有 Debian/Ubuntu 环境安装工具 |
 
-## 与 DeepFlowHunter 集成
+## 与 DeepSonar 集成
 
 1. 将 `tools-manifest.json` 中的工具 pin 版本后写入沙箱镜像构建脚本。  
 2. 黑盒 job 使用 **允许访问目标 scope + OOB** 的网络策略（与白盒默认断网不同）。  

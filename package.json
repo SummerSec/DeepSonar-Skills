@@ -1,8 +1,8 @@
 {
-  "name": "dfh-security-skills",
+  "name": "DeepSonar-Skills",
   "version": "0.1.0",
   "private": true,
-  "description": "DeepFlowHunter 高危安全技能仓：白盒代码审计 + 黑盒漏洞挖掘，均按漏洞类型分 plugin，仅 Critical/High。",
+  "description": "DeepSonar 高危安全技能仓：白盒代码审计 + 黑盒漏洞挖掘，均按漏洞类型分 plugin，仅 Critical/High。",
   "license": "Apache-2.0",
   "keywords": [
     "agent-skills",
@@ -10,6 +10,6 @@
     "whitebox",
     "blackbox",
     "security",
-    "deepflowhunter"
+    "deepsonar"
   ]
 }

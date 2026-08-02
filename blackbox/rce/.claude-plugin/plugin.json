@@ -1,6 +1,6 @@
 {
     "author":  {
-                   "name":  "DeepFlowHunter"
+                   "name":  "DeepSonar"
                },
     "description":  "黑盒远程代码执行挖掘",
     "name":  "blackbox-rce",

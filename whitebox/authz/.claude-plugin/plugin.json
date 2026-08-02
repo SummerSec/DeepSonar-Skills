@@ -1,6 +1,6 @@
 {
     "author":  {
-                   "name":  "DeepFlowHunter"
+                   "name":  "DeepSonar"
                },
     "description":  "白盒鉴权与认证绕过审计",
     "name":  "whitebox-authz",

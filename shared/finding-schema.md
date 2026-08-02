@@ -1,7 +1,7 @@
 # Finding 输出格式
 
 所有 skill 的漏洞报告必须使用下列结构（YAML 或等价 JSON）。  
-与 DeepFlowHunter SARIF 对齐时，将 `rule_id` → ruleId，`severity` → level，其余进 properties。
+与 DeepSonar SARIF 对齐时，将 `rule_id` → ruleId，`severity` → level，其余进 properties。
 
 ```yaml
 id: VULN-001

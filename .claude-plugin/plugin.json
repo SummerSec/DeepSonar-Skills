@@ -1,8 +1,8 @@
 {
-  "name": "dfh-security-skills",
+  "name": "DeepSonar-Skills",
   "version": "0.1.0",
-  "description": "DFH security skills marketplace root. Install per-vuln-type whitebox/blackbox plugins.",
+  "description": "DeepSonar security skills marketplace root. Install per-vuln-type whitebox/blackbox plugins.",
   "author": {
-    "name": "DeepFlowHunter"
+    "name": "DeepSonar"
   }
 }

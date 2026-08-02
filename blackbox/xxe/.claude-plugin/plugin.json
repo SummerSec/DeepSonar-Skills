@@ -1,6 +1,6 @@
 {
     "author":  {
-                   "name":  "DeepFlowHunter"
+                   "name":  "DeepSonar"
                },
     "description":  "黑盒 XXE 挖掘",
     "name":  "blackbox-xxe",

@@ -1,6 +1,6 @@
 {
     "author":  {
-                   "name":  "DeepFlowHunter"
+                   "name":  "DeepSonar"
                },
     "description":  "黑盒注入挖掘（SQL/命令/NoSQL）",
     "name":  "blackbox-injection",

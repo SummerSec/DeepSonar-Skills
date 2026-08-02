@@ -1,6 +1,6 @@
 {
     "author":  {
-                   "name":  "DeepFlowHunter"
+                   "name":  "DeepSonar"
                },
     "description":  "黑盒不安全反序列化挖掘",
     "name":  "blackbox-deserialization",

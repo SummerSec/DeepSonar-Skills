@@ -1,13 +1,13 @@
 # 黑盒漏洞挖掘 agent 环境（工具内置）
 # 构建示例:
-#   docker build -f agent-env/Dockerfile.blackbox -t dfh-blackbox-agent:0.1 .
+#   docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 #
-# 与 DeepFlowHunter agentbox 集成时，可将 RUN 段合并进 agent-harness/image.mjs
+# 与 DeepSonar agentbox 集成时，可将 RUN 段合并进 agent-harness/image.mjs
 
 FROM debian:bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    PATH="/opt/dfh-tools/bin:${PATH}" \
+    PATH="/opt/deepsonar-tools/bin:${PATH}" \
     GOPATH=/opt/go \
     GOTOOLCHAIN=local
 
@@ -16,22 +16,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       ripgrep unzip wget openjdk-17-jre-headless \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /opt/dfh-tools/bin /opt/dfh-tools/lib
+RUN mkdir -p /opt/deepsonar-tools/bin /opt/deepsonar-tools/lib
 
 # --- 固定版本安装（CI 可改为 checksum 校验）---
 # 说明: 下列为示意安装；生产镜像请 pin 版本并校验 sha256。
 
 # sqlmap
 RUN pip3 install --break-system-packages sqlmap \
-    && ln -sf "$(command -v sqlmap)" /opt/dfh-tools/bin/sqlmap || true
+    && ln -sf "$(command -v sqlmap)" /opt/deepsonar-tools/bin/sqlmap || true
 
 # jwt_tool
-RUN git clone --depth 1 https://github.com/ticarpi/jwt_tool.git /opt/dfh-tools/lib/jwt_tool \
-    && printf '#!/bin/sh\nexec python3 /opt/dfh-tools/lib/jwt_tool/jwt_tool.py "$@"\n' > /opt/dfh-tools/bin/jwt_tool \
-    && chmod +x /opt/dfh-tools/bin/jwt_tool
+RUN git clone --depth 1 https://github.com/ticarpi/jwt_tool.git /opt/deepsonar-tools/lib/jwt_tool \
+    && printf '#!/bin/sh\nexec python3 /opt/deepsonar-tools/lib/jwt_tool/jwt_tool.py "$@"\n' > /opt/deepsonar-tools/bin/jwt_tool \
+    && chmod +x /opt/deepsonar-tools/bin/jwt_tool
 
 # ProjectDiscovery / ffuf 等 Go 工具：构建机有网络时安装 release
-# 若离线构建，请预先放入 /opt/dfh-tools/bin/
+# 若离线构建，请预先放入 /opt/deepsonar-tools/bin/
 ARG HTTPX_VERSION=latest
 ARG NUCLEI_VERSION=latest
 ARG FFUF_VERSION=latest
@@ -41,13 +41,13 @@ ARG GITLEAKS_VERSION=latest
 RUN set -eux; \
     arch="$(uname -m)"; \
     case "$arch" in x86_64) a=amd64;; aarch64) a=arm64;; *) a=amd64;; esac; \
-    echo "Install platform binaries for $a manually or via CI cache into /opt/dfh-tools/bin"; \
+    echo "Install platform binaries for $a manually or via CI cache into /opt/deepsonar-tools/bin"; \
     # 占位: 构建流水线应下载 httpx/nuclei/ffuf/interactsh-client/gitleaks/trufflehog \
     true
 
 # ysoserial jar（可选）
-# ADD ysoserial.jar /opt/dfh-tools/lib/ysoserial.jar
-# RUN printf '#!/bin/sh\nexec java -jar /opt/dfh-tools/lib/ysoserial.jar "$@"\n' > /opt/dfh-tools/bin/ysoserial && chmod +x /opt/dfh-tools/bin/ysoserial
+# ADD ysoserial.jar /opt/deepsonar-tools/lib/ysoserial.jar
+# RUN printf '#!/bin/sh\nexec java -jar /opt/deepsonar-tools/lib/ysoserial.jar "$@"\n' > /opt/deepsonar-tools/bin/ysoserial && chmod +x /opt/deepsonar-tools/bin/ysoserial
 
 WORKDIR /workspace
 CMD ["sleep", "infinity"]

@@ -5,10 +5,10 @@
 ## 安装
 
 ```text
-/plugin install vuln-definitions@dfh-security-skills
+/plugin install vuln-definitions@DeepSonar-Skills
 ```
 
-或 DeepFlowHunter Profile **始终勾选** 本模块 + 任一 `whitebox-*` / `blackbox-*`。
+或 DeepSonar Profile **始终勾选** 本模块 + 任一 `whitebox-*` / `blackbox-*`。
 
 ## 内容
 

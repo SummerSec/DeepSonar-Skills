@@ -1,8 +1,8 @@
 {
-  "name": "dfh-security-skills",
-  "description": "DeepFlowHunter security skills: vulnerability definitions module + whitebox/blackbox plugins by vuln type (report Critical/High only).",
+  "name": "DeepSonar-Skills",
+  "description": "DeepSonar security skills: vulnerability definitions module + whitebox/blackbox plugins by vuln type (report Critical/High only).",
   "owner": {
-    "name": "DeepFlowHunter"
+    "name": "DeepSonar"
   },
   "plugins": [
     {

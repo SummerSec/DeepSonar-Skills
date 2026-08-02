@@ -1,4 +1,4 @@
-# dfh-security-skills
+# DeepSonar-Skills
 
 单一技能仓：
 
@@ -66,15 +66,15 @@ agent-env/                # 黑盒工具内置清单与镜像
 cat agent-env/tools-manifest.json
 
 # 构建黑盒 agent 示例镜像
-docker build -f agent-env/Dockerfile.blackbox -t dfh-blackbox-agent:0.1 .
+docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 ```
 
 本地预览插件（Claude Code 内）：
 
 ```text
-/plugin marketplace add <path-or-repo>/dfh-security-skills
-/plugin install vuln-definitions@dfh-security-skills
-/plugin install whitebox-injection@dfh-security-skills
+/plugin marketplace add <path-or-repo>/DeepSonar-Skills
+/plugin install vuln-definitions@DeepSonar-Skills
+/plugin install whitebox-injection@DeepSonar-Skills
 ```
 
 ## 改 skill 时
@@ -87,7 +87,7 @@ docker build -f agent-env/Dockerfile.blackbox -t dfh-blackbox-agent:0.1 .
 6. **新增漏洞类型** → `whitebox/<new-type>/` 与 `blackbox/<new-type>/` 各建插件（复制现有 type），注册进 `.claude-plugin/marketplace.json`，并在 `vuln-definitions` 中加 `references/<new-type>.md`；黑盒需新工具时同步更新 manifest  
 7. Finding 输出必须遵守 `shared/finding-schema.md`：`severity` 只允许 `critical|high`，`confidence` 禁止 `low`，`severity_rule` 必填
 
-## DeepFlowHunter
+## DeepSonar
 
 - `POST /skill-sources` 指向本仓 URL，sync 后 catalog 按 plugin 分组  
 - Profile 按角色勾选：`whitebox-*` 给 audit/explore，`blackbox-*` 给 blackbox/test  

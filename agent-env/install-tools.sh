@@ -3,7 +3,7 @@
 # 用法: sudo ./agent-env/install-tools.sh
 set -euo pipefail
 
-BIN="${DFH_TOOLS_BIN:-/opt/dfh-tools/bin}"
+BIN="${DEEPSONAR_TOOLS_BIN:-/opt/deepsonar-tools/bin}"
 mkdir -p "$BIN"
 export PATH="$BIN:$PATH"
 
@@ -13,12 +13,12 @@ apt-get install -y --no-install-recommends \
 
 pip3 install --break-system-packages sqlmap || pip3 install sqlmap
 
-if [[ ! -d /opt/dfh-tools/lib/jwt_tool ]]; then
-  git clone --depth 1 https://github.com/ticarpi/jwt_tool.git /opt/dfh-tools/lib/jwt_tool
+if [[ ! -d /opt/deepsonar-tools/lib/jwt_tool ]]; then
+  git clone --depth 1 https://github.com/ticarpi/jwt_tool.git /opt/deepsonar-tools/lib/jwt_tool
 fi
 cat > "$BIN/jwt_tool" <<'EOF'
 #!/bin/sh
-exec python3 /opt/dfh-tools/lib/jwt_tool/jwt_tool.py "$@"
+exec python3 /opt/deepsonar-tools/lib/jwt_tool/jwt_tool.py "$@"
 EOF
 chmod +x "$BIN/jwt_tool"
 
