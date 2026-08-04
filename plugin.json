@@ -1,7 +1,7 @@
 {
   "name": "DeepSonar-Skills",
-  "version": "0.1.0",
-  "description": "White-box audit and black-box hunting skills by vulnerability type (Critical/High only).",
+  "version": "0.2.0",
+  "description": "Vulnerability definitions, CVSS v4.0 scoring, white-box audit and black-box hunting skills by vuln type (Critical/High only).",
   "author": {
     "name": "DeepSonar",
     "url": "https://github.com/SummerSec/DeepSonar"

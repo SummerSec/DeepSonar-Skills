@@ -1,6 +1,6 @@
 {
   "name": "DeepSonar-Skills",
-  "description": "DeepSonar security skills: vulnerability definitions module + whitebox/blackbox plugins by vuln type (report Critical/High only).",
+  "description": "DeepSonar security skills: vulnerability definitions, CVSS v4.0 scoring, and whitebox/blackbox plugins by vuln type (report Critical/High only).",
   "owner": {
     "name": "DeepSonar"
   },
@@ -8,7 +8,7 @@
     {
       "name": "vuln-definitions",
       "description": "漏洞定义模块：每类漏洞定义与严重/高危/中危/无危害判定标准（白盒黑盒共用）。",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "source": "./vuln-definitions"
     },
     {
