@@ -1,0 +1,8 @@
+{
+  "name": "vuln-scoring",
+  "version": "0.1.0",
+  "description": "漏洞评分模块：基于 CVSS v4.0 计算利用/影响分，映射 DeepSonar 四级定级，并补充 EPSS/SSVC/KEV 优先级指引。",
+  "author": {
+    "name": "DeepSonar"
+  }
+}

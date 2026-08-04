@@ -12,6 +12,12 @@
       "source": "./vuln-definitions"
     },
     {
+      "name": "vuln-scoring",
+      "description": "漏洞评分模块：CVSS v4.0 利用/影响评分、向量串、与 DeepSonar 四级映射，以及 EPSS/SSVC/KEV 优先级。",
+      "version": "0.1.0",
+      "source": "./vuln-scoring"
+    },
+    {
       "name": "whitebox-injection",
       "description": "白盒注入审计（SQL/命令/NoSQL/LDAP）",
       "version": "0.1.0",

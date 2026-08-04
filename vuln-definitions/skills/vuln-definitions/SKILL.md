@@ -75,11 +75,12 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 | Plugin | 关系 |
 |--------|------|
 | `vuln-definitions`（本插件） | **定义与定级** 唯一语义源 |
+| `vuln-scoring` | 定性定级后做 **CVSS v4.0** 定量分与优先级；不替代本插件条款 |
 | `whitebox-*` | 用本定义做源码审计；只产出 critical/high finding |
 | `blackbox-*` | 用本定义做动态验证；只产出 critical/high finding |
 | `shared/severity-policy.md` | 仓库报告策略（只报 C/H）；细节以本插件为准 |
 
-Profile 建议：**凡启用任一 wb-*/bb-*，同时启用本插件**。
+Profile 建议：**凡启用任一 wb-*/bb-*，同时启用本插件**；需要向量/分数时再启用 `vuln-scoring`。
 
 ## 输出（仅定级场景）
 

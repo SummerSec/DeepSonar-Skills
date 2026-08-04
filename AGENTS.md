@@ -3,10 +3,11 @@
 单一技能仓：
 
 1. **vuln-definitions** — 漏洞定义模块（独立 plugin，语义基线）  
-2. **whitebox-*** — 白盒审计（按漏洞类型）  
-3. **blackbox-*** — 黑盒挖掘（按漏洞类型，工具在 agent-env）  
+2. **vuln-scoring** — 漏洞评分模块（CVSS v4.0 + EPSS/SSVC/KEV 优先级）  
+3. **whitebox-*** — 白盒审计（按漏洞类型）  
+4. **blackbox-*** — 黑盒挖掘（按漏洞类型，工具在 agent-env）  
 
-定级含 **严重 / 高危 / 中危 / 无危害**；**正式报告仅 Critical/High**。
+定级含 **严重 / 高危 / 中危 / 无危害**；**正式报告仅 Critical/High**。定量分默认 **CVSS v4.0**。
 
 > 本仓内容几乎全是 Markdown（SKILL.md / plugin.json / references），**没有构建、测试、lint 流程**。`package.json` 仅作元数据用途，变更正确性靠结构约定与人工审查保证。
 
@@ -14,6 +15,7 @@
 
 ```
 vuln-definitions/         # 独立插件：定义 + 四级定级
+vuln-scoring/             # 独立插件：CVSS v4.0 评分 + 优先级
 whitebox/<type>/          # 白盒 plugin
   .claude-plugin/plugin.json
   skills/wb-<type>/SKILL.md
@@ -29,8 +31,9 @@ agent-env/                # 黑盒工具内置清单与镜像
 ### 三层组织
 
 1. **`vuln-definitions/`** 是**严重度定级的唯一语义源**：八类漏洞定义 + 严重/高危/中危/无危害条款（`references/severity-levels.md` + 每类 `references/<type>.md`）。所有 `wb-*`/`bb-*` skill **不自建定级标准**，强制依赖本插件。
-2. **`whitebox/<type>/` 与 `blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
-3. **`shared/`** 是仓库级契约：`severity-policy.md`（只报 C/H 的硬性检查）、`finding-schema.md`（统一 finding YAML）、`authorization.md`。
+2. **`vuln-scoring/`** 是**定量评分与利用优先级**模块：主标准 **CVSS v4.0**（向量 + Base/Threat/Environmental），并映射回四级定级；可选 EPSS / SSVC / CISA KEV 做修复排序。**不替代**定性条款，finding 的 `severity` 仍以 definitions 为准。
+3. **`whitebox/<type>/` 与 `blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
+4. **`shared/`** 是仓库级契约：`severity-policy.md`（只报 C/H 的硬性检查）、`finding-schema.md`（统一 finding YAML，含 `cvss` 块）、`authorization.md`。
 
 ### SKILL.md 通用骨架
 
@@ -74,18 +77,20 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 ```text
 /plugin marketplace add <path-or-repo>/DeepSonar-Skills
 /plugin install vuln-definitions@DeepSonar-Skills
+/plugin install vuln-scoring@DeepSonar-Skills
 /plugin install whitebox-injection@DeepSonar-Skills
 ```
 
 ## 改 skill 时
 
 1. **改漏洞定义/定级标准** → 只改 `vuln-definitions/`，bump 其 version  
-2. 改审计手法 → 对应 `whitebox-*` / `blackbox-*`  
-3. 报告策略（是否上报 medium）→ `shared/severity-policy.md`  
-4. 黑盒新工具 → `agent-env/tools-manifest.json` + 镜像  
-5. marketplace 条目 version 与 plugin.json 对齐  
-6. **新增漏洞类型** → `whitebox/<new-type>/` 与 `blackbox/<new-type>/` 各建插件（复制现有 type），注册进 `.claude-plugin/marketplace.json`，并在 `vuln-definitions` 中加 `references/<new-type>.md`；黑盒需新工具时同步更新 manifest  
-7. Finding 输出必须遵守 `shared/finding-schema.md`：`severity` 只允许 `critical|high`，`confidence` 禁止 `low`，`severity_rule` 必填
+2. **改 CVSS/利用评分/优先级标准** → 只改 `vuln-scoring/`，bump 其 version  
+3. 改审计手法 → 对应 `whitebox-*` / `blackbox-*`  
+4. 报告策略（是否上报 medium）→ `shared/severity-policy.md`  
+5. 黑盒新工具 → `agent-env/tools-manifest.json` + 镜像  
+6. marketplace 条目 version 与 plugin.json 对齐  
+7. **新增漏洞类型** → `whitebox/<new-type>/` 与 `blackbox/<new-type>/` 各建插件（复制现有 type），注册进 `.claude-plugin/marketplace.json`，并在 `vuln-definitions` 中加 `references/<new-type>.md`；黑盒需新工具时同步更新 manifest；可在 `vuln-scoring/.../vector-examples.md` 补示例向量  
+8. Finding 输出必须遵守 `shared/finding-schema.md`：`severity` 只允许 `critical|high`，`confidence` 禁止 `low`，`severity_rule` 必填；推荐附 CVSS v4.0 `cvss` 块
 
 ## DeepSonar
 

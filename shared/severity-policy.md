@@ -19,6 +19,7 @@
 2. 打开对应 `references/<vuln_type>.md`  
 3. 按 Critical → High → Medium → None 匹配  
 4. 仅 `critical`/`high` 且 `confidence` 为 high/medium 时，交给 `wb-*` / `bb-*` 输出  
+5. （推荐）加载 **vuln-scoring**，按 **CVSS v4.0** 补全 finding 的 `cvss` 向量与分数；评分不得单独把 medium 抬进正式报告  
 
 ## 硬性检查（报告前）
 
