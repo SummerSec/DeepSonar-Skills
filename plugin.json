@@ -1,6 +1,6 @@
 {
   "name": "DeepSonar-Skills",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Vulnerability definitions, CVSS v4.0 scoring, white-box audit and black-box hunting skills by vuln type (Critical/High only).",
   "author": {
     "name": "DeepSonar",

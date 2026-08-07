@@ -1,6 +1,6 @@
 {
   "name": "vuln-definitions",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "漏洞定义模块：每类漏洞的定义，以及严重 / 高危 / 中危 / 无危害的判定标准。白盒与黑盒审计的共用语义基线。OpenHarmony 系统类审计加载 references/openharmony.md。",
   "author": {
     "name": "DeepSonar"
