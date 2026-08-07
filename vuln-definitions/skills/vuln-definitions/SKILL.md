@@ -1,6 +1,6 @@
 ---
 name: vuln-definitions
-description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserialization/file-access/xxe/secrets 等漏洞类型的含义，以及严重(Critical)、高危(High)、中危(Medium)、无危害(None) 的判定标准。白盒/黑盒审计、定级、争议裁决时必须加载。"
+description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserialization/file-access/xxe/secrets 等漏洞类型的含义，以及严重(Critical)、高危(High)、中危(Medium)、无危害(None) 的判定标准。白盒/黑盒审计、定级、争议裁决时必须加载。OpenHarmony 等系统类审计时加载 references/openharmony.md 对齐系统语义。"
 ---
 
 # 漏洞定义模块
@@ -22,6 +22,7 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 - 发现可疑点后：对照该类的四级标准定级  
 - 白盒与黑盒结论冲突：以本模块定义裁决  
 - 用户问「这算高危还是中危」：直接引用对应 `references/*.md`
+- 审计目标为 OpenHarmony / 类移动 OS 系统层、框架层、应用层：加载 `references/openharmony.md` 对齐系统语义
 
 ## 全局等级定义
 
@@ -30,11 +31,11 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 | 等级 | 代码 | 含义（一句话） |
 |------|------|----------------|
 | 严重 | `critical` | 可现实利用，导致系统/租户/身份/核心数据 **沦陷级** 后果 |
-| 高危 | `high` | 可现实利用，导致 **重大** 数据/权限/链式沦陷风险，但未达全系统一键沦陷 |
+| 高危 | `high` | 可现实利用，导致 **重大** 数据/权限/链式沦陷，但未达全系统一键沦陷 |
 | 中危 | `medium` | 真实弱点，影响 **有限** 或利用链不完整，单独不足以重大事故 |
-| 无危害 | `none` | 不构成可利用安全问题，或仅理论/不可达/已有效防护 |
+| 无危害 | `none` | 不构成可利用安全漏洞，或仅理论/不可达/已有效防护 |
 
-**定级原则（强制）**：
+**定级规则（强制）**：
 
 1. 先看 **实际可达的影响**，再看 **攻击者前提**（未认证 > 普通用户 > 管理员）。  
 2. 同一技术缺陷，因前提与影响不同，可跨等级。  
@@ -57,6 +58,14 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 | xxe | [xxe.md](references/xxe.md) | XML 外部实体/危险解析导致读文件或 SSRF |
 | secrets | [secrets.md](references/secrets.md) | 敏感凭据暴露且可被滥用 |
 
+### 系统专项（OpenHarmony / 类移动 OS）
+
+审计目标为 **OpenHarmony 标准/小型/轻量系统**（系统服务层、框架层、应用层）时，加载：
+
+**[references/openharmony.md](references/openharmony.md)** — 官方四档（严重/高危/中危/低危）危害条款（`openharmony.md#C1…H1…M1…L1…`）、术语（远程/本地/TCB/特权进程/普通应用进程/受限进程）、级别调整 10 条（`#ADJ1…10`）、无效漏洞 9 条（`#INV1…9`）与案例锚点。
+
+系统语义与本文件全局条款冲突时，**以 `openharmony.md` 为准**。
+
 跨类型边界与「优先归哪类」见 **[references/classification.md](references/classification.md)**。
 
 ## 定级工作流（每次 finding 必走）
@@ -65,9 +74,10 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 1. 确认现象是否符合某一类「漏洞定义」→ 否则 none
 2. 写清：攻击者是谁、需要什么前提、能造成什么影响
 3. 打开该类 references/<type>.md，从上到下匹配 Critical → High → Medium → None
-4. 命中最高且证据充分的一级；证据不足则降级或标 none
-5. 若最终为 critical/high 且 confidence≥medium → 可交由对应 wb-*/bb-* 输出 finding
-6. 若为 medium/none → 本仓默认不写入 findings（可在进度文件记一句否决原因）
+4. 系统类目标（OpenHarmony 等）→ 先对齐 `references/openharmony.md` 的系统条款与无效条款，再回到类型细则
+5. 命中最高且证据充分的一级；证据不足则降级或标 none
+6. 若最终为 critical/high 且 confidence≥medium → 可交由对应 wb-*/bb-* 输出 finding
+7. 若为 medium/none → 本仓默认不写入 findings（可在进度文件记一句否决原因）
 ```
 
 ## 与其它 plugin 的关系
@@ -80,7 +90,7 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 | `blackbox-*` | 用本定义做动态验证；只产出 critical/high finding |
 | `shared/severity-policy.md` | 仓库报告策略（只报 C/H）；细节以本插件为准 |
 
-Profile 建议：**凡启用任一 wb-*/bb-*，同时启用本插件**；需要向量/分数时再启用 `vuln-scoring`。
+Profile 配置：**凡启用任一 wb-*/bb-*，必须同时启用本插件**；需要向量/分数时再启用 `vuln-scoring`。
 
 ## 输出（仅定级场景）
 

@@ -3,9 +3,10 @@
 单一技能仓：
 
 1. **vuln-definitions** — 漏洞定义模块（独立 plugin，语义基线）  
-2. **vuln-scoring** — 漏洞评分模块（CVSS v4.0 + EPSS/SSVC/KEV 优先级）  
-3. **whitebox-*** — 白盒审计（按漏洞类型）  
-4. **blackbox-*** — 黑盒挖掘（按漏洞类型，工具在 agent-env）  
+2. **vuln-definitions-oh** — OpenHarmony 系统漏洞定义指南（独立 plugin，系统四档/无效条款）  
+3. **vuln-scoring** — 漏洞评分模块（CVSS v4.0 + EPSS/SSVC/KEV 优先级）  
+4. **whitebox-*** — 白盒审计（按漏洞类型）  
+5. **blackbox-*** — 黑盒挖掘（按漏洞类型，工具在 agent-env）  
 
 定级含 **严重 / 高危 / 中危 / 无危害**；**正式报告仅 Critical/High**。定量分默认 **CVSS v4.0**。
 
@@ -15,6 +16,7 @@
 
 ```
 vuln-definitions/         # 独立插件：定义 + 四级定级
+vuln-definitions-oh/      # 独立插件：OpenHarmony 系统漏洞定义指南（系统四档/无效条款/案例）
 vuln-scoring/             # 独立插件：CVSS v4.0 评分 + 优先级
 whitebox/<type>/          # 白盒 plugin
   .claude-plugin/plugin.json
@@ -30,7 +32,8 @@ agent-env/                # 黑盒工具内置清单与镜像
 
 ### 三层组织
 
-1. **`vuln-definitions/`** 是**严重度定级的唯一语义源**：八类漏洞定义 + 严重/高危/中危/无危害条款（`references/severity-levels.md` + 每类 `references/<type>.md`）。所有 `wb-*`/`bb-*` skill **不自建定级标准**，强制依赖本插件。
+1. **`vuln-definitions/`** 是**严重度定级的唯一语义源**：八类漏洞定义 + 严重/高危/中危/无危害条款（`references/severity-levels.md` + 每类 `references/<type>.md`）。所有 `wb-*`/`bb-*` skill **不自建定级标准**，强制依赖本插件。  
+   OpenHarmony 等系统类审计时：类型定义仍以本插件为准；**系统四档/无效条款** 加载 `vuln-definitions/.../references/openharmony.md`，或直接用独立插件 `vuln-definitions-oh/`（更完整：术语/调整/案例）。
 2. **`vuln-scoring/`** 是**定量评分与利用优先级**模块：主标准 **CVSS v4.0**（向量 + Base/Threat/Environmental），并映射回四级定级；可选 EPSS / SSVC / CISA KEV 做修复排序。**不替代**定性条款，finding 的 `severity` 仍以 definitions 为准。
 3. **`whitebox/<type>/` 与 `blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
 4. **`shared/`** 是仓库级契约：`severity-policy.md`（只报 C/H 的硬性检查）、`finding-schema.md`（统一 finding YAML，含 `cvss` 块）、`authorization.md`。
@@ -78,12 +81,14 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 /plugin marketplace add <path-or-repo>/DeepSonar-Skills
 /plugin install vuln-definitions@DeepSonar-Skills
 /plugin install vuln-scoring@DeepSonar-Skills
+/plugin install vuln-definitions-oh@DeepSonar-Skills   # OpenHarmony 系统审计时
 /plugin install whitebox-injection@DeepSonar-Skills
 ```
 
 ## 改 skill 时
 
 1. **改漏洞定义/定级标准** → 只改 `vuln-definitions/`，bump 其 version  
+1b. **改 OpenHarmony 系统四档/无效条款** → 只改 `vuln-definitions-oh/`（及 `vuln-definitions/.../references/openharmony.md`），同步 bump 两处 version  
 2. **改 CVSS/利用评分/优先级标准** → 只改 `vuln-scoring/`，bump 其 version  
 3. 改审计手法 → 对应 `whitebox-*` / `blackbox-*`  
 4. 报告策略（是否上报 medium）→ `shared/severity-policy.md`  

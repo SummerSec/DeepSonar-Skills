@@ -1,0 +1,8 @@
+{
+  "name": "vuln-definitions-oh",
+  "version": "0.1.0",
+  "description": "OpenHarmony 系统漏洞定义指南：官方四档（严重/高危/中危/低危）危害条款、级别调整 10 条、无效漏洞 9 条、术语与真实复现案例对照。系统服务层/框架层/应用层审计的定级语义源。",
+  "author": {
+    "name": "DeepSonar"
+  }
+}
