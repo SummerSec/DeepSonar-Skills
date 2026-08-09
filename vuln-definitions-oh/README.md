@@ -9,7 +9,7 @@
 /plugin install vuln-definitions-oh@DeepSonar-Skills
 ```
 
-审计时建议同时安装 `vuln-definitions`（八类机理）+ `vuln-scoring`（CVSS v4.0）。
+审计时建议同时安装 `vuln-definitions`（八类机理）+ `vuln-scoring`（CVSS v3.1/v4.0）。
 
 ## 内容
 
@@ -28,7 +28,7 @@
 - **Phone OS 共性优先**：类型体系不局限某一厂商历史披露；OH 是落地目标与四档口径来源  
 - **只报 C/H**：正式报告仅 `critical`/`high`  
 - **无效即停**：强前提 / INV 直接 `none`  
-- **定性定量分离**：本插件定性；CVSS v4.0 由 `vuln-scoring` 负责  
+- **定性定量分离**：本插件定性；CVSS（默认 v3.1，可按需 v4.0）由 `vuln-scoring` 负责  
 - **不收录具体 case**：无 CVE、无历史公告摘录  
 
 ## 与 vuln-definitions 的关系

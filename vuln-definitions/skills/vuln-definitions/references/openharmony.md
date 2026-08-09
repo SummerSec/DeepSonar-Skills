@@ -150,5 +150,5 @@ OH 组件索引见同插件 `attack-surfaces.md`；影响语映射见 `severity-
 - 定级前先跑 Gate 检查：**攻击者是谁 → 默认与可达 → 直接实害 → 利用链闭合**；任一不过 → 判 `none`/对内（详见 `vuln-definitions-oh` 的 `gates.md`）。
 - finding 的 `severity_rule` 填本文件锚点，如 `openharmony.md#H5`、`openharmony.md#INV1`、`openharmony.md#ADJ3`。
 - 报告至少写清：影响与根因（版本/模块/代码逻辑）、**恢复出厂后** 分步复现 + 截图、完整可编译 PoC（源码/依赖/构建说明）。
-- 与 CVSS 的关系：本文件负责 **定性**；量化用 `vuln-scoring`（**CVSS v4.0**）。官方公告常用 CVSS 3.1，**不得**单独把 none/low 抬进正式报告。
+- 与 CVSS 的关系：本文件负责 **定性**；量化用 `vuln-scoring`（**默认 CVSS v3.1**，可按需 v4.0）。**不得**单独把 none/low 抬进正式报告。
 - **不收录具体 case**：本文件只提供条款与判定规则，不写具体漏洞样例或历史漏洞清单。

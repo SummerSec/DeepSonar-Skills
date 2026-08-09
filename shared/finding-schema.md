@@ -13,13 +13,17 @@ severity_rule: "injection.md#C1"  # 必填：vuln-definitions 插件中的条款
 confidence: high | medium        # 禁止 low
 cwe: CWE-xxx
 cvss_hint: "9.8"                 # 可选兼容字段：粗估；新报告优先用下方 cvss 块
-cvss:                            # 可选但推荐：由 vuln-scoring 插件按 CVSS v4.0 填写
+cvss:                            # 可选但推荐：vuln-scoring 按所选版本填写
+  version: "3.1"                 # "3.1" | "4.0"
+  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  # v4 例: "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+  base_score: 9.8
+  nomenclature: null             # 仅 v4 常用：CVSS-B | CVSS-BT | CVSS-BE | CVSS-BTE
+cvss_alt:                        # 可选：另一版本对照
   version: "4.0"
-  vector: "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+  vector: "CVSS:4.0/..."
   base_score: 9.3
-  nomenclature: CVSS-B           # CVSS-B | CVSS-BT | CVSS-BE | CVSS-BTE
-  # threat_score / environmental_score 可选
-
+  nomenclature: CVSS-B
 
 # 影响
 impact: |
@@ -67,11 +71,14 @@ remediation:
 
 - `rule_id` / `vuln_type` 使用 plugin 目录名：`injection`、`rce`、`ssrf`、`authz`、`deserialization`、`file-access`、`xxe`、`secrets`
 - 白盒 skill 名：`wb-<type>`；黑盒：`bb-<type>`
-- 严重度语义：`vuln-definitions`；数值评分：`vuln-scoring`（CVSS v4.0）
+- 严重度语义：`vuln-definitions`；数值评分：`vuln-scoring`（**CVSS v3.1 或 v4.0**）
 
 ## CVSS 字段纪律
 
-- 标准默认 **CVSS v4.0**；`vector` 必须以 `CVSS:4.0/` 开头且 Base 指标齐全  
-- `base_score` 须与向量一致；不确定时宁可省略分数并在证据中说明，勿编造  
-- `severity`（报告等级）仍以 `severity_rule` 定性条款为准；CVSS 用于量化与对齐，不能单独把 medium 抬进正式报告  
-- 完整评分流程见 `vuln-scoring` 插件
+- 支持 **v3.1** 与 **v4.0**；`version` 与 `vector` 前缀必须一致  
+  - `3.1` → `CVSS:3.1/` + Base 8 项（AV/AC/PR/UI/S/C/I/A）  
+  - `4.0` → `CVSS:4.0/` + Base 11 项（含 AT 与 VC/VI/VA/SC/SI/SA）  
+- **默认**主版本 `3.1`；用户/数据源指定或需 FIRST v4 时用 `4.0`；对照时主块 + `cvss_alt`  
+- `base_score` 须与向量一致；不确定时宁可省略分数并说明，勿编造  
+- `severity` 仍以 `severity_rule` 定性为准；CVSS 不能单独把 medium 抬进正式报告  
+- 完整流程与按需加载见 `vuln-scoring` 插件  

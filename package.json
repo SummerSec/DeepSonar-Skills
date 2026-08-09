@@ -2,7 +2,7 @@
   "name": "DeepSonar-Skills",
   "version": "0.2.1",
   "private": true,
-  "description": "DeepSonar 高危安全技能仓：漏洞定义与 CVSS v4.0 评分 + 白盒审计 + 黑盒挖掘，按漏洞类型分 plugin，仅 Critical/High。",
+  "description": "DeepSonar 高危安全技能仓：漏洞定义与 CVSS v3.1/v4.0 评分 + 白盒审计 + 黑盒挖掘，按漏洞类型分 plugin，仅 Critical/High。",
   "license": "Apache-2.0",
   "keywords": [
     "agent-skills",

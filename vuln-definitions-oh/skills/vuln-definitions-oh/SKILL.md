@@ -41,7 +41,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 | 调整与无效 | `references/adjustment-and-invalid.md` |
 | 门禁与报告 | `references/gates.md` |
 | 八类机理定义 | `vuln-definitions` → `references/<type>.md` |
-| CVSS v4.0 | `vuln-scoring`（公告 3.1 仅参考） |
+| CVSS v3.1 / v4.0 | `vuln-scoring`（OH 语境默认 3.1，可按需 4.0） |
 
 ## 范围与只报
 
@@ -59,7 +59,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 5. 八类 references/<type>.md 确认机理成立
 6. severity-levels.md 匹配 严重→高危→中危→低危
 7. adjustment-and-invalid.md 查降级/无效
-8. 仅 critical/high 且 confidence≥medium → 输出 finding（附 CVSS v4.0）
+8. 仅 critical/high 且 confidence≥medium → 输出 finding（附 CVSS，默认 v3.1）
 9. 其余记否决原因
 ```
 

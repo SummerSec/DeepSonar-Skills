@@ -1,6 +1,6 @@
 # 漏洞评分模块（vuln-scoring）
 
-独立 plugin：在 **vuln-definitions 定性定级** 之后，用 **最新行业标准** 给出可复现的定量分与利用优先级。
+独立 plugin：在 **vuln-definitions 定性定级** 之后，用 **CVSS v3.1 和/或 v4.0** 给出可复现定量分与利用优先级。
 
 ## 安装
 
@@ -12,29 +12,37 @@
 
 ## 标准基线
 
-| 标准 | 版本/状态 | 本插件用途 |
-|------|-----------|------------|
-| **CVSS** | **v4.0**（FIRST，2023-11 GA） | 主评分：向量串 + Base / Threat / Environmental 分 |
-| **EPSS** | FIRST EPSS（持续更新） | 未来约 30 天被野外利用概率（辅助） |
-| **SSVC** | CERT/CISA 决策树 | 响应动作：Track / Attend / Act 等 |
-| **CISA KEV** | 已知被利用目录 | 命中则提高紧急度 |
+| 标准 | 版本 | 本插件用途 |
+|------|------|------------|
+| **CVSS** | **v3.1** 与 **v4.0**（按需选一或对照） | 向量串 + Base（+ Temporal/Threat/Environmental） |
+| **EPSS** | FIRST EPSS | 野外利用概率（辅助） |
+| **SSVC** | CERT/CISA | 响应动作 |
+| **CISA KEV** | 已知被利用目录 | 提高紧急度 |
 
-> **不替代** `vuln-definitions` 的严重/高危/中危/无危害语义。  
-> 定性条款仍是报告门槛；CVSS 用于数值化、对齐外部漏洞库与修复排序。
+> **不替代** `vuln-definitions`。定性条款是报告门槛；CVSS 用于数值化与外部对齐。
+
+### 版本怎么选
+
+- **默认 v3.1**（OH/厂商公告、NVD 存量常见）  
+- 用户指定或数据源已是 `CVSS:4.0/` → **v4.0**  
+- 用户要求对照 → **两版各评一次**（`cvss` + `cvss_alt`）  
+- 细则见 `skills/vuln-scoring/SKILL.md`「版本选择 / 按需加载」
 
 ## 内容
 
 | 文件 | 说明 |
 |------|------|
-| `skills/vuln-scoring/SKILL.md` | 入口：何时用、评分流程、输出格式 |
-| `references/cvss-v4.md` | CVSS v4.0 指标定义与取值决策 |
-| `references/score-mapping.md` | CVSS ↔ DeepSonar C/H/M/N 映射与冲突处理 |
-| `references/prioritization.md` | EPSS / SSVC / KEV 组合优先级 |
-| `references/vector-examples.md` | 八类漏洞常见向量示例 |
+| `skills/vuln-scoring/SKILL.md` | 入口：版本选择、按需加载、流程、输出 |
+| `references/cvss-v3.1.md` | **按需**：v3.1 指标与决策 |
+| `references/cvss-v4.md` | **按需**：v4.0 指标与决策 |
+| `references/vector-examples-v3.1.md` | **按需**：v3.1 示例向量 |
+| `references/vector-examples-v4.md` | **按需**：v4.0 示例向量 |
+| `references/score-mapping.md` | **共用**：分数 ↔ DeepSonar C/H/M/N |
+| `references/prioritization.md` | **共用**：EPSS / SSVC / KEV |
 
 ## 原则
 
-1. **主标准固定为 CVSS v4.0**（不要默认回退到 v3.1，除非用户明确要求对照）  
-2. **必须同时给出分数与完整向量串**  
-3. 与 `vuln-definitions` 冲突时：**先对齐定性证据，再调指标**；不得只为抬分改向量  
-4. 本仓正式 finding 仍只报 Critical/High；评分可为 medium/none 记录在进度中  
+1. **先选版本，再只加载该版本指标文件**（双版本对照除外）  
+2. **向量前缀与 version 必须一致**；禁止混用 3.1/4.0 指标集  
+3. 与 definitions 冲突时先对齐证据再改指标  
+4. 正式 finding 仍只报 Critical/High  

@@ -1,6 +1,6 @@
 {
   "name": "DeepSonar-Skills",
-  "description": "DeepSonar security skills: vulnerability definitions, CVSS v4.0 scoring, and whitebox/blackbox plugins by vuln type (report Critical/High only).",
+  "description": "DeepSonar security skills: vulnerability definitions, CVSS v3.1/v4.0 scoring, and whitebox/blackbox plugins by vuln type (report Critical/High only).",
   "owner": {
     "name": "DeepSonar"
   },
@@ -19,8 +19,8 @@
     },
     {
       "name": "vuln-scoring",
-      "description": "漏洞评分模块：CVSS v4.0 利用/影响评分、向量串、与 DeepSonar 四级映射，以及 EPSS/SSVC/KEV 优先级。",
-      "version": "0.1.0",
+      "description": "漏洞评分模块：CVSS v3.1 与 v4.0 按需评分、向量串、与 DeepSonar 四级映射，以及 EPSS/SSVC/KEV 优先级。",
+      "version": "0.2.1",
       "source": "./vuln-scoring"
     },
     {
