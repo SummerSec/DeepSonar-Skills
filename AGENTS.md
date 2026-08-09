@@ -3,7 +3,7 @@
 单一技能仓：
 
 1. **vuln-definitions** — 漏洞定义模块（独立 plugin，语义基线）  
-2. **vuln-definitions-oh** — OpenHarmony 系统漏洞定义指南（独立 plugin，系统四档/无效条款）  
+2. **vuln-definitions-oh** — OpenHarmony / Phone OS 系统漏洞定义（独立 plugin：四档/无效条款 + 移动 OS 通用类型）  
 3. **vuln-scoring** — 漏洞评分模块（CVSS v4.0 + EPSS/SSVC/KEV 优先级）  
 4. **whitebox-*** — 白盒审计（按漏洞类型）  
 5. **blackbox-*** — 黑盒挖掘（按漏洞类型，工具在 agent-env）  
@@ -16,7 +16,7 @@
 
 ```
 vuln-definitions/         # 独立插件：定义 + 四级定级
-vuln-definitions-oh/      # 独立插件：OpenHarmony 系统漏洞定义指南（系统四档/无效条款/案例）
+vuln-definitions-oh/      # 独立插件：OH/Phone OS 系统漏洞定义（四档 + 通用类型）
 vuln-scoring/             # 独立插件：CVSS v4.0 评分 + 优先级
 whitebox/<type>/          # 白盒 plugin
   .claude-plugin/plugin.json
@@ -33,7 +33,7 @@ agent-env/                # 黑盒工具内置清单与镜像
 ### 三层组织
 
 1. **`vuln-definitions/`** 是**严重度定级的唯一语义源**：八类漏洞定义 + 严重/高危/中危/无危害条款（`references/severity-levels.md` + 每类 `references/<type>.md`）。所有 `wb-*`/`bb-*` skill **不自建定级标准**，强制依赖本插件。  
-   OpenHarmony 等系统类审计时：类型定义仍以本插件为准；**系统四档/无效条款** 加载 `vuln-definitions/.../references/openharmony.md`，或直接用独立插件 `vuln-definitions-oh/`（更完整：术语/调整/案例）。
+   OpenHarmony 等系统类审计时：机理类型仍以本插件八类为准；**系统四档/无效条款/Phone OS 形态** 加载 `vuln-definitions/.../references/openharmony.md`，或直接用 `vuln-definitions-oh/`（完整：`phone-os-vuln-types.md` + 门禁）。
 2. **`vuln-scoring/`** 是**定量评分与利用优先级**模块：主标准 **CVSS v4.0**（向量 + Base/Threat/Environmental），并映射回四级定级；可选 EPSS / SSVC / CISA KEV 做修复排序。**不替代**定性条款，finding 的 `severity` 仍以 definitions 为准。
 3. **`whitebox/<type>/` 与 `blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
 4. **`shared/`** 是仓库级契约：`severity-policy.md`（只报 C/H 的硬性检查）、`finding-schema.md`（统一 finding YAML，含 `cvss` 块）、`authorization.md`。

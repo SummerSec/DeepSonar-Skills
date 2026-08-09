@@ -18,7 +18,7 @@
 | `references/severity-levels.md` | 严重/高危/中危/无危害 全局定义 |
 | `references/classification.md` | 多类型冲突时如何归类 |
 | `references/injection.md` 等 | 八类漏洞各自的定义与四级条款 |
-| `references/openharmony.md` | OpenHarmony 系统漏洞定级规则（官方四档/术语/级别调整/无效条款/案例锚点） |
+| `references/openharmony.md` | OpenHarmony / Phone OS 定级规则（官方四档/术语/调整无效/类型摘要） |
 
 ## 规则
 

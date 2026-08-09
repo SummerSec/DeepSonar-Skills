@@ -62,7 +62,7 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 
 审计目标为 **OpenHarmony 标准/小型/轻量系统**（系统服务层、框架层、应用层）时，加载：
 
-**[references/openharmony.md](references/openharmony.md)** — 官方四档（严重/高危/中危/低危）危害条款（`openharmony.md#C1…H1…M1…L1…`）、术语（远程/本地/TCB/特权进程/普通应用进程/受限进程）、级别调整 10 条（`#ADJ1…10`）、无效漏洞 9 条（`#INV1…9`）与案例锚点。
+**[references/openharmony.md](references/openharmony.md)** — 官方四档（`#C1…H1…M1…L1…`）、术语、ADJ/INV、Phone OS 类型摘要。完整 **Phone OS 通用漏洞类型** 与门禁见插件 `vuln-definitions-oh`（`phone-os-vuln-types.md`）。
 
 系统语义与本文件全局条款冲突时，**以 `openharmony.md` 为准**。
 
