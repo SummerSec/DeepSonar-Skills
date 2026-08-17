@@ -65,6 +65,13 @@ remediation:
     参数化 / 鉴权 / 白名单 等具体建议
 
 # 否决说明：若最终决定不报，写在进度文件，不要进入 findings
+
+# 系统类 / OpenHarmony（可选；用 vuln-definitions-oh 时必填）
+phone_os_class: I1                 # 可选：Phone OS 类型 ID，如 I1 / K5 / W6
+asset_repo: communication_dsoftbus # 官方 bounty 名单中的仓名（精确匹配）
+asset_scope: in_list_first_party   # in_list_first_party | in_list_third_party | in_list_upstream_kernel | in_list_vendor | in_list_non_runtime | not_in_list
+subject_revision: "<仓>@<sha>"     # Job 钉扎；可与现树不同
+live_checked: "<后继仓>@<sha> <日期> | not_checked"
 ```
 
 ## 命名约定
@@ -72,6 +79,7 @@ remediation:
 - `rule_id` / `vuln_type` 使用 plugin 目录名：`injection`、`rce`、`ssrf`、`authz`、`deserialization`、`file-access`、`xxe`、`secrets`
 - 白盒 skill 名：`wb-<type>`；黑盒：`bb-<type>`
 - 严重度语义：`vuln-definitions`；数值评分：`vuln-scoring`（**CVSS v3.1 或 v4.0**）
+- 系统类（OH / Phone OS）另填 `phone_os_class`、`asset_repo`、`asset_scope`；名单与分桶见 `vuln-definitions-oh` 的 `asset-scope.md`。`asset_scope` 不是 `in_list_first_party` 时默认不进正式报告（三方/上游内核仅默认路径独立 e2e 可例外）
 
 ## CVSS 字段纪律
 

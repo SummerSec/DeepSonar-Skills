@@ -121,34 +121,35 @@
 | INV8 | 仅能通过本地触发导致应用临时拒绝服务 |
 | INV9 | 其它应属无效漏洞的场景 |
 
-**复现硬门槛**：最新公开版本 + **标准默认配置** 可复现；报告须人工验证 + 分步复现 + **完整可编译 PoC**。
+**复现硬门槛**：最新公开版本 + **标准默认配置** 可复现；报告须人工验证 + 分步复现 + **完整可编译 PoC**。  
+赏金名单仓名可能停更（旧名 `master` 停在迁仓年）；必须核后继仓 / 现树（`vuln-definitions-oh` `gates.md` Gate V）。冻结 revision 上的静态成立 ≠ 可投递。
 
 ---
 
 ## 6. Phone OS 类型与攻击面（摘要）
 
 完整类型定义见 `vuln-definitions-oh` 的 **`phone-os-vuln-types.md`**（Android / iOS / OH 通用形态，不局限历史披露清单）。  
-OH 组件索引见同插件 `attack-surfaces.md`；影响语映射见 `severity-levels.md` §6。
+OH 组件索引见同插件 `attack-surfaces.md`；**bounty 资产范围**见 `asset-scope.md`（官方仓库名单精确匹配）；影响语映射见 `severity-levels.md` §6。
 
 | 类型簇 | 例 | 条款倾向 |
 |--------|-----|----------|
-| 内核/驱动 TCB | 本地 UAF/越界 → ACE/root | H1 / C2；远程进 TCB → C1 |
-| IPC / 系统服务 | 缺鉴权、混淆代理/中继、Parcel 内存破坏 | M5/H5/H3；半链 → ADJ4/INV2 |
+| 内核/驱动/HDF TCB | 本地 UAF/越界/竞态 → ACE/root；默认节点过宽 | H1 / C2；远程进 TCB → C1 |
+| IPC / 系统服务 | 缺鉴权、SA 中继、Parcel 内存破坏、反序列化鉴权绕过 | M5/H5/H3；半链 → ADJ4/INV2 |
 | 沙箱/隔离 | 跨应用数据、路径穿越、多用户 | H3 / H4 |
-| 权限/令牌 | 权限绕过、身份伪造 | M5/M6；远程 → H5/H8 |
-| 导出组件/deeplink | 未鉴权导出、链接越权 | M5/H5 |
+| 权限/令牌 | 权限绕过、身份伪造、**权限实现错误** | M5/M6；远程 → H5/H8 |
+| 导出组件/Ability/Want | 未鉴权导出、链接越权、元能力传参 | M5/H5/H3 |
 | 媒体/消息解析 | 畸形媒体远程 ACE | H2 / C1 |
-| Web/运行时 | 引擎 RCE、JS 桥、Ark 内存破坏 | H2 / M2/M3 |
-| 无线/分布式 | BT/Wi‑Fi/SoftBus、跨设备 | H2/H5/H7；C6/H11 |
-| 安装/锁屏/密钥 | 静默装、绕锁、密钥导出 | H10/H9/M7 |
-| 广播/剪贴板 | 敏感事件、跨应用剪贴板 | M5 |
+| Web/Ark 运行时 | 引擎 RCE、JS 桥、内存破坏、**类型混淆** | H2 / M2/M3；**受限场景 ACE → L1/M1** |
+| 无线/近场/软总线/分布式 | BT/Wi‑Fi/SoftBus 实现层、跨设备 | H2/H5/H7；C6/H11 |
+| 安装/OTA/锁屏/密钥 | 静默装、升级安装器、绕锁、密钥导出 | H10/H9/M7；仍需用户确认 ≠ C4 |
+| 广播/UDMF/剪贴板/窗口 | 敏感事件、统一数据面、窗口属性 | M5 / H3 |
 
-须 system UID / 二次洞 / 纯上游无默认路径 → ADJ3 / ADJ4 / INV4。
+须 system UID / 二次洞 / 纯上游无默认路径 / 官方「受限场景」未证普通模型 → ADJ3 / ADJ4 / INV4 / L1。
 
 ## 7. 报告与定级纪律
 
-- 定级前先跑 Gate 检查：**攻击者是谁 → 默认与可达 → 直接实害 → 利用链闭合**；任一不过 → 判 `none`/对内（详见 `vuln-definitions-oh` 的 `gates.md`）。
-- finding 的 `severity_rule` 填本文件锚点，如 `openharmony.md#H5`、`openharmony.md#INV1`、`openharmony.md#ADJ3`。
+- 定级前先跑 Gate 检查：**资产范围（S）→ 活树/最新公开版本（V）→ 攻击者是谁 → 默认与可达 → 直接实害 → 利用链闭合**；S/V 不过或任一不过 → 判 `none`/对内（详见 `vuln-definitions-oh` 的 `gates.md`、`asset-scope.md`）。
+- finding 的 `severity_rule` 填本文件锚点，如 `openharmony.md#H5`、`openharmony.md#INV1`、`openharmony.md#ADJ3`。系统类另填 `asset_repo` / `asset_scope`（见 `shared/finding-schema.md`）。
 - 报告至少写清：影响与根因（版本/模块/代码逻辑）、**恢复出厂后** 分步复现 + 截图、完整可编译 PoC（源码/依赖/构建说明）。
 - 与 CVSS 的关系：本文件负责 **定性**；量化用 `vuln-scoring`（**默认 CVSS v3.1**，可按需 v4.0）。**不得**单独把 none/low 抬进正式报告。
 - **不收录具体 case**：本文件只提供条款与判定规则，不写具体漏洞样例或历史漏洞清单。

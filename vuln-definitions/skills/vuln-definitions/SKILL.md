@@ -62,7 +62,7 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 
 审计目标为 **OpenHarmony 标准/小型/轻量系统**（系统服务层、框架层、应用层）时，加载：
 
-**[references/openharmony.md](references/openharmony.md)** — 官方四档（`#C1…H1…M1…L1…`）、术语、ADJ/INV、Phone OS 类型摘要。完整 **Phone OS 通用漏洞类型** 与门禁见插件 `vuln-definitions-oh`（`phone-os-vuln-types.md`）。
+**[references/openharmony.md](references/openharmony.md)** — 官方四档（`#C1…H1…M1…L1…`）、术语、ADJ/INV、Phone OS 类型摘要。完整 **Phone OS 通用漏洞类型**、**bounty 资产范围**与门禁见插件 `vuln-definitions-oh`（`phone-os-vuln-types.md`、`asset-scope.md`、`gates.md`）。
 
 系统语义与本文件全局条款冲突时，**以 `openharmony.md` 为准**。
 
@@ -74,7 +74,7 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 1. 确认现象是否符合某一类「漏洞定义」→ 否则 none
 2. 写清：攻击者是谁、需要什么前提、能造成什么影响
 3. 打开该类 references/<type>.md，从上到下匹配 Critical → High → Medium → None
-4. 系统类目标（OpenHarmony 等）→ 先对齐 `references/openharmony.md` 的系统条款与无效条款，再回到类型细则
+4. 系统类目标（OpenHarmony 等）→ 先过资产范围（`vuln-definitions-oh` / `asset-scope.md`），再对齐 `references/openharmony.md` 的系统条款与无效条款，再回到类型细则
 5. 命中最高且证据充分的一级；证据不足则降级或标 none
 6. 若最终为 critical/high 且 confidence≥medium → 可交由对应 wb-*/bb-* 输出 finding
 7. 若为 medium/none → 本仓默认不写入 findings（可在进度文件记一句否决原因）

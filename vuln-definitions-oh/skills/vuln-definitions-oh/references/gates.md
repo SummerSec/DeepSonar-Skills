@@ -1,11 +1,12 @@
-# 挖掘门禁 Gate A–D 与报告要求
+# 挖掘门禁 Gate S、A–D 与报告要求
 
 发现可疑点后 **按顺序回答**；任一「否」→ 不进入深度 PoC，最多记对内缺陷。  
-类型定义见 `phone-os-vuln-types.md`；OH 组件索引见 `attack-surfaces.md`；同网/分布式算远程见 `terminology.md`。
+类型定义见 `phone-os-vuln-types.md`；OH 组件索引见 `attack-surfaces.md`；同网/分布式算远程见 `terminology.md`。  
+**落点仓必须先过资产范围**（`asset-scope.md` / 官方名单），否则后面 Gate 不必做。
 
 ## Gate A · 攻击者是谁？
 
-- [ ] **A1** 攻击者可以是：**未安装 App 的远程方**（含同网 / 局域网 / 分布式组网报文），或 **仅安装普通三方 HAP 的本地方**？
+- [ ] **A1** 攻击者可以是：**未安装 App 的远程方**（含同网 / 局域网 / **近场** / 分布式组网报文），或 **仅安装普通三方 HAP 的本地方**？
 - [ ] **A2** 不需要：TOKEN_NATIVE / system_app / system UID / 预置 SA / root / 写 `/data/service` 类系统路径？
 - [ ] **A3** 不需要：开发者模式、解锁 bootloader、刷自签系统、打开 `nosharefs` 等非默认开关？
 - [ ] **A4** 不需要：先再打一个未证明的提权/RCE，或仅 SA 中继半链？
@@ -15,6 +16,7 @@
 - [ ] **B1** 受害方或系统在 **出厂默认 / 文档默认 API 用法** 下会走到漏洞路径？（不是 `skip=true`）
 - [ ] **B2** 普通 Phone 标准系统（或社区明确纳入的 small/standard）可复现，而非仅 mini/lite？
 - [ ] **B3** SELinux / seccomp / 权限模型在 **真实策略** 下仍可达？（不要只看 `chmod 0666`）
+- [ ] **B4** 若报告或代码注释写「受限场景 / 特定场景」：已证明 **普通三方 HAP 或默认可达远程内容** 可稳定触发？否则按 W6 / L1 / M1，Gate 本项记否
 
 ## Gate C · 有没有「直接实害」？
 
@@ -39,10 +41,32 @@
 - [ ] **D3** 准备得出：**完整可编译 PoC + 默认配置复现步骤 + 截图/日志**
 - [ ] **D4** 若为三方库问题：已确认在 OH **默认路径** 上可独立演示实害（否则 INV4）
 
+## Gate S · 落点是不是 bounty 资产？
+
+对照 `asset-scope.md`（实时：`https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories`；离线：`asset-scope-repos.json`）。
+
+- [ ] **S1** 落点仓库名能在官方 `data` 里 **精确匹配**？否 → `not_in_list`，不投递
+- [ ] **S2** 不是 `third_party_*`、也不是上游 `kernel_linux` / `_4.19` / `_5.10` / `_6.6` 通用树？是这类 → INV4（除非默认路径独立 e2e）。`kernel_linux_patches` / `kernel_linux_common_modules*` / `kernel_common_modules_newip` 可证 OH 独有路径时按自研
+- [ ] **S3** 不是 `vendor_*` 且不是测试/文档/工具链/内核构建配置（`xts_*`、`docs`、多数 `developtools_*`、`kernel_linux_config`、`kernel_linux_build` 等）？是这类 → ADJ2 / 不跟
+- [ ] **S4** 主 finding 只绑 **一个** 在册自研仓名，并写入 `asset_repo` / `asset_scope`
+
+## Gate V · 扫的是不是「最新公开版本」？
+
+官方复现硬门槛是 **最新公开版本 + 标准默认配置**，不是 Job 冻结树、也不是赏金名单上的停更仓名。在册 ≠ 该仓 `master` 就是当前产品代码。
+
+- [ ] **V1** 冻结 revision 所在仓的 `master` 仍在演进（近 12 个月有实质提交）？停更、或仓名与现用组件路径不一致（如旧名 `miscservices_*` vs 现名 `distributeddatamgr_*`）→ 必须找到后继仓 / 现树，不能把停更 `master` 当最新
+- [ ] **V2** 已在后继仓或当前公开产品树（OH 最新 Release / 活 `master`，及对应 API 的默认镜像）上复核同一 sink？现树已加 AccessToken / 权限 / 焦点手势 / MAC → **不得**对冻结旧树 `confirmed` 为可投递；对内可记「历史 revision 缺陷」
+- [ ] **V3** 验证不是「把冻结逻辑再抄一遍的 host harness」？只复刻 InterfaceToken / `clips_[userId]` 等自证循环 → 证据未闭合，不算产品可复现
+- [ ] **V4** finding 写清 `subject_revision`（审计钉扎）与 `live_checked`（后继仓 + HEAD 日期，或明示「未查后继」）。未查后继不得标可投递
+
+「第四轮必须产出 Finding」不豁免 V。冻结 `report-input.json` 只约束「别改这份快照上的静态事实」，不授权把快照外推成最新产品漏洞。
+
 ## 决策
 
 ```
-Gate A/B/C/D 全过 → 进入 L3 复现与投递队列
+Gate S 不过     → 非本 bounty 资产 / INV4 / 非运行时，停
+Gate V 不过     → 停更仓/仅冻结树/自证 harness → 对内，不投递
+Gate A/B/C/D 全过且 S 为在册自研且 V 过 → 进入复现与投递队列
 任一不过       → 写入「对内/无效」口径，不占主线
 争议项         → 先做最小 e2e，再决定是否投递
 ```
