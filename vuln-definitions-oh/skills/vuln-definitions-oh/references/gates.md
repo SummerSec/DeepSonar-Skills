@@ -49,10 +49,12 @@
 - [ ] **S2** 不是 `third_party_*`、也不是上游 `kernel_linux` / `_4.19` / `_5.10` / `_6.6` 通用树？是这类 → INV4（除非默认路径独立 e2e）。`kernel_linux_patches` / `kernel_linux_common_modules*` / `kernel_common_modules_newip` 可证 OH 独有路径时按自研
 - [ ] **S3** 不是 `vendor_*` 且不是测试/文档/工具链/内核构建配置（`xts_*`、`docs`、多数 `developtools_*`、`kernel_linux_config`、`kernel_linux_build` 等）？是这类 → ADJ2 / 不跟
 - [ ] **S4** 主 finding 只绑 **一个** 在册自研仓名，并写入 `asset_repo` / `asset_scope`
+- [ ] **S5** 官方实时 `data` 命中 **不能** 当成「这是活跃代码树」。`master` 停更或仓名已迁走 → 记 `in_list_stale`，进入 Gate V，不得在该停更树上 `confirmed`
 
 ## Gate V · 扫的是不是「最新公开版本」？
 
-官方复现硬门槛是 **最新公开版本 + 标准默认配置**，不是 Job 冻结树、也不是赏金名单上的停更仓名。在册 ≠ 该仓 `master` 就是当前产品代码。
+官方复现硬门槛是 **最新公开版本 + 标准默认配置**。  
+**官方实时名单也会包含停更仓、旧仓名**（与有没有离线快照无关）。在册 ≠ 活跃代码，更 ≠ 该仓 `master` 是当前产品。审计时把停更/旧名仓从「活跃树」里拿掉，只在后继仓或当前 Release 上定投递。
 
 - [ ] **V1** 冻结 revision 所在仓的 `master` 仍在演进（近 12 个月有实质提交）？停更、或仓名与现用组件路径不一致（如旧名 `miscservices_*` vs 现名 `distributeddatamgr_*`）→ 必须找到后继仓 / 现树，不能把停更 `master` 当最新
 - [ ] **V2** 已在后继仓或当前公开产品树（OH 最新 Release / 活 `master`，及对应 API 的默认镜像）上复核同一 sink？现树已加 AccessToken / 权限 / 焦点手势 / MAC → **不得**对冻结旧树 `confirmed` 为可投递；对内可记「历史 revision 缺陷」

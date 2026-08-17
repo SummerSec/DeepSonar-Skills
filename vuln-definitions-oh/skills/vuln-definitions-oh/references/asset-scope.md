@@ -8,8 +8,10 @@
 https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories
 ```
 
-响应：`{"code":"20000","data":["<repo>", ...]}`，`data` 为仓库名数组。现场 GET 后精确匹配，**不要**把名单全文检入本仓或贴进 SKILL/报告。  
+响应：`{"code":"20000","data":["<repo>", ...]}`，`data` 为仓库名数组。现场 GET 后精确匹配。  
 非官方镜像（只读对照，不作权威）：`https://sumsec.me/resources/oh-scope.html`
+
+**官方实时名单也会挂停更仓、旧仓名。** 在册只表示「算 bounty 资产」，不表示该仓 `master` 是当前产品代码，更不能当活跃代码树来扫、来 `confirmed`。离线/实时是同一份名单，问题不在缓存。
 
 ---
 
@@ -17,7 +19,7 @@ https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories
 
 1. 先定 **落点仓库**（公告/代码仓名，如 `communication_dsoftbus`）  
 2. 在官方实时 `data` 里 **精确匹配** 仓库名  
-3. 命中 → 是 bounty 资产，再按下面分桶  
+3. 命中 → 只说明在 bounty 范围内，**再判是不是活跃树**（见下节），然后分桶  
 4. 未命中 → **不是本计划资产**，不按 OH 奖励计划出正式 finding（可对内记录）
 
 模块名与仓名不完全一致时：用仓名匹配，不要用子系统中文名瞎猜。一份 finding 只绑一个主落点仓。
@@ -30,7 +32,8 @@ https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories
 
 | 桶 | 如何认 | 处理 |
 |----|--------|------|
-| **在册自研** | 名单内，且不是下三行 | 按本插件类型 + 四档 + Gate |
+| **在册但停更** | 名单命中，但 `master` 近 12 个月无实质提交，或仓名已迁走（旧名仍在实时 `data` 里） | **不当活跃代码树**。必须找到后继仓 / 现树再审计；只在停更 `master` 上成立 → 对内，不投递 |
+| **在册自研（活跃）** | 名单内、非停更、且不是下三行 | 按本插件类型 + 四档 + Gate |
 | **在册三方** | `third_party_*` | **默认 INV4**；OH 默认可达且可独立 e2e 实害才例外 |
 | **在册上游内核** | `kernel_linux` / `kernel_linux_4.19` / `kernel_linux_5.10` / `kernel_linux_6.6` 通用树 | **默认 INV4**；OH 自研补丁/模块（`kernel_linux_patches`、`kernel_linux_common_modules*`、`kernel_common_modules_newip` 中可证为 OH 独有路径）按自研 |
 | **在册厂商** | `vendor_*` | 非标准设备默认路径 → ADJ2；能在社区标准/small 设备 e2e 再评 |
@@ -49,19 +52,20 @@ https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories
 | 三方/上游通病 | 本文件分桶 + `adjustment-and-invalid.md` INV4 |
 | 定级 | `severity-levels.md` |
 
-名单只解决 **「算不算 OH bounty 资产」**，不解决定级，也不因为「在名单里」就预设有洞。  
-**在册仓名 ≠ 当前产品代码**：名单会残留已迁走的旧仓名，其 `master` 可能停在迁仓当年。投递前必须按 `gates.md` Gate V 核对后继仓 / 最新公开版本。
+名单只解决 **「算不算 OH bounty 资产」**，不解决定级，也不因为「在实时名单里」就当成活跃代码或预设有洞。  
+实时 `data` 与离线快照是同一类名单，都会残留已迁走的旧仓名。投递前必须按 `gates.md` Gate V 丢掉停更树、核对后继仓 / 最新公开版本。
 
 ---
 
 ## 4. 审计时怎么用
 
 ```
-落点仓名 → 官方名单精确匹配
+落点仓名 → 官方实时名单精确匹配
   ├ 不在册     → 停（非本计划资产）
+  ├ 在册但 master 停更 / 旧名 → 不当活跃树；找后继仓，找不到或现树已修 → 不投递
   ├ third_party / 上游 linux 树 → INV4（除非默认路径独立 e2e）
   ├ vendor / 仅测试文档工具   → ADJ2 / 不跟
-  └ 在册自研   → Gate V（活树/后继仓）→ Gate A–D 与四档
+  └ 在册且活跃 → Gate V（现树复核）→ Gate A–D 与四档
 ```
 
 查后继仓的最小动作：看该仓 `master` 最后提交日期；停更则在 GitCode/GitHub 搜现用路径（`foundation/...`、`distributeddatamgr_*` 等），对现仓同一 sink 再读一遍。只钉旧 SHA 的 Job 不能跳过这一步。
@@ -73,7 +77,7 @@ asset_repo: communication_dsoftbus   # 官方名单中的仓名
 asset_scope: in_list_first_party     # 见下
 ```
 
-`asset_scope` 取值：`in_list_first_party` | `in_list_third_party` | `in_list_upstream_kernel` | `in_list_vendor` | `in_list_non_runtime` | `not_in_list`。
+`asset_scope` 取值：`in_list_first_party` | `in_list_stale` | `in_list_third_party` | `in_list_upstream_kernel` | `in_list_vendor` | `in_list_non_runtime` | `not_in_list`。`in_list_stale` 默认不投递。
 
 ---
 

@@ -46,7 +46,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 
 ## 范围与只报
 
-- **只挖**：落点仓库在官方 bounty 名单内（见 `asset-scope.md`）的 **在册自研** 组件；默认配置下可由远程（含同网/近场/无线/文件消息）或普通三方应用触达，且能演示实害、危害强于已有权限  
+- **只挖**：官方 bounty 名单内、且 **master 仍活跃（或已转到后继仓现树）** 的在册自研组件；默认配置下可由远程（含同网/近场/无线/文件消息）或普通三方应用触达，且能演示实害、危害强于已有权限。实时名单里的停更/旧名仓不当活跃树  
 - **只报**：`critical` / `high`  
 - **明确不报**：名单外仓库、在册三方/上游 linux 树（INV4）、厂商/测试文档工具链、system/root/native 前提、未证明二次洞、IPC 半链、权限等价、单应用临时 DoS、非默认 skip、解锁 BL 主路径等（见 ADJ/INV）
 
@@ -54,7 +54,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 
 ```
 1. 攻击者模型：远程（未装 App，含同网/近场/无线/消息文件）或本地（普通三方 HAP）？
-2. asset-scope.md：落点仓是否在官方名单、属哪一桶（不在册 / 三方 / 上游内核 / 厂商 / 非运行时 → 停或 INV4）
+2. asset-scope.md：落点仓是否在官方名单、是否停更/旧名、属哪一桶（不在册 / 在册停更 / 三方 / 上游内核 / 厂商 / 非运行时 → 停或找后继）
 3. phone-os-vuln-types.md 归类（K/I/S/P/E/F/B/M/W/N/U/X，含 K5/I5/P5/E4/F5/W5–W6/N6/U6/X5）
 4. attack-surfaces.md 对照 OH 组件（若目标为 OH）
 5. gates.md：**S 资产范围** → **V 活树/最新公开版本** → A 攻击者 → B 默认可达 → C 直接实害 → D 链闭合
@@ -71,7 +71,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 vuln_type: <type|none>          # 八类
 phone_os_class: <如 I1|S1|M1a> # 可选，Phone OS 类型 ID
 asset_repo: <官方名单仓名>      # 如 communication_dsoftbus
-asset_scope: in_list_first_party | in_list_third_party | in_list_upstream_kernel | in_list_vendor | in_list_non_runtime | not_in_list
+asset_scope: in_list_first_party | in_list_stale | in_list_third_party | in_list_upstream_kernel | in_list_vendor | in_list_non_runtime | not_in_list
 subject_revision: "<仓>@<sha>"  # Job 钉扎
 live_checked: "<后继仓>@<sha> <日期> | not_checked"
 severity: critical | high | medium | none

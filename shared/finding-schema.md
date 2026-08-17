@@ -69,7 +69,7 @@ remediation:
 # 系统类 / OpenHarmony（可选；用 vuln-definitions-oh 时必填）
 phone_os_class: I1                 # 可选：Phone OS 类型 ID，如 I1 / K5 / W6
 asset_repo: communication_dsoftbus # 官方 bounty 名单中的仓名（精确匹配）
-asset_scope: in_list_first_party   # in_list_first_party | in_list_third_party | in_list_upstream_kernel | in_list_vendor | in_list_non_runtime | not_in_list
+asset_scope: in_list_first_party   # in_list_first_party | in_list_stale | in_list_third_party | in_list_upstream_kernel | in_list_vendor | in_list_non_runtime | not_in_list
 subject_revision: "<仓>@<sha>"     # Job 钉扎；可与现树不同
 live_checked: "<后继仓>@<sha> <日期> | not_checked"
 ```

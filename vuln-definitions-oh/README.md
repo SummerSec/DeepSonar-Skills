@@ -31,7 +31,7 @@
 - **无效即停**：强前提 / INV 直接 `none`  
 - **定性定量分离**：本插件定性；CVSS（默认 v3.1，可按需 v4.0）由 `vuln-scoring` 负责  
 - **资产以官方名单为准**：`https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories`；不在册不投递；`third_party_*` / 上游 linux 树默认 INV4  
-- **在册 ≠ 最新树**：停更仓 / 冻结 SHA 上的成立须过 Gate V；现树已修则不投递  
+- **在册 ≠ 活跃树**：官方实时名单也会挂停更/旧名仓；须过 Gate V，现树已修则不投递  
 - **不收录具体 case**：无 CVE、无历史公告摘录；类型覆盖可对照官方月报**第一张表（自研）**做缺口检查  
 
 ## 与 vuln-definitions 的关系
