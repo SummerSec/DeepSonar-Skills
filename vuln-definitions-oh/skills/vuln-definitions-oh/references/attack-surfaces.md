@@ -1,6 +1,6 @@
 # 攻击面索引（Phone OS 类型 × OH 组件）
 
-**漏洞类型定义**见 [`phone-os-vuln-types.md`](phone-os-vuln-types.md)（Android / iOS / OH 通用形态）。  
+**机理类型**见 [`mechanism-types.md`](mechanism-types.md)。**攻击面形态**见 [`phone-os-vuln-types.md`](phone-os-vuln-types.md)。  
 **落点仓是否在 bounty 范围内**见 [`asset-scope.md`](asset-scope.md)（官方名单精确匹配）。  
 本文件只做 **OpenHarmony 组件落点索引**，便于选模块；不收录 CVE/历史公告。
 
@@ -40,7 +40,7 @@
 
 ```
 选模块（本文件）→ 选类型（phone-os-vuln-types.md）
-  → 条款（severity-levels.md）→ Gate / ADJ·INV → 只报 C/H
+  → 条款（severity-levels.md）→ Gate / ADJ·INV → 官方四档可报
 ```
 
 不要因为「某组件历史上出过洞」就预设有洞；按 **当前默认配置 + 可演示实害** 判定。

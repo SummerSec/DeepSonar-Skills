@@ -1,6 +1,6 @@
 {
   "name": "vuln-definitions-oh",
-  "version": "0.2.3",
+  "version": "0.2.7",
   "description": "OpenHarmony / Phone OS 系统漏洞定义：官方四档与调整/无效条款，外加移动 OS 通用漏洞类型（内核/HDF/IPC/沙箱/Ark/近场软总线/OTA 等，对齐 Android·iOS 形态）。",
   "author": {
     "name": "DeepSonar"

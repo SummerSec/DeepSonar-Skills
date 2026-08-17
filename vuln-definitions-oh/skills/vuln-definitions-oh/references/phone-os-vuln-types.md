@@ -1,10 +1,11 @@
 # Phone OS 通用漏洞类型定义
 
-OpenHarmony 本质是 **移动/嵌入式操作系统**。本文件定义 **Phone OS 通用** 漏洞类型（Android / iOS / OH 同类问题形态），用于：
+OpenHarmony 本质是 **移动/嵌入式操作系统**。本文件定义 **Phone OS 攻击面形态**（Android / iOS / OH 同类落点），用于：
 
-- 审计时「该挖什么类问题」  
+- 审计时「洞落在哪一类系统面」  
+- 与公告机理交叉：机理（越界写/UAF/权限绕过等）见 **`mechanism-types.md`**，必须先定机理再定本文件形态  
 - 现象归类后映射到 `severity-levels.md` 四档条款  
-- 与 `vuln-definitions` 八类（injection/rce/…）交叉：本文件偏 **系统层形态**，八类偏 **技术机理**
+- 与 `vuln-definitions` 八类交叉：本文件偏 **系统层落点**，八类偏 **利用语义**
 
 **纪律**：只写类型与判定规则；**不写**具体 CVE、公告条目、历史样板 ID。  
 定级以 `severity-levels.md` + `adjustment-and-invalid.md` 为准；本文件不单独抬级。
@@ -30,10 +31,11 @@ OpenHarmony 本质是 **移动/嵌入式操作系统**。本文件定义 **Phone
 ## 0. 怎么用
 
 1. 先定 **攻击路径**：远程（含同网/无线/文件/消息）或本地（普通三方 App）  
-2. 在本文件命中 **类型**（可多选，取危害最高且证据充分的）  
-3. 用类型表中的 **条款倾向** 打开 `severity-levels.md` 精匹配  
-4. 过 Gate（`gates.md`）与 ADJ/INV  
-5. 回填 `vuln_type`（八类之一，见 §13）
+2. 先打开 `mechanism-types.md` 命中 **机理**（越界写/UAF/权限绕过…）  
+3. 在本文件命中 **形态**（可多选，取危害最高且证据充分的）  
+4. 用类型表中的 **条款倾向** 打开 `severity-levels.md` 精匹配  
+5. 过 Gate（`gates.md`）与 ADJ/INV  
+6. 回填 `mechanism` + `vuln_type`（八类之一，见 §13）
 
 ---
 
@@ -199,7 +201,7 @@ OpenHarmony 本质是 **移动/嵌入式操作系统**。本文件定义 **Phone
 | 可控进 shell/命令 | `injection` 或 `rce` |
 | XXE 配置解析 | `xxe` |
 | 密钥/token 硬编码或可导出、U4 | `secrets` |
-| W6 受限场景 ACE | 按机理仍填 `rce`，`severity` 走 L1/M1，正式报告不报 |
+| W6 受限场景 ACE | 按机理仍填 `rce`，`severity` 走 L1/M1，不上抬 C/H |
 
 现象跨类时：按 **最终可演示影响** 选一类主类型，rationale 可注明次要类。
 
@@ -230,5 +232,5 @@ P5 通常降/无效：解锁 BL、开发者模式、system UID 前提、三方�
 | 纯三方上游、OH 默认不可达 | INV4 |
 | 权限等价 | INV7 |
 | 主路径靠钓鱼 | INV3 |
-| 官方「受限场景 / 特定场景」ACE 且未证普通模型 | W6 → L1/M1，不报 C/H |
+| 官方「受限场景 / 特定场景」ACE 且未证普通模型 | W6 → L1/M1，不上抬 C/H |
 | 远程安装管控绕过但仍需用户确认 | 不按 C4/H10 报 |

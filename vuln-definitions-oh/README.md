@@ -17,7 +17,8 @@
 |------|------|
 | `skills/vuln-definitions-oh/SKILL.md` | 入口：角色、工作流、输出 |
 | `references/asset-scope.md` | **资产范围**：官方 bounty 实时名单 + 分桶 |
-| `references/phone-os-vuln-types.md` | **主类型表**：内核/HDF/IPC/沙箱/权限实现/Ability/文件·UDMF/广播/媒体/Ark·Web/近场·软总线/OTA/UI 等 |
+| `references/mechanism-types.md` | **官方公告机理**：2021–2026 自研披露类型全表 + 定义（越界/UAF/权限绕过/路径穿越/SA 中继/明文 PIN 等） |
+| `references/phone-os-vuln-types.md` | **攻击面形态**：内核/HDF/IPC/沙箱/权限实现/Ability/文件·UDMF/广播/媒体/Ark·Web/近场·软总线/OTA/UI 等 |
 | `references/attack-surfaces.md` | OH 组件族 → 类型 ID 索引 |
 | `references/terminology.md` | 远程/本地/TCB；同网算远程 |
 | `references/severity-levels.md` | 官方四档条款 + 影响语映射 |
@@ -27,7 +28,7 @@
 ## 规则
 
 - **Phone OS 共性优先**：类型体系不局限某一厂商历史披露；OH 是落地目标与四档口径来源  
-- **只报 C/H**：正式报告仅 `critical`/`high`  
+- **官方四档均可报**：正式报告含 `critical`/`high`/`medium`/`none`（低危）；INV / Gate 不过不报  
 - **无效即停**：强前提 / INV 直接 `none`  
 - **定性定量分离**：本插件定性；CVSS（默认 v3.1，可按需 v4.0）由 `vuln-scoring` 负责  
 - **资产以官方名单为准**：`https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories`；不在册不投递；`third_party_*` / 上游 linux 树默认 INV4  

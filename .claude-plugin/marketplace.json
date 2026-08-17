@@ -14,7 +14,7 @@
     {
       "name": "vuln-definitions-oh",
       "description": "OpenHarmony / Phone OS 系统漏洞定义：官方四档与调整/无效条款，外加移动 OS 通用漏洞类型（对齐 Android·iOS 形态）。",
-      "version": "0.2.3",
+      "version": "0.2.7",
       "source": "./vuln-definitions-oh"
     },
     {
