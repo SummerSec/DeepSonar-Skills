@@ -43,7 +43,7 @@
 
 ## Gate S · 落点是不是 bounty 资产？
 
-对照 `asset-scope.md`（实时：`https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories`；离线：`asset-scope-repos.json`）。
+对照 `asset-scope.md`（实时：`https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories`）。
 
 - [ ] **S1** 落点仓库名能在官方 `data` 里 **精确匹配**？否 → `not_in_list`，不投递
 - [ ] **S2** 不是 `third_party_*`、也不是上游 `kernel_linux` / `_4.19` / `_5.10` / `_6.6` 通用树？是这类 → INV4（除非默认路径独立 e2e）。`kernel_linux_patches` / `kernel_linux_common_modules*` / `kernel_common_modules_newip` 可证 OH 独有路径时按自研

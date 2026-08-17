@@ -8,18 +8,15 @@
 https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories
 ```
 
-响应：`{"code":"20000","data":["<repo>", ...]}`，`data` 为仓库名数组。  
-离线快照：[`asset-scope-repos.json`](asset-scope-repos.json)（拉取日期见文件内 `fetched`）。  
+响应：`{"code":"20000","data":["<repo>", ...]}`，`data` 为仓库名数组。现场 GET 后精确匹配，**不要**把名单全文检入本仓或贴进 SKILL/报告。  
 非官方镜像（只读对照，不作权威）：`https://sumsec.me/resources/oh-scope.html`
-
-刷新快照：对官方 URL 做 GET，把 `data` 写回 `asset-scope-repos.json` 的 `repos`，更新 `fetched` / `count`。
 
 ---
 
 ## 1. 怎么判「在范围内」
 
 1. 先定 **落点仓库**（公告/代码仓名，如 `communication_dsoftbus`）  
-2. 在官方 `data`（或离线 `repos`）里 **精确匹配** 仓库名  
+2. 在官方实时 `data` 里 **精确匹配** 仓库名  
 3. 命中 → 是 bounty 资产，再按下面分桶  
 4. 未命中 → **不是本计划资产**，不按 OH 奖励计划出正式 finding（可对内记录）
 
@@ -80,7 +77,6 @@ asset_scope: in_list_first_party     # 见下
 
 ---
 
-## 5. 快照规模（便于心算，以文件内 count 为准）
+## 5. 名单规模（便于心算）
 
-官方名单量级约八百仓：约三分之一 `third_party_*`，其余为自研/厂商/测试等。  
-**不要**把快照全文贴进 SKILL 或报告；查表用 JSON / 实时接口。
+官方名单量级约八百仓：约三分之一 `third_party_*`，其余为自研/厂商/测试等。以实时接口为准。

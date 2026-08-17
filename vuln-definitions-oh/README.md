@@ -16,8 +16,7 @@
 | 文件 | 说明 |
 |------|------|
 | `skills/vuln-definitions-oh/SKILL.md` | 入口：角色、工作流、输出 |
-| `references/asset-scope.md` | **资产范围**：官方 bounty 仓库名单 + 分桶 |
-| `references/asset-scope-repos.json` | 官方名单离线快照 |
+| `references/asset-scope.md` | **资产范围**：官方 bounty 实时名单 + 分桶 |
 | `references/phone-os-vuln-types.md` | **主类型表**：内核/HDF/IPC/沙箱/权限实现/Ability/文件·UDMF/广播/媒体/Ark·Web/近场·软总线/OTA/UI 等 |
 | `references/attack-surfaces.md` | OH 组件族 → 类型 ID 索引 |
 | `references/terminology.md` | 远程/本地/TCB；同网算远程 |
@@ -43,5 +42,5 @@
 ## 语义基线
 
 - 定级口径：OpenHarmony 安全漏洞奖励计划（2026-05）  
-- 资产范围：奖励计划同步仓库名单（实时接口；快照见 `asset-scope-repos.json`）  
+- 资产范围：奖励计划同步仓库名单（仅实时接口，不检入仓列表）  
 - 类型覆盖：移动操作系统通用攻击面（Android / iOS / OH 同型问题，抽象定义）  

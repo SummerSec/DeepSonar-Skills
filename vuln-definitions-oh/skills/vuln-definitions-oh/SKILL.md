@@ -86,8 +86,7 @@ reportable: true | false
 
 | 文件 | 说明 |
 |------|------|
-| [asset-scope.md](references/asset-scope.md) | **OH bounty 资产范围**：官方仓库名单 + 分桶 |
-| [asset-scope-repos.json](references/asset-scope-repos.json) | 官方名单离线快照（`fetched` 日期） |
+| [asset-scope.md](references/asset-scope.md) | **OH bounty 资产范围**：官方实时名单 + 分桶 |
 | [phone-os-vuln-types.md](references/phone-os-vuln-types.md) | **Phone OS 通用漏洞类型定义**（主类型表） |
 | [attack-surfaces.md](references/attack-surfaces.md) | OH 组件 → 类型索引 |
 | [terminology.md](references/terminology.md) | 远程/本地/TCB；同网算远程 |
