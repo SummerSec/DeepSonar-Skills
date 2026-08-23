@@ -4,16 +4,17 @@
 审计目标为 **出货 Chrome / Chromium 浏览器**（Windows / macOS / Linux / Android）时，优先以本文件条款定级；与全局 `severity-levels.md` / `<type>.md` 冲突时，**浏览器语义以本文件为准**。
 
 > 语义基线：[Chromium Severity Guidelines](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/severity-guidelines.md)（对照日 2026-08-23）。  
-> 完整形态、沙箱表、门禁见插件 `vuln-definitions-chrome`。  
-> **不是** ChromeOS 系统定级。
+> 完整形态、沙箱表、门禁、VRP 资格见插件 `vuln-definitions-chrome`。  
+> **不是** ChromeOS 系统定级。赏金表 **不** 改本文件档位。
 
 ---
 
 ## 1. 何时使用
 
 - 目标是 Chrome / Chromium 浏览器（非网站业务、非 ChromeOS 镜像）
-- finding 涉及：browser/renderer/GPU/network 进程、V8/Blink、Mojo、Site Isolation、SOP/UXSS、地址栏/权限 UX、扩展、着色器编译器
+- finding 涉及：browser/renderer/GPU/network 进程、V8/Blink、Mojo、Site Isolation、SOP/UXSS、地址栏/权限 UX、扩展、着色器编译器、Chrome 内 AI / Gemini
 - 需要对照官方 Critical/High/Medium/Low（S0–S3），或判断是否根本不是安全漏洞
+- 已授权投递时：范围 / 报告质量 / `vrp_eligible` 见完整插件 `vrp-rules.md`（本文件不定资格）
 
 ---
 
@@ -151,8 +152,10 @@
 | INV16 | javascript: / DevTools / 书签对自己文档执行脚本 |
 | INV17 | 无 PoC 的理论报告 |
 | INV18 | 其它应属非安全 |
+| INV19 | AI 越狱 / 幻觉 / 对齐 / 仅系统提示词（间接触发未确认动作或敏感数据外带才评） |
 
-**复现**：出货通道 + 符号化 ASAN（含 MiraclePtr Status）+ 文件型 PoC。完整门禁见 `vuln-definitions-chrome` 的 `gates.md`。
+**复现**：出货通道 + 符号化 ASAN（含 MiraclePtr Status）+ 文件型 PoC。完整门禁见 `vuln-definitions-chrome` 的 `gates.md`。  
+**投递**：Bughunters 选 Chrome VRP；资格见 `vrp-rules.md`，**不**用奖金改档。
 
 ---
 
@@ -169,7 +172,8 @@
 | 源与隔离 | UXSS、跨站同进程、跨站数据 | H9–H11 |
 | UX | 地址栏完全可控 vs 有限骗 | H12 / L13–L18 |
 | 着色器 | 仅 Metal 编译器 | M4 |
-| 非安全 | DoS、PROTECTED、物理本机 | INV |
+| AI / Gemini | 未确认 Rogue Actions / 敏感数据外带 / AI UI XSS | 按实害；越狱幻觉 → INV19 |
+| 非安全 | DoS、PROTECTED、物理本机、AI 越狱 | INV |
 
 iframe/`sandbox` 与 CSP sandbox **不是** OS 沙箱逃逸。
 
@@ -178,6 +182,6 @@ iframe/`sandbox` 与 CSP sandbox **不是** OS 沙箱逃逸。
 ## 7. 报告与定级纪律
 
 - 定级前先跑 Gate：**威胁模型 → 资产范围 → 进程沙箱 → 出货可达 → 安全实害 → 可复现**。
-- `severity_rule` 填本文件锚点，如 `chromium.md#H4`、`chromium.md#INV3`（完整插件亦可用 `severity-levels.md#H4`）。另填 `chrome_class` / `chrome_process` / `chrome_sandbox`（见 `shared/finding-schema.md`）。
+- `severity_rule` 填本文件锚点，如 `chromium.md#H4`、`chromium.md#INV3`（完整插件亦可用 `severity-levels.md#H4`）。另填 `chrome_class` / `chrome_process` / `chrome_sandbox`；可选 `vrp_eligible`（见 `shared/finding-schema.md`）。
 - 与 CVSS：本文件定性；量化用 `vuln-scoring`（默认 v3.1）。CVSS **不得**单独抬档；官方低危按 `low` 报。
 - **不收录具体 case**：无 CVE / crbug 清单。

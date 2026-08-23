@@ -2,15 +2,18 @@
 
 本文件是 **vuln-definitions-chrome 的资产范围**：落点必须是 **出货 Chrome / Chromium 浏览器** 的安全边界，才按本插件四档出正式 finding。
 
-**权威口径**（实时以源码为准，不检入名单快照）：
+**权威口径**（实时以官网 / 源码为准，不检入名单快照）：
 
 - 定级：[Severity Guidelines](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/severity-guidelines.md)
-- 威胁模型：[Security FAQ](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/faq.md)
+- 威胁模型 / AI 是否安全洞：[Security FAQ](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/faq.md)
 - 沙箱表：[process-sandboxes-by-platform.md](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/process-sandboxes-by-platform.md)
-- 投递入口（已授权）：[Google Bughunters → Chrome VRP](https://bughunters.google.com/report/vrp)
+- **VRP 规则与奖金表**（资格，不定级）：[Chrome VRP Rules](https://bughunters.google.com/about/rules/chrome-friends/chrome-vulnerability-reward-program-rules)（短链 https://g.co/chrome/vrp）
+- 投递入口（已授权）：[Google Bughunters → Chrome VRP](https://bughunters.google.com/report/vrp)（直接打 Chromium tracker **已弃用**）
 - VRP 习惯：[vrp-faq.md](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/vrp-faq.md)
+- 本插件摘要：[`vrp-rules.md`](vrp-rules.md)
 
-本插件 **不替代** ChromeOS 系统定级文档，也不覆盖「任意网站自己的 XSS」。
+本插件 **不替代** ChromeOS 系统定级文档，也不覆盖「任意网站自己的 XSS」。  
+**赏金 ≠ 定级**：`severity` 只走 Severity Guidelines；`vrp_eligible` 只回答「能不能按 Chrome VRP 投」。
 
 ---
 
@@ -40,7 +43,11 @@
 | **Chrome for Testing / headless-shell** | 不自动更新，只应用可信内容 | 打不可信网 → 范围外 |
 | **测试二进制** | `unit_tests`、`browser_tests` 等 | INV12 |
 | **嵌入方私有编译** | 不同工具链 / 标准库 / 额外组件 | 以 **出货 Chrome 配置** 是否表现为安全问题为准；仅嵌入方能打到 → 非本档 |
-| **VRP 常排除配置** | V8 `--experimental` 专属、SwiftShader、WebNN 未出货、unsafe 警告旗标、`--single-process` | 不定为可投递赏金项；若仍要语义定级，标 Impact_None 并写清 |
+| **VRP 常排除配置** | V8 `--experimental` 专属、SwiftShader、WebNN 未出货、unsafe 警告旗标、`--single-process` | `vrp_eligible: false`；若仍要语义定级，标 Impact_None 并写清 |
+| **Chrome 内 AI / Gemini** | 浏览器里随 Chrome 出货的 AI 表面（间接注入导致未确认动作 / 敏感数据外带 / AI UI XSS） | 可评，见 `chrome-vuln-types.md` A1–A3；越狱/幻觉/对齐 **不是** 安全洞（INV19） |
+| **GPU 驱动 / Mesa / Mali** | 从出货 Chrome（常是 renderer）可触发的驱动损坏 | 须证明 Chrome 走得到；纯驱动通病且 Chrome 不可达 → 非本资产 |
+| **ChromeOS 系统 VRP** | 登录、verified boot、`chronos`→root | **另一计划**，不是 Chrome 浏览器 VRP |
+| **Extensions VRP** | 扩展商店 / 扩展 API 专项 | **另一计划**，不是本插件主模型 |
 
 ---
 
@@ -52,8 +59,9 @@
 | 这个进程算不算未沙箱 | `process-sandbox.md` |
 | 算不算安全漏洞 | `adjustment-and-invalid.md` |
 | 定级 | `severity-levels.md` |
+| 能不能按 Chrome VRP 投 | `vrp-rules.md`（`vrp_eligible`） |
 
-范围只解决 **「算不算 Chrome 浏览器安全问题」**，不解决档位。
+范围只解决 **「算不算 Chrome 浏览器安全问题」**，不解决档位，也不决定奖金。
 
 ---
 
@@ -61,10 +69,11 @@
 
 ```
 产品是不是出货 Chrome/Chromium 浏览器
-  ├ 否（ChromeOS / iOS 主模型 / CfT / 测试件）→ 停或换文档
-  ├ 仅过新 HEAD / 仅 unsafe 旗标 → 对内或 Impact_None
+  ├ 否（ChromeOS 系统 / iOS 主模型 / CfT / 测试件 / 扩展商店专项）→ 停或换计划
+  ├ 仅过新 HEAD（落地未满约 7 天）/ 仅 Canary / 仅 unsafe 旗标 → 对内或 Impact_None；vrp_eligible: false
   ├ 三方库但出货走不到 → 停
-  └ 是 → 认进程沙箱 → Gate T/P/D/C/R → 四档
+  ├ AI 越狱 / 幻觉 / 仅系统提示词 → INV19，停
+  └ 是 → 认进程沙箱 → Gate T/P/D/C/R → 四档 → 对照 vrp-rules.md 填 vrp_eligible
 ```
 
 Finding 建议写：
@@ -73,6 +82,7 @@ Finding 建议写：
 chrome_process: renderer
 chrome_sandbox: sandboxed
 security_impact: stable | beta | dev | head | none
+vrp_eligible: true | false
 subject_revision: "chromium@<sha-or-version>"
 live_checked: "stable 128.x <日期> | not_checked"
 ```

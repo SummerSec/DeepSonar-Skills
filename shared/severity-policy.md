@@ -45,4 +45,4 @@ OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-d
 
 ## 例外：Chrome / Chromium（`vuln-definitions-chrome`）
 
-仓级「只报 C/H」**不适用于**本例外。浏览器类正式 finding 的 `severity` 为官方四档 `critical` / `high` / `medium` / `low`（S0–S3）。非安全条款与 Gate 不过仍不报（`reportable: false`）。`confidence` 仍禁止 `low`。字段另填 `chrome_class`、`chrome_process`、`chrome_sandbox`、`security_impact`（见 `finding-schema.md`）。纯 DoS / MiraclePtr PROTECTED / 物理本机不是低危，是不报。  
+仓级「只报 C/H」**不适用于**本例外。浏览器类正式 finding 的 `severity` 为官方四档 `critical` / `high` / `medium` / `low`（S0–S3）。非安全条款与 Gate 不过仍不报（`reportable: false`）。`confidence` 仍禁止 `low`。字段另填 `chrome_class`、`chrome_process`、`chrome_sandbox`、`security_impact`；可选 `vrp_eligible`（见 `finding-schema.md`）。纯 DoS / MiraclePtr PROTECTED / 物理本机 / AI 越狱不是低危，是不报。`vrp_eligible: false` 不阻止对内正式 finding。  

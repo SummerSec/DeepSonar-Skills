@@ -5,7 +5,8 @@
 **范围**见 [`asset-scope.md`](asset-scope.md)。  
 本文件只做 **Chromium 源码目录落点索引**，便于选模块；不收录 CVE / crbug。
 
-定级：`severity-levels.md` + `adjustment-and-invalid.md`。
+定级：`severity-levels.md` + `adjustment-and-invalid.md`。  
+VRP 资格：`vrp-rules.md`。
 
 ---
 
@@ -23,6 +24,7 @@
 | `mojo/`、`*.mojom`、`content/browser/*host*` | I1–I4、P3 | 已沦陷 renderer 模型；勿用自定义 harness |
 | `components/site_isolation`、`content/browser/site_instance*`、process model | W2、W3 | 跨站同进程 / 跨站数据 |
 | `chrome/browser/ui`、omnibox、permission prompts | U1–U7 | 安全决策欺骗才报；clickjacking 再严也是 L18 |
+| Chrome 内 Gemini / 浏览器 AI 表面 | A1–A3 | 未确认动作 / 敏感数据外带 / AI UI XSS 才评；越狱幻觉 → INV19 |
 | `chrome/browser/extensions`、`extensions/` | E1–E3 | 特定扩展 → M2；debugger → L6 |
 | `chrome/updater`、elevation / installer | E5、P5 | 无前提系统提权 → H13；同用户本机 → INV |
 | `chrome/browser/download`、Safe Browsing 文件策略 | F2、F3 | 零交互沦陷的新类型才有意思 |

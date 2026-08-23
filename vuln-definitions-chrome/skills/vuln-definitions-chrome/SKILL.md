@@ -1,6 +1,6 @@
 ---
 name: vuln-definitions-chrome
-description: "Chrome / Chromium 浏览器漏洞定义指南。在官方四档（Critical S0 / High S1 / Medium S2 / Low S3）与缓解/非安全条款之上，定义浏览器进程模型、Site Isolation、沙箱逃逸与 Web 平台形态。用户提到「Chrome 定级」「Chromium 漏洞」「沙箱逃逸」「Site Isolation」「MiraclePtr」「UXSS」「Mojo」「地址栏欺骗」，或要按 Chrome VRP / Severity Guidelines 判断 renderer UAF、V8、GPU、omnibox 是否安全漏洞时使用。This skill should be used when the user asks to rate a Chrome or Chromium security bug, classify Site Isolation vs sandbox escape, apply Chrome VRP / severity guidelines, or mentions Security-Impact_None, compromised renderer, or Chromium severity guidelines."
+description: "Chrome / Chromium 浏览器漏洞定义指南。在官方四档（Critical S0 / High S1 / Medium S2 / Low S3）与缓解/非安全条款之上，定义浏览器进程模型、Site Isolation、沙箱逃逸与 Web 平台形态；并按 Chrome VRP 判断范围、投递与赏金资格（不定级）。用户提到「Chrome 定级」「Chromium 漏洞」「沙箱逃逸」「Site Isolation」「MiraclePtr」「UXSS」「Mojo」「地址栏欺骗」「Chrome VRP」「Bughunters」「Gemini Rogue Actions」「vrp-flag.json」，或要按 Chrome VRP / Severity Guidelines 判断 renderer UAF、V8、GPU、omnibox、AI 是否安全漏洞时使用。This skill should be used when the user asks to rate a Chrome or Chromium security bug, classify Site Isolation vs sandbox escape, apply Chrome VRP / severity guidelines, check VRP eligibility, or mentions Security-Impact_None, compromised renderer, Gemini rogue actions, or Chromium severity guidelines."
 ---
 
 # Chrome / Chromium 浏览器漏洞定义指南
@@ -15,14 +15,16 @@ description: "Chrome / Chromium 浏览器漏洞定义指南。在官方四档（
 2. **定级**：严重 / 高危 / 中危 / 低危（`critical` / `high` / `medium` / `low`）— 以 Chromium Severity Guidelines 的 S0–S3 为准
 3. **裁定**：缓解降档、非安全条款、Gate 门禁
 4. **报告**：正式报告按官方四档；非安全漏洞与 Gate 不过不报
+5. **VRP 资格**（可选）：对照 `vrp-rules.md` 填 `vrp_eligible`；**赏金不改档**
 
 本插件 **不执行扫描**；**不收录** 具体 CVE / crbug；**不写** 可武器化 exploit。类型来自官方条款与浏览器架构，**不**把 ChromeOS、iOS WebKit、嵌入方私有编译当成同一套档。
 
 ## 何时使用
 
 - 审计 Chromium / Chrome 浏览器源码、组件或已授权目标上的浏览器漏洞
-- 涉及：browser / renderer / GPU / network / utility 进程、V8/Blink、Mojo IPC、Site Isolation、SOP/UXSS、扩展、地址栏/权限 UX、着色器编译器
+- 涉及：browser / renderer / GPU / network / utility 进程、V8/Blink、Mojo IPC、Site Isolation、SOP/UXSS、扩展、地址栏/权限 UX、着色器编译器、Chrome 内 AI / Gemini
 - 需要按官方四档定级，或判断「这还算不算安全漏洞」
+- 已授权投递 Chrome VRP：范围、报告质量、`vrp_eligible`（不定级）
 
 ## 强制前置
 
@@ -43,6 +45,7 @@ description: "Chrome / Chromium 浏览器漏洞定义指南。在官方四档（
 | 缓解与非安全 | 本插件 `references/adjustment-and-invalid.md` |
 | 门禁与报告 | 本插件 `references/gates.md` |
 | 资产范围 | 本插件 `references/asset-scope.md` |
+| VRP 资格 / 投递 | 本插件 `references/vrp-rules.md` |
 | 八类机理定义 | `vuln-definitions` → `references/<type>.md` |
 | CVSS v3.1 / v4.0 | `vuln-scoring`（Chrome 语境默认 3.1，可按需 4.0） |
 
@@ -51,12 +54,15 @@ description: "Chrome / Chromium 浏览器漏洞定义指南。在官方四档（
 - https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/severity-guidelines.md
 - https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/faq.md
 - https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/process-sandboxes-by-platform.md
+- https://bughunters.google.com/about/rules/chrome-friends/chrome-vulnerability-reward-program-rules
+- https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/vrp-faq.md
 
 ## 范围与报告
 
 - **只挖**：出货 Chrome / Chromium 浏览器、默认可达或已出货给部分用户的路径；网页内容或「已沦陷 renderer」模型
 - **报告**：官方四档 `critical` / `high` / `medium` / `low`
-- **明确不报**：纯 DoS/稳定性崩溃、MiraclePtr PROTECTED、空指针小固定偏移、仅悬空指针检测、隐私/指纹、物理本机/同用户已控、测试二进制、不现实交互、无安全决策的 UI 欺骗（见 ADJ/INV）
+- **明确不报**：纯 DoS/稳定性崩溃、MiraclePtr PROTECTED、空指针小固定偏移、仅悬空指针检测、隐私/指纹、物理本机/同用户已控、测试二进制、不现实交互、无安全决策的 UI 欺骗、AI 越狱/幻觉/对齐（见 ADJ/INV）
+- **VRP**：投递走 Bughunters 选 Chrome VRP；HEAD 落地未满约 7 天、排除旗标、报告质量不过 → `vrp_eligible: false`（仍可对内定级）
 
 ## 定级工作流
 
@@ -64,32 +70,34 @@ description: "Chrome / Chromium 浏览器漏洞定义指南。在官方四档（
 1. 攻击者模型：网页内容（主模型）还是已沦陷 renderer（MojoJS）？同用户本地/物理 → 停
 2. asset-scope.md：是浏览器还是 ChromeOS / iOS WebKit / CfT / 测试二进制 / 仅实验旗标？
 3. process-sandbox.md：落在哪个进程？该进程在**最弱沙箱平台**上是否沙箱？
-4. chrome-vuln-types.md 定形态（P/M/W/I/U/E/F/G/N）
+4. chrome-vuln-types.md 定形态（P/M/W/I/U/E/F/G/N/A）
 5. attack-surfaces.md 对照目录族（若有源码树）
 6. gates.md：T 威胁模型 → S 范围 → P 进程沙箱 → D 默认可达/出货 → C 安全实害 → R 可复现
 7. 八类 references/<type>.md 确认 vuln_type 成立
 8. severity-levels.md 匹配 严重→高危→中危→低危
 9. adjustment-and-invalid.md 查降档 / 非安全
 10. 官方四档且 confidence≥medium、Gate 全过 → 输出 finding（附 CVSS，默认 v3.1）
-11. 非安全 / Gate 不过 → 记否决原因
+11. 对照 vrp-rules.md 填 vrp_eligible（赏金不改 severity）
+12. 非安全 / Gate 不过 → 记否决原因
 ```
 
 ## 输出（定级场景）
 
 ```yaml
 vuln_type: <type|none>                 # 八类
-chrome_class: <如 P1|W2|I2>            # 浏览器形态 ID
+chrome_class: <如 P1|W2|I2|A1>         # 浏览器形态 ID
 chrome_process: browser | renderer | gpu | network | utility | kernel | other
 chrome_sandbox: unsandboxed | sandboxed | platform_dependent
 security_impact: stable | beta | dev | head | none   # Impact_None 仍要定级
 miracleptr: protected | not_protected | n/a
+vrp_eligible: true | false             # 对照 vrp-rules.md；false 仍可 reportable
 subject_revision: "<chrome|chromium>@<version-or-sha>"
 live_checked: "<channel> <version> <日期> | not_checked"
 severity: critical | high | medium | low
 confidence: high | medium              # 禁止 confidence: low；与 severity: low 勿混
 severity_rule: "severity-levels.md#H2"
 rationale: |
-  攻击者模型；进程与沙箱；形态；条款；ADJ/INV
+  攻击者模型；进程与沙箱；形态；条款；ADJ/INV；VRP 资格
 reportable: true | false               # 官方四档且 confidence≠low 为 true；INV / Gate 不过为 false
 ```
 
@@ -105,3 +113,4 @@ reportable: true | false               # 官方四档且 confidence≠low 为 tr
 | [adjustment-and-invalid.md](references/adjustment-and-invalid.md) | 缓解 + 非安全 |
 | [gates.md](references/gates.md) | Gate + 报告话术 |
 | [asset-scope.md](references/asset-scope.md) | 浏览器资产范围 |
+| [vrp-rules.md](references/vrp-rules.md) | Chrome VRP 范围 / 投递 / 资格（不定级） |

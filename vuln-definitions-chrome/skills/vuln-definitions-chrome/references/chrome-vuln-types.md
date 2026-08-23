@@ -18,7 +18,7 @@
 3. 在本文件命中 **形态**（可多选，取危害最高且证据充分的）
 4. 用类型表中的 **条款倾向** 打开 `severity-levels.md` 精匹配
 5. 过 Gate 与 ADJ/INV
-6. 回填 `chrome_class` + `vuln_type`
+6. 回填 `chrome_class` + `vuln_type`；对照 `vrp-rules.md` 填 `vrp_eligible`
 
 ---
 
@@ -46,6 +46,7 @@
 | M5a | **受控跨进程读** | 已沦陷 renderer 从 browser/GPU/network **受控**读 ≥16 字节 | 不受控未初始化、单字节 | 已沦陷 renderer | **H5**；不受控未初始化 → **L7**；单字节 → **L1** |
 | M6a | **未初始化 / 小泄露** | 不受控单字节、renderer 任意 OOB 读、未初始化经 IPC | 受控 ≥16B | 视进程 | L1 / L2 / L7 |
 | M7a | **MiraclePtr / 悬空指针检测** | ASAN `PROTECTED`，或仅检出悬空未解引用 | `NOT PROTECTED` 且可证损坏 | — | **INV**（功能缺陷） |
+| M8a | **V8 sandbox 绕过** | 突破引擎内沙箱（**不是** OS 沙箱）。报告须按官方 d8 旗标（如 `--sandbox-testing`），标题标 `[V8 Sandbox Bypass]` | OS 沙箱逃逸（那是 P3）；V8 Experimental 专属 | 网页 | 按最终实害，常 **H2**；资格见 `vrp-rules.md` |
 
 ASAN：renderer 里的 READ 除非明确是小尺寸读，否则按 WRITE 处理。
 
@@ -146,7 +147,22 @@ SwiftShader 已弃用、仅测试；WebNN 未出货加固中——VRP 常排除�
 
 ---
 
-## 10. 与八类 `vuln_type` 的映射
+## 10. Chrome 内 AI / Gemini（A）
+
+Chrome 把误导、未对齐、不安全的**模型输出本身**不当漏洞。细则与投递要求见 `vrp-rules.md` §7。
+
+| ID | 类型 | 定义 | 不是什么 | 路径 | 条款倾向 |
+|----|------|------|----------|------|----------|
+| A1 | **Rogue Actions** | 间接触发，未确认即改受害者账号/数据，有安全后果（未预期付款、删号、实质性损坏） | 自己会话越狱、让模型说脏话/违法内容 | 网页 → AI 表面 | 按可演示实害定级（常 High 向）；`vrp_eligible` 另判 |
+| A2 | **敏感数据外带** | 把受害者 SPII/PII/跨站敏感数据送到攻击者可控处，且无有效确认 | 系统提示词套话、无敏感数据的 preamble | 网页 → AI 表面 | 按数据边界（常 High / Medium）；仅套话 → **INV19** |
+| A3 | **AI 表面 XSS** | 可信 AI UI 上下文执行脚本（须消毒失败的演示） | 用 DevTools 往可信面硬塞代码 | 网页 | 按 W1 / H9；DevTools 硬塞 → INV16 |
+
+越狱、幻觉、对齐、拷贝粘贴提示词、仅控制输出措辞、点了才泄露的链接 → **INV19**。后端滥用走 Google Abuse / Google VRP。  
+A1/A2 **不要自造** H14 一类条款号：`severity_rule` 填最接近的已有实害条款（跨源/账号 → `authz` 的 H9 向或 `severity-levels.md` 对应档；外带敏感数据按数据边界选 High/Medium），并写 `chrome_class: A1|A2`。`vrp_eligible` 另判。
+
+---
+
+## 11. 与八类 `vuln_type` 的映射
 
 | Chrome 类型（例） | 优先 `vuln_type` |
 |-------------------|------------------|
@@ -157,25 +173,28 @@ SwiftShader 已弃用、仅测试；WebNN 未出货加固中——VRP 常排除�
 | Mojo 反序列化 / 句柄 | `deserialization` 或 `rce`/`authz` 按实害 |
 | 命令/表达式进引擎 | `injection` 或 `rce` |
 | 扩展密钥、同步令牌可外带 | `secrets` |
+| A1 Rogue Actions / A2 敏感数据外带 | `authz` 或 `secrets`（按实害） |
+| A3 AI 表面 XSS | `authz`（同 W1） |
+| M8a V8 sandbox 绕过 | `rce` |
 
 现象跨类时：按 **最终可演示影响** 选一类主类型，rationale 可注明次要类。
 
 ---
 
-## 11. 挖掘优先级（浏览器通用）
+## 12. 挖掘优先级（浏览器通用）
 
 ```
 P0 网页直达未沙箱高权：browser、Android GPU、Win/Linux/Android network、任意本地文件
 P1 沙箱内 ACE：V8 / Blink / 已沙箱 GPU；UXSS / Site Isolation
 P2 已沦陷 renderer → 逃逸 / ≥16B 受控读 / 内核
-P3 完整历史、HSTS、插页、Metal 编译器、特定扩展
+P3 AI Rogue Actions / 敏感数据外带；完整历史、HSTS、插页、Metal 编译器、特定扩展
 P4 低危原语：OOB 读、部分 CSP、弱沙箱、有限 UX 骗
-P5 通常非安全：DoS、MiraclePtr PROTECTED、物理本机、隐私指纹、测试二进制、不合理交互
+P5 通常非安全：DoS、MiraclePtr PROTECTED、物理本机、隐私指纹、测试二进制、不合理交互、AI 越狱/幻觉
 ```
 
 ---
 
-## 12. 一票否决（浏览器向速查）
+## 13. 一票否决（浏览器向速查）
 
 | 情况 | 处理 |
 |------|------|
@@ -190,3 +209,5 @@ P5 通常非安全：DoS、MiraclePtr PROTECTED、物理本机、隐私指纹、
 | 隐私 / 指纹 / Incognito 保证 | INV（隐私缺陷） |
 | 测试二进制 / CfT 打不可信网 | 范围外 |
 | 必须再叠一个未证明洞 | 按已证单洞；链不完整不抬 C3 |
+| AI 越狱 / 幻觉 / 对齐 / 仅系统提示词 | INV19 |
+| V8 Experimental / SwiftShader / WebNN / `--single-process` 当赏金项 | `vrp_eligible: false`；仍可对内定级并标 Impact_None |

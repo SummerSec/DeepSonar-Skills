@@ -1,7 +1,8 @@
 # 级别调整与非安全条款
 
 定级后必须过本文件：命中调整条款 → 下调；命中无效条款 → 直接停。  
-口径：Severity Guidelines 文首缓解规则 + Security FAQ + VRP FAQ 的范围排除。
+口径：Severity Guidelines 文首缓解规则 + Security FAQ + [Chrome VRP Rules](https://bughunters.google.com/about/rules/chrome-friends/chrome-vulnerability-reward-program-rules) / VRP FAQ 的范围排除。  
+赏金资格细则见 `vrp-rules.md`，**不**用奖金表改档。
 
 ---
 
@@ -56,9 +57,10 @@
 | INV16 | **javascript: / DevTools / 书签脚本** | 用户对自己文档执行脚本，不是 XSS |
 | INV17 | **仅理论、无 PoC** | VRP：静态分析猜想且无演示 → 不可复现 / WontFix |
 | INV18 | **其它应属非安全** | 兜底：时序侧信道多数走隐私；仅观察到 NTLMv2 响应等 |
+| INV19 | **AI 越狱 / 幻觉 / 对齐 / 仅系统提示词** | 模型输出不当、自己会话越狱、拷贝粘贴提示词、仅 preamble 泄漏 → 产品反馈或 Google Abuse/VRP，**不是** Chrome 安全洞。间接触发未确认有害动作或敏感数据外带才评（A1/A2） |
 
 **复现硬门槛**：出货通道（Stable / Beta / Dev）+ 默认可达或已出货给部分用户的配置；内存安全须 **符号化 ASAN**（含 MiraclePtr Status）。  
-只在 Canary / 落地未满 7 天的 HEAD 新代码上成立 → 范围/奖励上常排除，定级可记但对内。
+只在 Canary / 落地未满约 7 天的 HEAD 新代码上成立 → `vrp_eligible: false`，定级可记但对内。
 
 ---
 

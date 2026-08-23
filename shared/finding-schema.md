@@ -76,11 +76,12 @@ subject_revision: "<仓>@<sha>"     # Job 钉扎；可与现树不同
 live_checked: "<后继仓>@<sha> <日期> | not_checked"
 
 # 浏览器类 / Chrome（用 vuln-definitions-chrome 时必填）
-chrome_class: P2                   # 浏览器形态 ID，如 P1 / M3a / W2 / I1
+chrome_class: P2                   # 浏览器形态 ID，如 P1 / M3a / W2 / I1 / A1
 chrome_process: renderer           # browser | renderer | gpu | network | utility | kernel | other
 chrome_sandbox: sandboxed          # unsandboxed | sandboxed | platform_dependent
 security_impact: stable            # stable | beta | dev | head | none
 miracleptr: not_protected          # protected | not_protected | n/a
+vrp_eligible: true                 # 可选：对照 vrp-rules.md；false 仍可 reportable
 ```
 
 ## 命名约定
@@ -89,7 +90,7 @@ miracleptr: not_protected          # protected | not_protected | n/a
 - 白盒 skill 名：`wb-<type>`；黑盒：`bb-<type>`
 - 严重度语义：`vuln-definitions`；数值评分：`vuln-scoring`（**CVSS v3.1 或 v4.0**）
 - 系统类（OH / Phone OS）另填 `mechanism`、`phone_os_class`、`asset_repo`、`asset_scope`；名单与分桶见 `vuln-definitions-oh` 的 `asset-scope.md`。`asset_scope` 不是 `in_list_first_party` 时默认不进正式报告（三方/上游内核仅默认路径独立 e2e 可例外）
-- 浏览器类（Chrome / Chromium）另填 `chrome_class`、`chrome_process`、`chrome_sandbox`、`security_impact`；沙箱与分桶见 `vuln-definitions-chrome` 的 `process-sandbox.md` / `asset-scope.md`
+- 浏览器类（Chrome / Chromium）另填 `chrome_class`、`chrome_process`、`chrome_sandbox`、`security_impact`；可选 `vrp_eligible`。沙箱、分桶与 VRP 资格见 `vuln-definitions-chrome` 的 `process-sandbox.md` / `asset-scope.md` / `vrp-rules.md`
 - **报告门槛**：`wb-*` / `bb-*` 只写 `critical|high`；`vuln-definitions-oh` 与 `vuln-definitions-chrome` 写官方四档 `critical|high|medium|low`。三种路径 `confidence` 均禁止 `low`（官方 `severity: low` 是低危档，不是置信度）
 
 ## CVSS 字段纪律

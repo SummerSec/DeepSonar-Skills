@@ -60,7 +60,7 @@ DeepSonar-Skills/
 | Plugin | Skill | 职责 |
 |--------|-------|------|
 | **vuln-definitions-oh** | `vuln-definitions-oh` | OpenHarmony / Phone OS 官方四档 + 系统形态 |
-| **vuln-definitions-chrome** | `vuln-definitions-chrome` | Chrome / Chromium 官方 S0–S3 + 沙箱 / Site Isolation |
+| **vuln-definitions-chrome** | `vuln-definitions-chrome` | Chrome / Chromium 官方 S0–S3 + 沙箱 / Site Isolation + VRP 资格（不定级） |
 
 ### 漏洞评分 `vuln-scoring`（推荐）
 

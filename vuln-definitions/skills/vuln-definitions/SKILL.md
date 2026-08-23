@@ -71,7 +71,7 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 
 审计目标为 **出货 Chrome / Chromium 浏览器**（进程沙箱、V8/Blink、Site Isolation、Mojo、地址栏 UX）时，加载：
 
-**[references/chromium.md](references/chromium.md)** — 官方四档（`#C1…H1…M1…L1…`）、缓解/非安全、浏览器类型摘要。完整 **进程沙箱**、**形态表**与门禁见插件 `vuln-definitions-chrome`（`process-sandbox.md`、`chrome-vuln-types.md`、`gates.md`）。
+**[references/chromium.md](references/chromium.md)** — 官方四档（`#C1…H1…M1…L1…`）、缓解/非安全、浏览器类型摘要。完整 **进程沙箱**、**形态表**、门禁与 **VRP 资格**见插件 `vuln-definitions-chrome`（`process-sandbox.md`、`chrome-vuln-types.md`、`gates.md`、`vrp-rules.md`）。
 
 浏览器语义与本文件全局条款冲突时，**以 `chromium.md` 为准**。  
 ChromeOS 系统镜像、iOS WebKit 壳不当本专项。

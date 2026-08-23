@@ -4,7 +4,7 @@
 
 1. **vuln-definitions** — 漏洞定义模块（独立 plugin，语义基线）  
 2. **vuln-definitions-oh** — OpenHarmony / Phone OS 系统漏洞定义（独立 plugin：四档/无效条款 + 移动 OS 通用类型）  
-2b. **vuln-definitions-chrome** — Chrome / Chromium 浏览器漏洞定义（独立 plugin：官方 S0–S3 + 沙箱/Site Isolation + 非安全条款）  
+2b. **vuln-definitions-chrome** — Chrome / Chromium 浏览器漏洞定义（独立 plugin：官方 S0–S3 + 沙箱/Site Isolation + 非安全条款 + Chrome VRP 资格）  
 3. **vuln-scoring** — 漏洞评分模块（CVSS v3.1 / v4.0 按需 + EPSS/SSVC/KEV）  
 4. **whitebox-*** — 白盒审计（按漏洞类型）  
 5. **blackbox-*** — 黑盒挖掘（按漏洞类型，工具在 agent-env）  
@@ -36,7 +36,7 @@ agent-env/                # 黑盒工具内置清单与镜像
 
 1. **`vuln-definitions/`** 是**严重度定级的唯一语义源**：八类漏洞定义 + 严重/高危/中危/无危害条款（`references/severity-levels.md` + 每类 `references/<type>.md`）。所有 `wb-*`/`bb-*` skill **不自建定级标准**，强制依赖本插件。  
    OpenHarmony 等系统类审计时：机理类型仍以本插件八类为准；**系统四档/无效条款/Phone OS 形态** 加载 `vuln-definitions/.../references/openharmony.md`，或直接用 `vuln-definitions-oh/`（完整：`phone-os-vuln-types.md` + 门禁）。  
-   Chrome / Chromium 浏览器审计时：机理类型仍以本插件八类为准；**浏览器四档/非安全条款/沙箱形态** 加载 `vuln-definitions/.../references/chromium.md`，或直接用 `vuln-definitions-chrome/`（完整：`chrome-vuln-types.md` + `process-sandbox.md` + 门禁）。
+   Chrome / Chromium 浏览器审计时：机理类型仍以本插件八类为准；**浏览器四档/非安全条款/沙箱形态** 加载 `vuln-definitions/.../references/chromium.md`，或直接用 `vuln-definitions-chrome/`（完整：`chrome-vuln-types.md` + `process-sandbox.md` + 门禁 + `vrp-rules.md`）。赏金资格不改 `severity`。
 2. **`vuln-scoring/`** 是**定量评分与利用优先级**模块：支持 **CVSS v3.1 与 v4.0**（先选版本再按需加载指标文件），并映射回四级定级；可选 EPSS / SSVC / CISA KEV 做修复排序。**不替代**定性条款，finding 的 `severity` 仍以 definitions 为准。
 3. **`whitebox/<type>/` 与 `blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
 4. **`shared/`** 是仓库级契约：`severity-policy.md`（默认只报 C/H；OH / Chrome 四档例外）、`finding-schema.md`（统一 finding YAML，含 `cvss` 块）、`authorization.md`。
@@ -93,7 +93,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 
 1. **改漏洞定义/定级标准** → 只改 `vuln-definitions/`，bump 其 version  
 1b. **改 OpenHarmony 系统四档/无效条款** → 只改 `vuln-definitions-oh/`（及 `vuln-definitions/.../references/openharmony.md`），同步 bump 两处 version  
-1c. **改 Chrome / Chromium 浏览器四档/非安全条款** → 只改 `vuln-definitions-chrome/`（及 `vuln-definitions/.../references/chromium.md`），同步 bump 两处 version  
+1c. **改 Chrome / Chromium 浏览器四档/非安全条款 / VRP 资格** → 只改 `vuln-definitions-chrome/`（及 `vuln-definitions/.../references/chromium.md`），同步 bump 两处 version；赏金表不改 `severity`  
 2. **改 CVSS/利用评分/优先级标准** → 只改 `vuln-scoring/`，bump 其 version  
 3. 改审计手法 → 对应 `whitebox-*` / `blackbox-*`  
 4. 报告策略（是否上报 medium）→ `shared/severity-policy.md`  
