@@ -15,21 +15,32 @@
 | `kernel_liteos_*` / `kernel_uniproton` / 关键驱动 | K1–K5 | **在册自研**；普通 App 可达的 syscall/ioctl/驱动节点；**默认节点过宽** |
 | 上游 `kernel_linux` / `_4.19` / `_5.10` / `_6.6` | — | **默认 INV4**；不按本表挖通用 CVE |
 | `kernel_linux_patches` / `common_modules*` / `newip` | K1–K5 | 可证 OH 独有路径才按自研；`kernel_linux_config` / `_build` 非运行时 |
-| `drivers_hdf_*` / 板级·SoC 驱动 | K3、K5 | HDF/HAL 用户态可达接口；默认设备节点 DAC |
+| `drivers_hdf_*` / `drivers_adapter*` | K3、K5 | HDF/HAL 用户态可达接口；默认设备节点 DAC |
+| `device_board_*` / `device_soc_*` / 板级 Hisilicon（如 `mmz_userdev`） | K3、K5 | **板级/厂商**（ADJ2）；非法映射/越界须社区标准设备、普通模型可达才评；须 system UID → ADJ3 |
 | `startup_appspawn` / `startup_init*` / param | S3、I1、K 边缘 | 路径穿越、缺鉴权改参、孵化参数 |
 | SA / SAMGR / `communication_ipc` | I1–I5、P1–P5 | caller 校验、**SA 中继**、Parcel 内存安全、反序列化鉴权 |
 | `security_access_token` / tokensync / 安全组件管理 | P1–P5 | 跨应用权限画像、token 同步、权限实现错误 |
 | `communication_dsoftbus` / BT / Wi‑Fi / WLAN / `netmanager` | N1–N6、I1 | 未认证报文、**近场/软总线实现**、组网、跨设备、网络管理越权 |
 | `arkcompiler_*` / `arkui_*` | W4–W6、M3a | 运行时/UI **内存破坏与类型混淆**；远程内容 vs 本地；**受限场景 ACE 不抬档** |
-| `web_webview` / nweb | W1–W3 | 引擎 RCE、JS 桥、file/origin；纯上游默认 INV4 |
+| `web_webview` / nweb | W1–W3 | 引擎 RCE、JS 桥、file/origin。**裁定**：缺陷在 OH 包装/桥/默认配置 → 按自研；纯 chromium/CEF 上游且 OH 未改默认路径 → INV4 |
 | multimedia / camera / `av_codec` / `av_session` / audio | M1a–M3a、P1、P5、I3 | 编解码远程入口；SA 未授权开相机；会话/音频服务 UAF |
 | telephony / 短信 / 蜂窝 / `cellular_call` | N3、B1、M1a、P5 | 消息入口解析；电话栈入参；敏感广播 |
 | bundlemanager / bms / `app_domain_verify` / 安装更新 | U1–U2、U6、E2、S3、F3 | 静默装、签名、**仍需用户确认的管控绕过不按 C4**、域名校验组件 |
 | `update_*` / `sys_installer` | U6、I2、F3 | OTA 安装器缺鉴权 / TOCTOU / UAF；半链中继不报 |
-| `ability_ability_runtime` | E1、E3、E4 | Ability/Want 拉起与传参越权 |
-| download / `filemanagement_*` / hmdfs / storage_service | F1–F4、S1 | 任意文件、存储服务路径、分布式文件隔离 |
+| `ability_ability_runtime` | E1、E3–E7 | Ability/Want 拉起与传参；WantAgent 误授；任务栈劫持；卡片/元服务 |
+| download / `request_request` / `filemanagement_*` / hmdfs / storage_service | F1–F4、S1 | 任意文件（含 download_server）、存储服务路径、分布式文件隔离 |
 | pasteboard / UDMF / inputmethod | F5、X2–X3、I2 | 统一数据面、剪贴板、输入法 stub |
-| window / 通知 / 公共事件 / `background_task` | B1–B3、X1、X5、P5 | 广播敏感字段、通知、窗口属性、后台任务权限 |
+| `distributeddatamgr_*`（KV / relationalstore / preferences） | F7、S1、S2 | 跨应用/跨设备数据面；默认可导出才评 |
+| window / 通知 / 公共事件 / `background_task` / push | B1–B4、X1、X5、P5 | 广播敏感字段、通知、推送、窗口属性、后台任务权限 |
+| `hiviewdfx_hiview` | F1、P5 | 诊断/日志服务把文件或能力暴露给普通调用方 |
+| `msdp_device_status` / `global_resource_management` | I3 | 设备状态 / 资源管理服务内存破坏（UAF、双重释放） |
+| `distributedhardware_device_manager` | N4、N6 | 组网异常报文 → 设备重启/越权；近场按远程 |
+| `security_device_auth` / `security_certificate_manager` | N2、U4 | 跨设备 PIN/明文；证书模块未初始化缓冲（机理 UNINIT） |
+| `os_account` / 分布式账号 | S5、S2 | 跨用户/跨设备账号边界 |
+| `applications_settings` | E1、P5 | 设置应用导出组件 / 权限实现错误 |
+| USB / ADB / MTP / 投屏·P2P | N7、N8 | 邻接面；须解锁 BL / 开发者选项 → ADJ6/7 |
+| 动态共享包 / HSP / 热更新 | U7 | 插件或热更新把不可信代码送进预置/普通进程 |
+| NAPI / XComponent 原生桥 | W7 | 非 WebView 的 ArkTS↔native 桥越权 |
 | `base_location` / 传感器 | P1、P5、X4 | 位置/传感器权限实现；低敏感侧信道 |
 | `ai_neural_network_runtime` | W4、W6 | NN 运行时内存破坏；默认须证普通模型可达 |
 | keystore / HUKS / 安全启动 | U4–U5、M7、N2 | 密钥导出；跨设备 PIN/明文；BL 解锁多为 ADJ6 |
@@ -66,10 +77,10 @@
 |--------|----------|------|
 | 分布式软总线 / 设备组网 | N4、N6、N1 | 授权前跨设备、弱设备→富设备（C6/H11）；近场报文打实现层 |
 | SA 中继链 / callback stub | I2、I5 | 与 Binder confused deputy 同型；半链不报 |
-| 多设备资料同步 | S2、F2、F5、H4 | 跨设备也要看用户/资料隔离；UDMF/剪贴板 |
-| Ark / ACE 运行时 | W4–W6 | 远程内容打任意应用进程才是 H2；「受限/特定场景」走 L1/M1 |
+| 多设备资料同步 | S2、S5、F2、F5、F7 | 跨设备也要看用户/资料/账号隔离；UDMF/剪贴板/分布式 KV |
+| Ark / ACE 运行时 | W4–W7 | 远程内容打任意应用进程才是 H2；「受限/特定场景」走 L1/M1；NAPI 桥 ≠ WebView JS 桥 |
 | HDF / 默认设备节点 | K3、K5 | 普通 App 默认可达才算；调试节点 ADJ6/7 |
-| OTA / 包管理 / Ability | U6、U2、E4 | 升级安装器、仍需确认的管控绕过、元能力传参 |
+| OTA / 包管理 / Ability | U6、U2、U7、E4–E7 | 升级安装器、动态共享包、WantAgent、任务栈、卡片/元服务 |
 
 其余类型（媒体远程、Web 引擎、权限、沙箱、内核等）与 Android/iOS **同型**，按 `phone-os-vuln-types.md` 挖。  
 **不按** 单一月报或三方库清单裁剪类型；`kernel_linux_*` / `third_party_*` / 上游引擎默认走 INV4。

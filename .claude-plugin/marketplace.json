@@ -1,26 +1,32 @@
 {
   "name": "DeepSonar-Skills",
-  "description": "DeepSonar security skills: vulnerability definitions, CVSS v3.1/v4.0 scoring, and whitebox/blackbox plugins by vuln type (report Critical/High only).",
+  "description": "DeepSonar security skills: vulnerability definitions (incl. OH / Chrome official four tiers), CVSS v3.1/v4.0 scoring, and whitebox/blackbox plugins by vuln type (wb/bb report Critical/High only).",
   "owner": {
     "name": "DeepSonar"
   },
   "plugins": [
     {
       "name": "vuln-definitions",
-      "description": "漏洞定义模块：每类漏洞定义与严重/高危/中危/无危害判定标准（白盒黑盒共用）；OpenHarmony 系统类审计加载 references/openharmony.md。",
-      "version": "0.2.6",
+      "description": "漏洞定义模块：每类漏洞定义与严重/高危/中危/无危害判定标准（白盒黑盒共用）；OpenHarmony 系统类加载 references/openharmony.md；Chrome / Chromium 加载 references/chromium.md。",
+      "version": "0.2.9",
       "source": "./vuln-definitions"
     },
     {
       "name": "vuln-definitions-oh",
       "description": "OpenHarmony / Phone OS 系统漏洞定义：官方四档与调整/无效条款，外加移动 OS 通用漏洞类型（对齐 Android·iOS 形态）。",
-      "version": "0.2.7",
+      "version": "0.2.9",
       "source": "./vuln-definitions-oh"
+    },
+    {
+      "name": "vuln-definitions-chrome",
+      "description": "Chrome / Chromium 浏览器漏洞定义：官方四档（S0–S3）与缓解/非安全条款，外加进程沙箱、Site Isolation 与浏览器形态。",
+      "version": "0.1.0",
+      "source": "./vuln-definitions-chrome"
     },
     {
       "name": "vuln-scoring",
       "description": "漏洞评分模块：CVSS v3.1 与 v4.0 按需评分、向量串、与 DeepSonar 四级映射，以及 EPSS/SSVC/KEV 优先级。",
-      "version": "0.2.1",
+      "version": "0.2.3",
       "source": "./vuln-scoring"
     },
     {

@@ -37,7 +37,7 @@ description: "漏洞评分模块。支持 CVSS v3.1 与 CVSS v4.0（按需加载
 |--------|------|----------|
 | 1 | 用户明确指定 `3.1` / `4.0` /「两版都要」 | 按用户 |
 | 2 | 外部数据源已给向量前缀 `CVSS:3.1/` 或 `CVSS:4.0/` | 与数据源一致 |
-| 3 | OpenHarmony / 手机 OS 公告、奖励计划、多数国内厂商通报语境 | **3.1** |
+| 3 | OpenHarmony / 手机 OS / Chrome 公告、奖励计划、多数国内厂商通报语境 | **3.1** |
 | 4 | 用户要求 FIRST 最新主标准、或 NVD 已提供 v4 | **4.0** |
 | 5 | 均未指定 | **默认 3.1**（与 OH/NVD 存量对齐）；可在 rationale 注明「可另出 v4 对照」 |
 
@@ -144,8 +144,8 @@ environmental_score: null
 metrics: {}                    # 该版本 Base 全量键值
 
 deepsonar:
-  severity_mapped: critical | high | medium | none
-  severity_from_definitions: critical | high | medium | none | unknown
+  severity_mapped: critical | high | medium | none | low   # low 仅 OH 官方低危
+  severity_from_definitions: critical | high | medium | none | low | unknown
   severity_rule: "injection.md#C1"
   alignment: match | diverge
   alignment_note: |

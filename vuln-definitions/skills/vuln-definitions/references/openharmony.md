@@ -31,15 +31,15 @@
 
 ## 3. 四档危害（官方条款）
 
-> 官方四档为 严重/高危/中危/**低危**；本仓报告模型为 critical/high/medium/none。  
-> 官方「低危」仍可领奖（≤1 万元），但本仓默认按 **none（不报告）** 处理——语义上仍是「真实但低影响」。
+> 官方四档为 严重/高危/中危/**低危**；本仓报告模型为 critical/high/medium/low。  
+> 系统类走 `vuln-definitions-oh` 时 **官方四档均可写入正式 finding**（低危 → `low` 且 `reportable: true`）。仓级 `shared/severity-policy.md` 的「只报 C/H」不适用。INV / Gate 不过仍不报（`reportable: false`），不要把低危写成 `none`。
 
 | 档 | 本仓映射 | 一句话 |
 |----|----------|--------|
 | 严重 | `critical` | TCB 级沦陷 / 远程永久砖机 / 特权数据未授权读取 |
 | 高危 | `high` | 普通应用远程 RCE / 隔离绕过 / 远程未授权读受保护数据 / 静默装包 |
 | 中危 | `medium` | 受限进程远程 RCE / 本地各档 RCE / 本地未授权读受保护数据 / 不安全加密泄露 |
-| 低危 | `none`（官方 low） | 本地受限进程 RCE / 本地临时 DoS / 低敏感信息泄露（官方原文：`低风险的信息泄露`） |
+| 低危 | `low` | 本地受限进程 RCE / 本地临时 DoS / 低敏感信息泄露（官方原文：`低风险的信息泄露`） |
 
 ### 严重（Critical）
 
@@ -80,7 +80,7 @@
 | M6 | 无需用户交互 **本地** 开启/关闭通常需用户发起的功能 |
 | M7 | 不安全的加密算法及密钥存储，可导致敏感信息泄露 |
 
-### 低危（Low → 本仓 none）
+### 低危（Low）
 
 | # | 判定条件 |
 |---|----------|
@@ -135,21 +135,21 @@ OH 组件索引见同插件 `attack-surfaces.md`；**bounty 资产范围**见 `a
 |--------|-----|----------|
 | 内核/驱动/HDF TCB | 本地 UAF/越界/竞态 → ACE/root；默认节点过宽 | H1 / C2；远程进 TCB → C1 |
 | IPC / 系统服务 | 缺鉴权、SA 中继、Parcel 内存破坏、反序列化鉴权绕过 | M5/H5/H3；半链 → ADJ4/INV2 |
-| 沙箱/隔离 | 跨应用数据、路径穿越、多用户 | H3 / H4 |
+| 沙箱/隔离 | 跨应用数据、路径穿越、多用户、**账号实现** | H3 / H4 |
 | 权限/令牌 | 权限绕过、身份伪造、**权限实现错误** | M5/M6；远程 → H5/H8 |
-| 导出组件/Ability/Want | 未鉴权导出、链接越权、元能力传参 | M5/H5/H3 |
+| 导出组件/Ability/Want | 未鉴权导出、链接越权、元能力传参、**WantAgent**、任务栈、卡片 | M5/H5/H3 |
 | 媒体/消息解析 | 畸形媒体远程 ACE | H2 / C1 |
-| Web/Ark 运行时 | 引擎 RCE、JS 桥、内存破坏、**类型混淆** | H2 / M2/M3；**受限场景 ACE → L1/M1** |
-| 无线/近场/软总线/分布式 | BT/Wi‑Fi/SoftBus 实现层、跨设备 | H2/H5/H7；C6/H11 |
-| 安装/OTA/锁屏/密钥 | 静默装、升级安装器、绕锁、密钥导出 | H10/H9/M7；仍需用户确认 ≠ C4 |
-| 广播/UDMF/剪贴板/窗口 | 敏感事件、统一数据面、窗口属性 | M5 / H3 |
+| Web/Ark 运行时 | 引擎 RCE、JS 桥、**NAPI 桥**、内存破坏、**类型混淆** | H2 / M2/M3；**受限场景 ACE → L1/M1** |
+| 无线/近场/软总线/分布式 | BT/Wi‑Fi/SoftBus 实现层、跨设备、**投屏/P2P** | H2/H5/H7；C6/H11 |
+| 安装/OTA/锁屏/密钥 | 静默装、升级安装器、**动态共享包**、绕锁、密钥导出 | H10/H9/M7；仍需用户确认 ≠ C4 |
+| 广播/UDMF/剪贴板/窗口 | 敏感事件、统一数据面、**分布式 KV**、窗口属性、推送 | M5 / H3 |
 
 须 system UID / 二次洞 / 纯上游无默认路径 / 官方「受限场景」未证普通模型 → ADJ3 / ADJ4 / INV4 / L1。
 
 ## 7. 报告与定级纪律
 
-- 定级前先跑 Gate 检查：**资产范围（S）→ 活树/最新公开版本（V）→ 攻击者是谁 → 默认与可达 → 直接实害 → 利用链闭合**；S/V 不过或任一不过 → 判 `none`/对内（详见 `vuln-definitions-oh` 的 `gates.md`、`asset-scope.md`）。
-- finding 的 `severity_rule` 填本文件锚点，如 `openharmony.md#H5`、`openharmony.md#INV1`、`openharmony.md#ADJ3`。系统类另填 `asset_repo` / `asset_scope`（见 `shared/finding-schema.md`）。
+- 定级前先跑 Gate 检查：**资产范围（S）→ 活树/最新公开版本（V）→ 攻击者是谁 → 默认与可达 → 直接实害 → 利用链闭合**；S/V 不过或任一不过 → `reportable: false` / 对内（详见 `vuln-definitions-oh` 的 `gates.md`、`asset-scope.md`）。
+- finding 的 `severity_rule` 填本文件锚点，如 `openharmony.md#H5`、`openharmony.md#INV1`、`openharmony.md#ADJ3`（完整插件亦可用 `severity-levels.md#H5`）。系统类另填 `mechanism` / `phone_os_class` / `asset_repo` / `asset_scope`（见 `shared/finding-schema.md`）。
 - 报告至少写清：影响与根因（版本/模块/代码逻辑）、**恢复出厂后** 分步复现 + 截图、完整可编译 PoC（源码/依赖/构建说明）。
-- 与 CVSS 的关系：本文件负责 **定性**；量化用 `vuln-scoring`（**默认 CVSS v3.1**，可按需 v4.0）。**不得**单独把 none/low 抬进正式报告。
+- 与 CVSS 的关系：本文件负责 **定性**；量化用 `vuln-scoring`（**默认 CVSS v3.1**，可按需 v4.0）。CVSS **不得**单独抬档；官方低危按 `low` 报，不要写成 high，也不要写成 `none`。
 - **不收录具体 case**：本文件只提供条款与判定规则，不写具体漏洞样例或历史漏洞清单。

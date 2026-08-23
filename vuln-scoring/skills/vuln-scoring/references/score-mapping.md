@@ -11,7 +11,7 @@ CVSS 用于 **量化与外部对齐**，不能单独推翻「无危害/中危」
 | 维度 | DeepSonar（vuln-definitions） | CVSS v3.1 / v4.0 |
 |------|-------------------------------|------------------|
 | 本质 | 业务/沦陷语义 + 前提 × 影响 | 标准化技术指标 → 0–10 分 |
-| 等级 | critical / high / medium / none | Critical / High / Medium / Low / None |
+| 等级 | critical / high / medium / none（OH / Chrome 官方低危另为 `low`） | Critical / High / Medium / Low / None |
 | 用途 | 是否报告、`severity_rule` | 向量、跨团队沟通、修复排序辅助 |
 | 证据 | source→sink 或可复现利用 | 指标必须能被同一证据解释 |
 
@@ -24,7 +24,7 @@ CVSS 用于 **量化与外部对齐**，不能单独推翻「无危害/中危」
 | **9.0 – 10.0** | `critical` | 与 CVSS Critical 对齐 |
 | **7.0 – 8.9** | `high` | 与 CVSS High 对齐 |
 | **4.0 – 6.9** | `medium` | 默认 **不写正式 finding** |
-| **0.1 – 3.9** | `none` 或 `medium` | 有限影响；无安全意义则 none |
+| **0.1 – 3.9** | `none` 或 `medium`；OH / Chrome 官方低危为 `low` | 有限影响；无安全意义则 none。**OpenHarmony / Chrome 低危不要写成 `none`** |
 | **0.0** | `none` | 无影响 |
 
 ### 2.1 允许的「语义覆盖」例外

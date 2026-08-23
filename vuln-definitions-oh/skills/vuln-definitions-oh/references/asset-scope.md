@@ -36,7 +36,7 @@ https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories
 | **在册自研（活跃）** | 名单内、非停更、且不是下三行 | 按本插件类型 + 四档 + Gate |
 | **在册三方** | `third_party_*` | **默认 INV4**；OH 默认可达且可独立 e2e 实害才例外 |
 | **在册上游内核** | `kernel_linux` / `kernel_linux_4.19` / `kernel_linux_5.10` / `kernel_linux_6.6` 通用树 | **默认 INV4**；OH 自研补丁/模块（`kernel_linux_patches`、`kernel_linux_common_modules*`、`kernel_common_modules_newip` 中可证为 OH 独有路径）按自研 |
-| **在册厂商** | `vendor_*` | 非标准设备默认路径 → ADJ2；能在社区标准/small 设备 e2e 再评 |
+| **在册厂商** | `vendor_*`、`device_board_*`、`device_soc_*`、`device_*_hisilicon` 等板级/SoC（不必带 `vendor_` 前缀） | 非社区标准设备默认路径 → ADJ2；能在社区标准/small 设备 e2e 再评 |
 | **在册非运行时** | `xts_*`、`test*`、`testfwk_*`、`docs`、`community`、`codelabs`、`oh-agreements`、`release-management`、`repohooks`、`manifest`、`.gitcode`、多数 `developtools_*`、`kernel_linux_config`、`kernel_linux_build` | 默认不跟（测试/文档/工具链/内核构建配置，不是设备攻击面） |
 | **不在册** | 名单外 | 非本 bounty 资产，不投递 |
 

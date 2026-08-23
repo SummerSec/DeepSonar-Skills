@@ -19,9 +19,10 @@
 | `references/classification.md` | 多类型冲突时如何归类 |
 | `references/injection.md` 等 | 八类漏洞各自的定义与四级条款 |
 | `references/openharmony.md` | OpenHarmony / Phone OS 定级规则（官方四档/术语/调整无效/类型摘要）；资产范围见 `vuln-definitions-oh` 的 `asset-scope.md` |
+| `references/chromium.md` | Chrome / Chromium 定级规则（官方四档/缓解/非安全/类型摘要）；完整沙箱与门禁见 `vuln-definitions-chrome` |
 
 ## 规则
 
 - **定义清楚**：每类「是什么 / 不是什么」  
 - **四级齐全**：Critical / High / Medium / None 均有可操作条款  
-- **报告策略分离**：本插件负责定级；仓库 `shared/severity-policy.md` 规定默认只报 C/H  
+- **报告策略分离**：本插件负责定级；仓库 `shared/severity-policy.md` 规定默认只报 C/H（**例外**：`vuln-definitions-oh` / `vuln-definitions-chrome` 官方四档均可报）  

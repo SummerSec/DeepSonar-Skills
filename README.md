@@ -9,7 +9,7 @@ DeepSonar / Agent 用的 **高危安全技能仓**（单仓库）：
 | **白盒** | 源码审计，source→sink 追踪 |
 | **黑盒** | 已授权目标上的漏洞验证；**工具预装进 agent 环境** |
 | **组织方式** | **按漏洞类型** 各一个 plugin（白盒、黑盒对称） |
-| **报告范围** | 定级后 **只报告 Critical / High**；中危与无危害不写 finding |
+| **报告范围** | `wb-*`/`bb-*` 定级后 **只报告 Critical / High**；**OH / Chrome 官方四档均可报** |
 
 > 使用前阅读 [DISCLAIMER.md](./DISCLAIMER.md) 与 [shared/authorization.md](./shared/authorization.md)。
 
@@ -23,12 +23,16 @@ DeepSonar-Skills/
 │   └── skills/vuln-definitions/
 │       ├── SKILL.md
 │       └── references/          # 全局等级 + 八类四级条款
+├── vuln-definitions-oh/         # 【独立插件】OH / Phone OS 系统四档
+│   └── skills/vuln-definitions-oh/
+├── vuln-definitions-chrome/     # 【独立插件】Chrome / Chromium 浏览器四档
+│   └── skills/vuln-definitions-chrome/
 ├── vuln-scoring/                # 【独立插件】漏洞评分（CVSS v3.1/v4.0 按需）
 │   └── skills/vuln-scoring/
 │       ├── SKILL.md
 │       └── references/          # cvss-v3.1 / cvss-v4、映射、优先级、分版示例
 ├── shared/                      # 报告策略、finding 格式、授权
-│   ├── severity-policy.md       # 只报 C/H（细则见 vuln-definitions）
+│   ├── severity-policy.md       # 默认只报 C/H；OH / Chrome 四档例外（细则见对应插件）
 │   ├── finding-schema.md
 │   └── authorization.md
 ├── whitebox/<type>/             # 白盒 plugin ×8
@@ -50,6 +54,13 @@ DeepSonar-Skills/
 | **vuln-definitions** | `vuln-definitions` | 八类漏洞的定义；严重/高危/中危/无危害判定；归类规则 |
 
 凡启用任一审计/挖洞 plugin，**应同时启用本插件**。
+
+### 系统 / 浏览器专项
+
+| Plugin | Skill | 职责 |
+|--------|-------|------|
+| **vuln-definitions-oh** | `vuln-definitions-oh` | OpenHarmony / Phone OS 官方四档 + 系统形态 |
+| **vuln-definitions-chrome** | `vuln-definitions-chrome` | Chrome / Chromium 官方 S0–S3 + 沙箱 / Site Isolation |
 
 ### 漏洞评分 `vuln-scoring`（推荐）
 
@@ -87,6 +98,8 @@ DeepSonar-Skills/
 /plugin marketplace add <your-org>/DeepSonar-Skills
 /plugin install vuln-definitions@DeepSonar-Skills   # 必装：定级基线
 /plugin install vuln-scoring@DeepSonar-Skills       # 推荐：CVSS v3.1/v4.0 评分
+/plugin install vuln-definitions-oh@DeepSonar-Skills      # OpenHarmony / Phone OS
+/plugin install vuln-definitions-chrome@DeepSonar-Skills  # Chrome / Chromium
 /plugin install whitebox-injection@DeepSonar-Skills
 /plugin install blackbox-injection@DeepSonar-Skills
 # 按需安装其他 type
@@ -122,19 +135,21 @@ npx skills add <org>/DeepSonar-Skills --skill wb-injection
 **定量评分**：插件 [`vuln-scoring`](./vuln-scoring/)（**CVSS v3.1 默认 / v4.0 按需**；可选 EPSS/SSVC/KEV）。  
 **报告策略**：[`shared/severity-policy.md`](./shared/severity-policy.md)（默认只报严重/高危）。
 
-| 等级 | 是否报告 | 含义（全局） |
+| 等级 | 是否报告（wb/bb） | 含义（全局） |
 |------|----------|--------------|
 | 严重 Critical | ✅ | 沦陷级：RCE/整库/身份或租户接管/云凭证等 |
 | 高危 High | ✅ | 重大数据/权限/子系统沦陷，未达一键全系统 |
 | 中危 Medium | ❌ | 真实弱点但影响有限或利用受限 |
 | 无危害 None | ❌ | 不可达、已防护、误报、非安全问题 |
 
+OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome` 时例外：官方四档 `critical` / `high` / `medium` / `low` 均可报；INV / Gate 不过仍不报。不要把官方低危写成 `none`。Chrome 的纯 DoS / MiraclePtr PROTECTED 是不报，不是低危。
+
 | CVSS Base（v3.1/v4.0 共用档） | 常见 DeepSonar 映射 |
 |-------------------------------|---------------------|
 | 9.0 – 10.0 | critical |
 | 7.0 – 8.9 | high |
 | 4.0 – 6.9 | medium（默认不报） |
-| 0.0 – 3.9 | none / medium |
+| 0.0 – 3.9 | none / medium（OH / Chrome 官方低危为 `low`） |
 
 ---
 

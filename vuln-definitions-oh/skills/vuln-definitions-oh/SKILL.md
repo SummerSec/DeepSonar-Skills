@@ -12,22 +12,22 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 完成：
 
 1. **归类**：先定公告机理（见 `mechanism-types.md`），再定 Phone OS 形态（见 `phone-os-vuln-types.md`），并映射八类 `vuln_type`
-2. **定级**：严重 / 高危 / 中危 / 低危（`critical` / `high` / `medium` / `none`）— 以 OH 官方奖励计划四档为准
+2. **定级**：严重 / 高危 / 中危 / 低危（`critical` / `high` / `medium` / `low`）— 以 OH 官方奖励计划四档为准
 3. **裁定**：级别调整 10 条、无效 9 条、Gate 门禁
-4. **报告**：正式报告按官方四档（`critical` / `high` / `medium` / `none`）；INV 与 Gate 不过不报
+4. **报告**：正式报告按官方四档（`critical` / `high` / `medium` / `low`）；INV 与 Gate 不过不报
 
 本插件 **不执行扫描**；**不收录** 具体 CVE 或历史公告条目。类型体系来自 Phone OS 共性，**不局限** 于某一厂商已公开漏洞清单。
 
 ## 何时使用
 
 - 审计 OpenHarmony 或 **同类移动 OS** 的系统服务层 / 框架层 / 应用层
-- 涉及：内核与驱动/HDF、IPC/SA 中继、沙箱隔离、权限实现、Ability/Want、媒体/消息解析、Ark/Web 运行时、近场·软总线·分布式、OTA/包管理、锁屏与密钥、UDMF/剪贴板/广播等
+- 涉及：内核与驱动/HDF、IPC/SA 中继、沙箱隔离、权限实现、Ability/Want/WantAgent、媒体/消息解析、Ark/Web/NAPI 桥、近场·软总线·分布式、OTA/包管理/动态共享包、锁屏与密钥、UDMF/剪贴板/广播、账号、USB/投屏等
 - 需要官方四档定级或判断是否投递
 
 ## 强制前置
 
 1. **读 `shared/authorization.md`** — 未授权目标不启动  
-2. **读 `shared/finding-schema.md`** — 字段结构、`severity_rule` 必填；本插件 `severity` 为官方四档（`critical|high|medium|none`），`confidence` 禁止 `low`  
+2. **读 `shared/finding-schema.md`** — 字段结构、`severity_rule` 必填；本插件 `severity` 为官方四档（`critical|high|medium|low`），`confidence` 禁止 `low`（与 `severity: low` 不是同一字段）  
 3. 仓级 `shared/severity-policy.md` 的「只报 C/H」**不适用于**本插件  
 4. **对齐机理类型**：`vuln_type` 仍属八类之一（`vuln-definitions`）
 
@@ -48,7 +48,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 ## 范围与报告
 
 - **只挖**：官方 bounty 名单内、且 **master 仍活跃（或已转到后继仓现树）** 的在册自研组件；默认配置下可由远程（含同网/近场/无线/文件消息）或普通三方应用触达，且能演示实害、危害强于已有权限。实时名单里的停更/旧名仓不当活跃树  
-- **报告**：官方四档 `critical` / `high` / `medium` / `none`（低危）  
+- **报告**：官方四档 `critical` / `high` / `medium` / `low`  
 - **明确不报**：名单外仓库、在册三方/上游 linux 树（INV4）、厂商/测试文档工具链、system/root/native 前提、未证明二次洞、IPC 半链、权限等价、单应用临时 DoS、非默认 skip、解锁 BL 主路径等（见 ADJ/INV）
 
 ## 定级工作流
@@ -77,8 +77,8 @@ asset_repo: <官方名单仓名>      # 如 communication_dsoftbus
 asset_scope: in_list_first_party | in_list_stale | in_list_third_party | in_list_upstream_kernel | in_list_vendor | in_list_non_runtime | not_in_list
 subject_revision: "<仓>@<sha>"  # Job 钉扎
 live_checked: "<后继仓>@<sha> <日期> | not_checked"
-severity: critical | high | medium | none
-confidence: high | medium | low
+severity: critical | high | medium | low
+confidence: high | medium      # 禁止 confidence: low；与 severity: low 勿混
 severity_rule: "severity-levels.md#H5"
 rationale: |
   资产桶；Phone OS 类型；路径与影响；条款；ADJ/INV

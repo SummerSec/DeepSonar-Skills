@@ -4,8 +4,9 @@
 定级时从上到下匹配：命中最高且证据充分的一级；证据不足则降级。  
 每档给出 CVSS **区间（近似）**（精确分用 `vuln-scoring`，默认 v3.1、可按需 v4.0；不替代本文件定性）。
 
-> 本仓报告模型：官方「严重→critical、高危→high、中危→medium、低危→none」。  
-> 官方四档均可写入正式 finding。  
+> 本仓报告模型：官方「严重→critical、高危→high、中危→medium、低危→low」。  
+> 官方四档均可写入正式 finding。无效与 Gate 不过不报（`reportable: false`），**不要**把低危写成 `none`。  
+> `severity: low` 是官方低危档；`confidence: low` 仍禁止（两字段勿混）。  
 > 官方安全公告常用 **CVSS 3.1**；仓内默认对齐 v3.1，需要时可另出 v4.0。
 
 | 档 | 本仓映射 | CVSS Base 区间（近似） |
@@ -13,7 +14,7 @@
 | 严重 | `critical` | ≥ 9.0 |
 | 高危 | `high` | 7.0 – 8.9 |
 | 中危 | `medium` | 4.0 – 6.9 |
-| 低危 | `none` | 0.1 – 3.9 |
+| 低危 | `low` | 0.1 – 3.9 |
 
 ---
 
@@ -77,7 +78,7 @@
 
 ---
 
-## 4. 低危（Low → 本仓 none）
+## 4. 低危（Low）
 
 | # | 判定条件 |
 |---|----------|
@@ -87,8 +88,8 @@
 
 ### 本仓处理
 
-- 必须会定级为 low（语义完整），`severity: none`，`reportable: true`（官方低危档）
-- 无效（INV）与 Gate 不过另标 `reportable: false`
+- 必须会定级为低危：`severity: low`，`reportable: true`
+- 无效（INV）与 Gate 不过另标 `reportable: false`（不是低危，也不是 `none`）
 
 ---
 

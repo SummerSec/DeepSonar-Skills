@@ -47,7 +47,7 @@
 
 - [ ] **S1** 落点仓库名能在官方 `data` 里 **精确匹配**？否 → `not_in_list`，不投递
 - [ ] **S2** 不是 `third_party_*`、也不是上游 `kernel_linux` / `_4.19` / `_5.10` / `_6.6` 通用树？是这类 → INV4（除非默认路径独立 e2e）。`kernel_linux_patches` / `kernel_linux_common_modules*` / `kernel_common_modules_newip` 可证 OH 独有路径时按自研
-- [ ] **S3** 不是 `vendor_*` 且不是测试/文档/工具链/内核构建配置（`xts_*`、`docs`、多数 `developtools_*`、`kernel_linux_config`、`kernel_linux_build` 等）？是这类 → ADJ2 / 不跟
+- [ ] **S3** 不是 `vendor_*` / `device_board_*` / `device_soc_*` / 板级 Hisilicon 等，且不是测试/文档/工具链/内核构建配置（`xts_*`、`docs`、多数 `developtools_*`、`kernel_linux_config`、`kernel_linux_build` 等）？是这类 → ADJ2 / 不跟
 - [ ] **S4** 主 finding 只绑 **一个** 在册自研仓名，并写入 `asset_repo` / `asset_scope`
 - [ ] **S5** 官方实时 `data` 命中 **不能** 当成「这是活跃代码树」。`master` 停更或仓名已迁走 → 记 `in_list_stale`，进入 Gate V，不得在该停更树上 `confirmed`
 

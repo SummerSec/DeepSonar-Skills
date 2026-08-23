@@ -1,0 +1,8 @@
+{
+  "name": "vuln-definitions-chrome",
+  "version": "0.1.0",
+  "description": "Chrome / Chromium 浏览器漏洞定义：官方四档（S0–S3）与缓解/非安全条款，外加浏览器进程模型、Site Isolation 与沙箱形态。",
+  "author": {
+    "name": "DeepSonar"
+  }
+}

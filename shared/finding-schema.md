@@ -8,9 +8,10 @@ id: VULN-001
 mode: whitebox | blackbox
 vuln_type: injection | rce | ssrf | authz | deserialization | file-access | xxe | secrets
 title: 一句话标题（含组件/接口）
-severity: critical | high          # 禁止 medium/low/none 进入正式报告
-severity_rule: "injection.md#C1"  # 必填：vuln-definitions 插件中的条款号
-confidence: high | medium        # 禁止 low
+severity: critical | high          # 默认（wb-*/bb-*）：禁止 medium/low/none
+# 例外：vuln-definitions-oh / vuln-definitions-chrome 官方四档为 critical|high|medium|low（低危→low；勿与 confidence: low 混淆）
+severity_rule: "injection.md#C1"  # 必填：vuln-definitions 条款号；OH 用 severity-levels.md#H5 或 openharmony.md#H5；Chrome 用 severity-levels.md#H4 或 chromium.md#H4
+confidence: high | medium        # 禁止 low（含 OH）
 cwe: CWE-xxx
 cvss_hint: "9.8"                 # 可选兼容字段：粗估；新报告优先用下方 cvss 块
 cvss:                            # 可选但推荐：vuln-scoring 按所选版本填写
@@ -66,12 +67,20 @@ remediation:
 
 # 否决说明：若最终决定不报，写在进度文件，不要进入 findings
 
-# 系统类 / OpenHarmony（可选；用 vuln-definitions-oh 时必填）
-phone_os_class: I1                 # 可选：Phone OS 类型 ID，如 I1 / K5 / W6
+# 系统类 / OpenHarmony（用 vuln-definitions-oh 时必填）
+mechanism: UAF                     # 公告机理 ID，见 mechanism-types.md（MW/MR/UAF/AUTHZ/…）
+phone_os_class: I1                 # Phone OS 形态 ID，如 I1 / K5 / W6 / E5
 asset_repo: communication_dsoftbus # 官方 bounty 名单中的仓名（精确匹配）
 asset_scope: in_list_first_party   # in_list_first_party | in_list_stale | in_list_third_party | in_list_upstream_kernel | in_list_vendor | in_list_non_runtime | not_in_list
 subject_revision: "<仓>@<sha>"     # Job 钉扎；可与现树不同
 live_checked: "<后继仓>@<sha> <日期> | not_checked"
+
+# 浏览器类 / Chrome（用 vuln-definitions-chrome 时必填）
+chrome_class: P2                   # 浏览器形态 ID，如 P1 / M3a / W2 / I1
+chrome_process: renderer           # browser | renderer | gpu | network | utility | kernel | other
+chrome_sandbox: sandboxed          # unsandboxed | sandboxed | platform_dependent
+security_impact: stable            # stable | beta | dev | head | none
+miracleptr: not_protected          # protected | not_protected | n/a
 ```
 
 ## 命名约定
@@ -79,7 +88,9 @@ live_checked: "<后继仓>@<sha> <日期> | not_checked"
 - `rule_id` / `vuln_type` 使用 plugin 目录名：`injection`、`rce`、`ssrf`、`authz`、`deserialization`、`file-access`、`xxe`、`secrets`
 - 白盒 skill 名：`wb-<type>`；黑盒：`bb-<type>`
 - 严重度语义：`vuln-definitions`；数值评分：`vuln-scoring`（**CVSS v3.1 或 v4.0**）
-- 系统类（OH / Phone OS）另填 `phone_os_class`、`asset_repo`、`asset_scope`；名单与分桶见 `vuln-definitions-oh` 的 `asset-scope.md`。`asset_scope` 不是 `in_list_first_party` 时默认不进正式报告（三方/上游内核仅默认路径独立 e2e 可例外）
+- 系统类（OH / Phone OS）另填 `mechanism`、`phone_os_class`、`asset_repo`、`asset_scope`；名单与分桶见 `vuln-definitions-oh` 的 `asset-scope.md`。`asset_scope` 不是 `in_list_first_party` 时默认不进正式报告（三方/上游内核仅默认路径独立 e2e 可例外）
+- 浏览器类（Chrome / Chromium）另填 `chrome_class`、`chrome_process`、`chrome_sandbox`、`security_impact`；沙箱与分桶见 `vuln-definitions-chrome` 的 `process-sandbox.md` / `asset-scope.md`
+- **报告门槛**：`wb-*` / `bb-*` 只写 `critical|high`；`vuln-definitions-oh` 与 `vuln-definitions-chrome` 写官方四档 `critical|high|medium|low`。三种路径 `confidence` 均禁止 `low`（官方 `severity: low` 是低危档，不是置信度）
 
 ## CVSS 字段纪律
 
@@ -88,5 +99,5 @@ live_checked: "<后继仓>@<sha> <日期> | not_checked"
   - `4.0` → `CVSS:4.0/` + Base 11 项（含 AT 与 VC/VI/VA/SC/SI/SA）  
 - **默认**主版本 `3.1`；用户/数据源指定或需 FIRST v4 时用 `4.0`；对照时主块 + `cvss_alt`  
 - `base_score` 须与向量一致；不确定时宁可省略分数并说明，勿编造  
-- `severity` 仍以 `severity_rule` 定性为准；CVSS 不能单独把 medium 抬进正式报告  
+- `severity` 仍以 `severity_rule` 定性为准；CVSS 不能单独把 medium 抬进 `wb-*`/`bb-*` 正式报告（OH / Chrome 四档由定性条款决定，不靠分数抬档）  
 - 完整流程与按需加载见 `vuln-scoring` 插件  
