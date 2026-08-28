@@ -96,4 +96,5 @@ ClickHouse Bugcrowd 项目按 **Bugcrowd VRT** 定官方档；本表把 VRT 顶�
 - 先走 `gates.md`：**威胁模型 → 资产范围 → 环境合格 → 安全实害 → 可复现**
 - `severity_rule` 填本文件锚点，如 `severity-levels.md#H2`（或 `database.md#H2`）。另填 `db_class`、`target_asset`、`vrt_priority`；可选 `bounty_eligible`
 - 与 CVSS：本文件定性；量化用 `vuln-scoring`（默认 v3.1）。CVSS **不得**单独抬档
+- **边界情况对照 `history-patterns.md` §3 定级校准**：未认证受限控制流原语无完整 RCE 也 High（K1）；需高权限 + 特殊配置的 RCE 链仍 High（K2）；同用户跨角色缓存污染默认低档（K3）；superuser 功能误报不报（K5）。命中校准点时在 `rationale` 写 `history-patterns.md#K_`
 - **不收录具体 case**：无 CVE / issue 清单

@@ -9,15 +9,16 @@
 | 目录族 | 关注内容 | 形态 |
 |--------|----------|------|
 | `src/Parsers/`, `src/Analyzer/` | SQL 解析、语法树、查询重写 | Q1 / F2 |
-| `src/Interpreters/` | 执行计划、权限检查（AccessRights）、`InterpreterSelectQuery` 等各种 Interpreter | P1 / P2 / Q3 |
+| `src/Interpreters/` | 执行计划、权限检查（AccessRights）、`InterpreterSelectQuery` 等各种 Interpreter、**query cache 键构造**（CVE-2024-22412 类：键缺安全上下文） | P1 / P2 / P6 / Q3 |
 | `src/Access/` | RBAC、GRANT 语义、row policy、quota、settings profile | P1–P4 |
 | `src/Functions/`, `src/AggregateFunctions/` | 标量/聚合函数实现，参数校验 | Q1 / F2 / F3 |
-| `src/Formats/` | 输入输出格式（CSV / JSONEachRow / Parquet / ORC / Avro…） | S2 / F2 |
-| `src/Compression/`, `src/Encryption/` | codec、加密（encryption_codecs） | S3 / M3 |
+| `src/Formats/` | 输入输出格式（CSV / JSONEachRow / Parquet / ORC / Avro…）——**不可信数据第一站，历史重灾区** | S2 / F2 |
+| `src/Compression/`, `src/Encryption/` | **codec 解压路径未认证可达**（Gorilla / T64 / FPC 历史三连发）；加密（encryption_codecs） | S3 / F1 / F2 / M3 |
 | `src/Storages/` | MergeTree 族、外部引擎（Kafka / MySQL / PostgreSQL…）、视图 | S1 / X3 / R3 |
 | `src/TableFunctions/` | file / url / s3 / remote / mysql / postgresql 表函数 | X1 / X2 / X4 |
 | `src/Dictionaries/` | 外部字典（executable / http / redis 源） | S4 / X3 |
-| `src/Server/` | HTTP handler、TCP handler、Interserver、MySQL/PostgreSQL 兼容协议 | A1 / A4 / Q1 |
+| `src/Server/` | HTTP handler、**TCPHandler（native 协议，认证前处理面；CVE-2024-6873 类未认证控制流劫持）**、Interserver、MySQL/PostgreSQL 兼容协议 | A1 / A4 / F1 |
+| `src/Bridge/`（library-bridge / odbc-bridge） | **localhost HTTP API 输入校验**（CVE-2025-1385 类：与表引擎文件上传组合成 RCE 链） | X3 |
 | `src/Disks/` | 磁盘抽象、S3 / Azure blob 后端 | X2 / M3 |
 | `src/Common/`, `src/IO/` | 基础库、缓冲、压缩流 | F1–F4 |
 | `src/Coordination/`, `programs/keeper` | Keeper（ZooKeeper 兼容） | R1 / R2 |

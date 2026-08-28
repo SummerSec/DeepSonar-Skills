@@ -26,6 +26,7 @@
 | P3 | 列掩码 / column mask 绕过 | 脱敏失效 | H2 |
 | P4 | settings profile / constraint 绕过 | 限制被绕过（如 readonly） | H2 / M3 |
 | P5 | 云平台角色 / 作用域绕过 | org / project / API key 作用域 | C3 / H4 |
+| P6 | 缓存键未纳入安全上下文 | query cache / result cache 键缺 role、row policy、settings → 跨角色 / 跨设置读到他人结果（对照 CVE-2024-22412 类；同用户跨角色默认低档，跨用户 H2+） | M3 / L1 / H2 |
 
 映射：`authz`。
 
@@ -57,7 +58,7 @@
 |----|------|----------|----------|
 | X1 | 表函数 SSRF | url / s3 / remote / file 表函数 | H5（云）/ M6（盲） |
 | X2 | 文件读写越界 | file 表函数、备份路径 | C4 / H2（file-access） |
-| X3 | UDF / 可执行体逃逸 | catBoost / executable script | H1 |
+| X3 | UDF / 可执行体 / 脚本沙箱逃逸 | catBoost / executable script / library-bridge / 外部脚本引擎（对照 CVE-2025-1385、Groovy/Lua/Java UDF 沙箱逃逸族） | H1 |
 | X4 | 出网数据外带 | 任意 URL 写 / webhook 滥用 | H5 / H7 |
 
 映射：`ssrf`（X1/X4）、`file-access`（X2）、`rce`（X3）。

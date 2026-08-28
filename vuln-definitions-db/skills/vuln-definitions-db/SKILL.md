@@ -1,6 +1,6 @@
 ---
 name: vuln-definitions-db
-description: "数据库领域漏洞定义指南。定义 DBMS 通用漏洞形态（认证接入 / 权限模型 RBAC / 查询处理 / 存储引擎 / 外部访问 UDF·表函数 / 复制与集群 / 云控制面多租户 / 数据泄露 / 配置密钥 / 内存安全），并把 Bugcrowd VRT P1–P5 映射为 critical/high/medium/low 四档；含 ClickHouse Bugcrowd 项目资产范围、OSS 合格条款、云平台排除项与赏金资格（不定级）。用户提到「ClickHouse 漏洞」「数据库漏洞」「DBMS」「SQL 注入定级」「RBAC 绕过」「row policy」「Keeper」「clickhouse-server」「ClickHouse Cloud」「Bugcrowd」「VRT」「P1 P2 P3」「Langfuse」或要给数据库类审计目标定级时使用。This skill should be used when the user asks to rate a database / DBMS vulnerability, classify RBAC or row-policy bypasses, map Bugcrowd VRT priorities to severity tiers, check ClickHouse Bugcrowd scope and eligibility, or audits ClickHouse OSS, ClickHouse Cloud, or other database targets."
+description: "数据库领域漏洞定义指南。定义 DBMS 通用漏洞形态（认证接入 / 权限模型 RBAC / 查询处理 / 存储引擎 / 外部访问 UDF·表函数 / 复制与集群 / 云控制面多租户 / 数据泄露 / 配置密钥 / 内存安全），并把 Bugcrowd VRT P1–P5 映射为 critical/high/medium/low 四档；含 ClickHouse Bugcrowd 项目资产范围、OSS 合格条款、云平台排除项与赏金资格（不定级），以及历史漏洞模式库（codec 解压、query cache 键、native 协议、library-bridge、UDF 沙箱逃逸、NoSQL 注入等）。用户提到「ClickHouse 漏洞」「数据库漏洞」「DBMS」「SQL 注入定级」「RBAC 绕过」「row policy」「query cache」「Keeper」「clickhouse-server」「ClickHouse Cloud」「Bugcrowd」「VRT」「P1 P2 P3」「Langfuse」或要给数据库类审计目标定级时使用。This skill should be used when the user asks to rate a database / DBMS vulnerability, classify RBAC or row-policy bypasses, map Bugcrowd VRT priorities to severity tiers, check ClickHouse Bugcrowd scope and eligibility, or audits ClickHouse OSS, ClickHouse Cloud, or other database targets."
 ---
 
 # 数据库领域漏洞定义指南
@@ -45,6 +45,7 @@ description: "数据库领域漏洞定义指南。定义 DBMS 通用漏洞形态
 | 门禁与报告 | 本插件 `references/gates.md` |
 | 资产范围 | 本插件 `references/asset-scope.md` |
 | Bugcrowd 资格 / 纪律 | 本插件 `references/bugcrowd-rules.md` |
+| 历史漏洞模式与定级校准 | 本插件 `references/history-patterns.md` |
 | 八类机理定义 | `vuln-definitions` → `references/<type>.md` |
 | CVSS v3.1 / v4.0 | `vuln-scoring`（数据库语境默认 3.1，可按需 4.0） |
 
@@ -69,10 +70,10 @@ description: "数据库领域漏洞定义指南。定义 DBMS 通用漏洞形态
 2. asset-scope.md：目标在 in-scope 清单？OSS 是否 clickhouse-server + 支持版本 + 非实验特性？
 3. terminology.md 认清权限边界：default / readonly / granted / 管理员；云平台 org / service / API key 作用域
 4. db-vuln-types.md 定形态（A/P/Q/S/X/R/C/D/F/M）
-5. attack-surfaces.md 对照目录族（若有源码树）
+5. attack-surfaces.md 对照目录族（若有源码树）；history-patterns.md 对照历史模式与挖掘切入点
 6. gates.md：T 威胁模型 → S 资产范围 → E 环境合格 → C 安全实害 → R 可复现
 7. 八类 references/<type>.md 确认 vuln_type 成立
-8. severity-levels.md 匹配 严重→高危→中危→低危（Bugcrowd 项目同时给 vrt_priority）
+8. severity-levels.md 匹配 严重→高危→中危→低危（Bugcrowd 项目同时给 vrt_priority）；边界情况对照 history-patterns.md §3 校准（K1–K6）
 9. adjustment-and-invalid.md 查降档 / 排除
 10. 官方四档且 confidence≥medium、Gate 全过 → 输出 finding（附 CVSS，默认 v3.1）
 11. 对照 bugcrowd-rules.md 填 bounty_eligible（赏金不改 severity）
@@ -109,3 +110,4 @@ reportable: true | false               # 官方四档且 confidence≠low 为 tr
 | [gates.md](references/gates.md) | Gate + 报告要求 |
 | [asset-scope.md](references/asset-scope.md) | 资产范围（OSS / Cloud / Langfuse） |
 | [bugcrowd-rules.md](references/bugcrowd-rules.md) | Bugcrowd 项目纪律 / 赏金表 / 资格（不定级） |
+| [history-patterns.md](references/history-patterns.md) | 历史漏洞模式库 + 定级校准（K1–K6）+ 挖掘切入点 |

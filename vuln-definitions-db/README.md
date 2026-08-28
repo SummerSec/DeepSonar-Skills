@@ -28,6 +28,7 @@
 | `skills/vuln-definitions-db/references/gates.md` | Gate T/S/E/C/R + 报告要求 |
 | `skills/vuln-definitions-db/references/asset-scope.md` | 资产范围：OSS / Cloud / Langfuse + 范围外 |
 | `skills/vuln-definitions-db/references/bugcrowd-rules.md` | Bugcrowd 纪律 / 赏金表 / 资格（不定级） |
+| `skills/vuln-definitions-db/references/history-patterns.md` | 历史漏洞模式库（ClickHouse 官方案例 + 其他 DBMS 经典模式）+ 定级校准 K1–K6 + 挖掘切入点 |
 
 ## 规则
 
