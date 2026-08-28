@@ -1,6 +1,6 @@
 {
   "name": "vuln-scoring",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "漏洞评分模块：支持 CVSS v3.1 与 v4.0（按需加载），映射 DeepSonar 四级定级，并补充 EPSS/SSVC/KEV 优先级指引。",
   "author": {
     "name": "DeepSonar"

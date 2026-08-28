@@ -1,14 +1,14 @@
 {
   "name": "DeepSonar-Skills",
-  "description": "DeepSonar security skills: vulnerability definitions (incl. OH / Chrome official four tiers), CVSS v3.1/v4.0 scoring, and whitebox/blackbox plugins by vuln type (wb/bb report Critical/High only).",
+  "description": "DeepSonar security skills: vulnerability definitions by domain (general / OpenHarmony / Chrome / database), CVSS v3.1/v4.0 scoring, and whitebox/blackbox plugins by vuln type (wb/bb report Critical/High only).",
   "owner": {
     "name": "DeepSonar"
   },
   "plugins": [
     {
       "name": "vuln-definitions",
-      "description": "漏洞定义模块：每类漏洞定义与严重/高危/中危/无危害判定标准（白盒黑盒共用）；OpenHarmony 系统类加载 references/openharmony.md；Chrome / Chromium 加载 references/chromium.md。",
-      "version": "0.2.10",
+      "description": "漏洞定义模块：每类漏洞定义与严重/高危/中危/无危害判定标准（白盒黑盒共用）；OpenHarmony 系统类加载 references/openharmony.md；Chrome / Chromium 加载 references/chromium.md；数据库（ClickHouse 等 DBMS / 数据库云平台）加载 references/database.md。",
+      "version": "0.2.11",
       "source": "./vuln-definitions"
     },
     {
@@ -24,9 +24,15 @@
       "source": "./vuln-definitions-chrome"
     },
     {
+      "name": "vuln-definitions-db",
+      "description": "数据库领域漏洞定义：DBMS 通用形态（认证/RBAC/查询处理/存储引擎/外部访问/复制/云控制面/泄露/密钥）与 Bugcrowd VRT P1–P5 → 四档映射；含 ClickHouse Bugcrowd 项目资产范围、合格条款与赏金资格（不定级）。",
+      "version": "0.1.0",
+      "source": "./vuln-definitions-db"
+    },
+    {
       "name": "vuln-scoring",
       "description": "漏洞评分模块：CVSS v3.1 与 v4.0 按需评分、向量串、与 DeepSonar 四级映射，以及 EPSS/SSVC/KEV 优先级。",
-      "version": "0.2.3",
+      "version": "0.2.4",
       "source": "./vuln-scoring"
     },
     {

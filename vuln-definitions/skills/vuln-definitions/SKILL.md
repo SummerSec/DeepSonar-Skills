@@ -1,6 +1,6 @@
 ---
 name: vuln-definitions
-description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserialization/file-access/xxe/secrets 等漏洞类型的含义，以及严重(Critical)、高危(High)、中危(Medium)、无危害(None) 的判定标准。白盒/黑盒审计、定级、争议裁决时必须加载。OpenHarmony 等系统类审计时加载 references/openharmony.md；Chrome / Chromium 浏览器审计时加载 references/chromium.md。"
+description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserialization/file-access/xxe/secrets 等漏洞类型的含义，以及严重(Critical)、高危(High)、中危(Medium)、无危害(None) 的判定标准。白盒/黑盒审计、定级、争议裁决时必须加载。OpenHarmony 等系统类审计时加载 references/openharmony.md；Chrome / Chromium 浏览器审计时加载 references/chromium.md；数据库（ClickHouse 等 DBMS / 数据库云平台）审计时加载 references/database.md。"
 ---
 
 # 漏洞定义模块
@@ -24,6 +24,7 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 - 用户问「这算高危还是中危」：直接引用对应 `references/*.md`
 - 审计目标为 OpenHarmony / 类移动 OS 系统层、框架层、应用层：加载 `references/openharmony.md` 对齐系统语义
 - 审计目标为 Chrome / Chromium 浏览器：加载 `references/chromium.md` 对齐浏览器四档与非安全条款
+- 审计目标为数据库引擎 / 数据库云平台（ClickHouse OSS / ClickHouse Cloud / Langfuse 等）：加载 `references/database.md` 对齐数据库四档与排除条款
 
 ## 全局等级定义
 
@@ -76,6 +77,15 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 浏览器语义与本文件全局条款冲突时，**以 `chromium.md` 为准**。  
 ChromeOS 系统镜像、iOS WebKit 壳不当本专项。
 
+### 数据库专项（DBMS / 数据库云平台）
+
+审计目标为 **数据库引擎或数据库云平台**（当前厂商实例 ClickHouse：OSS 引擎 / ClickHouse Cloud / Langfuse Cloud）时，加载：
+
+**[references/database.md](references/database.md)** — Bugcrowd VRT P1–P5 → 四档（`#C1…H1…M1…L1…`）、降档/排除条款、数据库类型摘要。完整 **形态表**、**资产范围**、门禁与 **Bugcrowd 纪律**见插件 `vuln-definitions-db`（`db-vuln-types.md`、`asset-scope.md`、`gates.md`、`bugcrowd-rules.md`）。
+
+数据库语义与本文件全局条款冲突时，**以 `database.md` 为准**。  
+数据库领域新目标（MySQL / PostgreSQL / MongoDB / Redis / …）进 `vuln-definitions-db` 加厂商文件，**不开新 plugin**。
+
 跨类型边界与「优先归哪类」见 **[references/classification.md](references/classification.md)**。
 
 ## 定级工作流（每次 finding 必走）
@@ -86,10 +96,11 @@ ChromeOS 系统镜像、iOS WebKit 壳不当本专项。
 3. 打开该类 references/<type>.md，从上到下匹配 Critical → High → Medium → None
 4. 系统类目标（OpenHarmony 等）→ 先过资产范围（`vuln-definitions-oh` / `asset-scope.md`），再对齐 `references/openharmony.md` 的系统条款与无效条款，再回到类型细则
 4b. 浏览器类目标（Chrome / Chromium）→ 先过资产范围（`vuln-definitions-chrome` / `asset-scope.md`），再对齐 `references/chromium.md` 的浏览器条款与非安全条款，再回到类型细则
+4c. 数据库类目标（DBMS / 数据库云平台）→ 先过资产范围（`vuln-definitions-db` / `asset-scope.md`），再对齐 `references/database.md` 的数据库条款与排除条款，再回到类型细则
 5. 命中最高且证据充分的一级；证据不足则降级或标 none
 6. 若最终为 critical/high 且 confidence≥medium → 可交由对应 wb-*/bb-* 输出 finding
 7. 若为 medium/none → **默认**不写入 findings（可在进度文件记一句否决原因）
-   例外：系统类已走 openharmony.md / vuln-definitions-oh，或浏览器类已走 chromium.md / vuln-definitions-chrome → 官方四档可写正式 finding（低危为 `low`，不是 `none`）
+   例外：系统类已走 openharmony.md / vuln-definitions-oh，浏览器类已走 chromium.md / vuln-definitions-chrome，或数据库类已走 database.md / vuln-definitions-db → 官方四档可写正式 finding（低危为 `low`，不是 `none`）
 ```
 
 ## 与其它 plugin 的关系
@@ -99,10 +110,11 @@ ChromeOS 系统镜像、iOS WebKit 壳不当本专项。
 | `vuln-definitions`（本插件） | **定义与定级** 语义源（八类 + 全局四级） |
 | `vuln-definitions-oh` | OpenHarmony / Phone OS 官方四档与系统形态 |
 | `vuln-definitions-chrome` | Chrome / Chromium 官方四档与浏览器形态 |
+| `vuln-definitions-db` | 数据库领域（ClickHouse 等）四档与 DBMS / 云控制面形态 |
 | `vuln-scoring` | 定性定级后做 **CVSS v3.1/v4.0** 定量分与优先级；不替代本插件条款 |
 | `whitebox-*` | 用本定义做源码审计；只产出 critical/high finding |
 | `blackbox-*` | 用本定义做动态验证；只产出 critical/high finding |
-| `shared/severity-policy.md` | 仓库报告策略（只报 C/H；OH / Chrome 官方四档例外） |
+| `shared/severity-policy.md` | 仓库报告策略（只报 C/H；OH / Chrome / DB 官方四档例外） |
 
 Profile 配置：**凡启用任一 wb-*/bb-*，必须同时启用本插件**；需要向量/分数时再启用 `vuln-scoring`。
 
@@ -112,10 +124,10 @@ Profile 配置：**凡启用任一 wb-*/bb-*，必须同时启用本插件**；�
 
 ```yaml
 vuln_type: <type|none>
-severity: critical | high | medium | none   # 系统类 / 浏览器类走 openharmony.md 或 chromium.md 时第四档为 low，不是 none
+severity: critical | high | medium | none   # 系统类 / 浏览器类 / 数据库类走 openharmony.md / chromium.md / database.md 时第四档为 low，不是 none
 confidence: high | medium | low
 rationale: |
   引用了哪条定义；前提与影响如何匹配
 matched_rule: "见 references/<type>.md 的 <等级> 条款 x"
-reportable: true | false   # 本仓默认：仅 critical/high 且 confidence≠low 为 true；OH / Chrome 官方四档均可 true
+reportable: true | false   # 本仓默认：仅 critical/high 且 confidence≠low 为 true；OH / Chrome / DB 官方四档均可 true
 ```

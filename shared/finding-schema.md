@@ -9,8 +9,8 @@ mode: whitebox | blackbox
 vuln_type: injection | rce | ssrf | authz | deserialization | file-access | xxe | secrets
 title: 一句话标题（含组件/接口）
 severity: critical | high          # 默认（wb-*/bb-*）：禁止 medium/low/none
-# 例外：vuln-definitions-oh / vuln-definitions-chrome 官方四档为 critical|high|medium|low（低危→low；勿与 confidence: low 混淆）
-severity_rule: "injection.md#C1"  # 必填：vuln-definitions 条款号；OH 用 severity-levels.md#H5 或 openharmony.md#H5；Chrome 用 severity-levels.md#H4 或 chromium.md#H4
+# 例外：vuln-definitions-oh / vuln-definitions-chrome / vuln-definitions-db 官方四档为 critical|high|medium|low（低危→low；勿与 confidence: low 混淆）
+severity_rule: "injection.md#C1"  # 必填：vuln-definitions 条款号；OH 用 severity-levels.md#H5 或 openharmony.md#H5；Chrome 用 severity-levels.md#H4 或 chromium.md#H4；数据库用 severity-levels.md#H2 或 database.md#H2
 confidence: high | medium        # 禁止 low（含 OH）
 cwe: CWE-xxx
 cvss_hint: "9.8"                 # 可选兼容字段：粗估；新报告优先用下方 cvss 块
@@ -82,6 +82,12 @@ chrome_sandbox: sandboxed          # unsandboxed | sandboxed | platform_dependen
 security_impact: stable            # stable | beta | dev | head | none
 miracleptr: not_protected          # protected | not_protected | n/a
 vrp_eligible: true                 # 可选：对照 vrp-rules.md；false 仍可 reportable
+
+# 数据库类（用 vuln-definitions-db 时必填）
+db_class: H2                       # 数据库形态 ID，如 A1 / P2 / Q3 / X1 / C2 / F1（见 db-vuln-types.md）
+target_asset: clickhouse_oss       # clickhouse_oss | clickhouse_cloud | langfuse_cloud | <other-db>
+vrt_priority: P2                   # Bugcrowd 项目官方档（P1–P4；非 Bugcrowd 目标可省）
+bounty_eligible: true              # 可选：对照 bugcrowd-rules.md；false 仍可 reportable；不改 severity
 ```
 
 ## 命名约定
@@ -91,7 +97,8 @@ vrp_eligible: true                 # 可选：对照 vrp-rules.md；false 仍可
 - 严重度语义：`vuln-definitions`；数值评分：`vuln-scoring`（**CVSS v3.1 或 v4.0**）
 - 系统类（OH / Phone OS）另填 `mechanism`、`phone_os_class`、`asset_repo`、`asset_scope`；名单与分桶见 `vuln-definitions-oh` 的 `asset-scope.md`。`asset_scope` 不是 `in_list_first_party` 时默认不进正式报告（三方/上游内核仅默认路径独立 e2e 可例外）
 - 浏览器类（Chrome / Chromium）另填 `chrome_class`、`chrome_process`、`chrome_sandbox`、`security_impact`；可选 `vrp_eligible`。沙箱、分桶与 VRP 资格见 `vuln-definitions-chrome` 的 `process-sandbox.md` / `asset-scope.md` / `vrp-rules.md`
-- **报告门槛**：`wb-*` / `bb-*` 只写 `critical|high`；`vuln-definitions-oh` 与 `vuln-definitions-chrome` 写官方四档 `critical|high|medium|low`。三种路径 `confidence` 均禁止 `low`（官方 `severity: low` 是低危档，不是置信度）
+- 数据库类（ClickHouse 等 DBMS / 数据库云平台）另填 `db_class`、`target_asset`、`vrt_priority`；可选 `bounty_eligible`。形态表、资产范围与 Bugcrowd 纪律见 `vuln-definitions-db` 的 `db-vuln-types.md` / `asset-scope.md` / `bugcrowd-rules.md`
+- **报告门槛**：`wb-*` / `bb-*` 只写 `critical|high`；`vuln-definitions-oh`、`vuln-definitions-chrome` 与 `vuln-definitions-db` 写官方四档 `critical|high|medium|low`。四种路径 `confidence` 均禁止 `low`（官方 `severity: low` 是低危档，不是置信度）
 
 ## CVSS 字段纪律
 
@@ -100,5 +107,5 @@ vrp_eligible: true                 # 可选：对照 vrp-rules.md；false 仍可
   - `4.0` → `CVSS:4.0/` + Base 11 项（含 AT 与 VC/VI/VA/SC/SI/SA）  
 - **默认**主版本 `3.1`；用户/数据源指定或需 FIRST v4 时用 `4.0`；对照时主块 + `cvss_alt`  
 - `base_score` 须与向量一致；不确定时宁可省略分数并说明，勿编造  
-- `severity` 仍以 `severity_rule` 定性为准；CVSS 不能单独把 medium 抬进 `wb-*`/`bb-*` 正式报告（OH / Chrome 四档由定性条款决定，不靠分数抬档）  
+- `severity` 仍以 `severity_rule` 定性为准；CVSS 不能单独把 medium 抬进 `wb-*`/`bb-*` 正式报告（OH / Chrome / DB 四档由定性条款决定，不靠分数抬档）  
 - 完整流程与按需加载见 `vuln-scoring` 插件  

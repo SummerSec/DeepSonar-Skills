@@ -13,7 +13,7 @@
 | Medium（中危） | ❌ 否（可记入进度否决） |
 | None（无危害） | ❌ 否 |
 
-OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome` 时见文末例外（官方四档均可报）。
+OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库（ClickHouse 等 DBMS / 数据库云平台）走 `vuln-definitions-db` 时见文末例外（官方四档均可报）。
 
 ## 强制流程
 
@@ -46,3 +46,7 @@ OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-d
 ## 例外：Chrome / Chromium（`vuln-definitions-chrome`）
 
 仓级「只报 C/H」**不适用于**本例外。浏览器类正式 finding 的 `severity` 为官方四档 `critical` / `high` / `medium` / `low`（S0–S3）。非安全条款与 Gate 不过仍不报（`reportable: false`）。`confidence` 仍禁止 `low`。字段另填 `chrome_class`、`chrome_process`、`chrome_sandbox`、`security_impact`；可选 `vrp_eligible`（见 `finding-schema.md`）。纯 DoS / MiraclePtr PROTECTED / 物理本机 / AI 越狱不是低危，是不报。`vrp_eligible: false` 不阻止对内正式 finding。  
+
+## 例外：数据库（`vuln-definitions-db`）
+
+仓级「只报 C/H」**不适用于**本例外。数据库类（ClickHouse OSS / ClickHouse Cloud / Langfuse Cloud 及后续数据库目标）正式 finding 的 `severity` 为官方四档 `critical` / `high` / `medium` / `low`（Bugcrowd VRT P1–P4；P5 → 不报）。排除条款（DoS / 纯崩溃 / 缺限速 / 缺安全头 / 理论问题 / 实验特性等）与 Gate 不过仍不报（`reportable: false`）。`confidence` 仍禁止 `low`。字段另填 `db_class`、`target_asset`、`vrt_priority`；可选 `bounty_eligible`（见 `finding-schema.md`）。纯 DoS / 纯 crash / 理论影响不是低危，是不报。`bounty_eligible: false` 不阻止对内正式 finding；赏金表不改 `severity`。

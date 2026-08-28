@@ -5,11 +5,12 @@ DeepSonar / Agent 用的 **高危安全技能仓**（单仓库）：
 | 维度 | 说明 |
 |------|------|
 | **漏洞定义** | 独立插件 **`vuln-definitions`**：每类定义 + 严重/高危/中危/无危害 |
+| **领域定义** | 按领域独立插件：`vuln-definitions-oh`（移动 OS）/ `vuln-definitions-chrome`（浏览器）/ `vuln-definitions-db`（数据库） |
 | **漏洞评分** | 独立插件 **`vuln-scoring`**：**CVSS v3.1 / v4.0**（按需）+ EPSS/SSVC/KEV 优先级 |
 | **白盒** | 源码审计，source→sink 追踪 |
 | **黑盒** | 已授权目标上的漏洞验证；**工具预装进 agent 环境** |
-| **组织方式** | **按漏洞类型** 各一个 plugin（白盒、黑盒对称） |
-| **报告范围** | `wb-*`/`bb-*` 定级后 **只报告 Critical / High**；**OH / Chrome 官方四档均可报** |
+| **组织方式** | 定义按 **领域**、审计按 **漏洞类型** 各一个 plugin（白盒、黑盒对称） |
+| **报告范围** | `wb-*`/`bb-*` 定级后 **只报告 Critical / High**；**OH / Chrome / DB 官方四档均可报** |
 
 > 使用前阅读 [DISCLAIMER.md](./DISCLAIMER.md) 与 [shared/authorization.md](./shared/authorization.md)。
 
@@ -27,12 +28,14 @@ DeepSonar-Skills/
 │   └── skills/vuln-definitions-oh/
 ├── vuln-definitions-chrome/     # 【独立插件】Chrome / Chromium 浏览器四档
 │   └── skills/vuln-definitions-chrome/
+├── vuln-definitions-db/         # 【独立插件】数据库领域四档（ClickHouse 厂商实例）
+│   └── skills/vuln-definitions-db/
 ├── vuln-scoring/                # 【独立插件】漏洞评分（CVSS v3.1/v4.0 按需）
 │   └── skills/vuln-scoring/
 │       ├── SKILL.md
 │       └── references/          # cvss-v3.1 / cvss-v4、映射、优先级、分版示例
 ├── shared/                      # 报告策略、finding 格式、授权
-│   ├── severity-policy.md       # 默认只报 C/H；OH / Chrome 四档例外（细则见对应插件）
+│   ├── severity-policy.md       # 默认只报 C/H；OH / Chrome / DB 四档例外（细则见对应插件）
 │   ├── finding-schema.md
 │   └── authorization.md
 ├── whitebox/<type>/             # 白盒 plugin ×8
@@ -55,12 +58,15 @@ DeepSonar-Skills/
 
 凡启用任一审计/挖洞 plugin，**应同时启用本插件**。
 
-### 系统 / 浏览器专项
+### 领域专项（按领域组织，不按项目）
 
 | Plugin | Skill | 职责 |
 |--------|-------|------|
 | **vuln-definitions-oh** | `vuln-definitions-oh` | OpenHarmony / Phone OS 官方四档 + 系统形态 |
 | **vuln-definitions-chrome** | `vuln-definitions-chrome` | Chrome / Chromium 官方 S0–S3 + 沙箱 / Site Isolation + VRP 资格（不定级） |
+| **vuln-definitions-db** | `vuln-definitions-db` | 数据库领域：DBMS 形态 + Bugcrowd VRT P1–P5 → 四档 + ClickHouse 厂商实例 |
+
+> 新审计项目落进已有领域时 **只加厂商 reference 文件，不开新 plugin**（见 CLAUDE/AGENTS.md「领域插件框架」）。
 
 ### 漏洞评分 `vuln-scoring`（推荐）
 
@@ -100,6 +106,7 @@ DeepSonar-Skills/
 /plugin install vuln-scoring@DeepSonar-Skills       # 推荐：CVSS v3.1/v4.0 评分
 /plugin install vuln-definitions-oh@DeepSonar-Skills      # OpenHarmony / Phone OS
 /plugin install vuln-definitions-chrome@DeepSonar-Skills  # Chrome / Chromium
+/plugin install vuln-definitions-db@DeepSonar-Skills      # 数据库（ClickHouse 等）
 /plugin install whitebox-injection@DeepSonar-Skills
 /plugin install blackbox-injection@DeepSonar-Skills
 # 按需安装其他 type
@@ -142,14 +149,14 @@ npx skills add <org>/DeepSonar-Skills --skill wb-injection
 | 中危 Medium | ❌ | 真实弱点但影响有限或利用受限 |
 | 无危害 None | ❌ | 不可达、已防护、误报、非安全问题 |
 
-OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome` 时例外：官方四档 `critical` / `high` / `medium` / `low` 均可报；INV / Gate 不过仍不报。不要把官方低危写成 `none`。Chrome 的纯 DoS / MiraclePtr PROTECTED 是不报，不是低危。
+OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库走 `vuln-definitions-db` 时例外：官方四档 `critical` / `high` / `medium` / `low` 均可报；INV / Gate 不过仍不报。不要把官方低危写成 `none`。Chrome 的纯 DoS / MiraclePtr PROTECTED、DB 的纯 crash / 理论问题是 **不报**，不是低危。
 
 | CVSS Base（v3.1/v4.0 共用档） | 常见 DeepSonar 映射 |
 |-------------------------------|---------------------|
 | 9.0 – 10.0 | critical |
 | 7.0 – 8.9 | high |
 | 4.0 – 6.9 | medium（默认不报） |
-| 0.0 – 3.9 | none / medium（OH / Chrome 官方低危为 `low`） |
+| 0.0 – 3.9 | none / medium（OH / Chrome / DB 官方低危为 `low`） |
 
 ---
 
@@ -167,12 +174,18 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 
 ---
 
-## 扩展新漏洞类型
+## 扩展新漏洞类型 / 新领域 / 新厂商
+
+**新漏洞类型**（audit 手法维度）：
 
 1. 在 `whitebox/<new-type>/` 与 `blackbox/<new-type>/` 各建 plugin（复制现有 type）。  
 2. 更新 `.claude-plugin/marketplace.json`。  
 3. 若黑盒需要新工具 → 写入 `agent-env/tools-manifest.json` 并重建镜像。  
 4. 确认仍只覆盖 Critical/High。  
+
+**新领域**（如 Web 框架、IoT）：建新 `vuln-definitions-<domain>` plugin + `vuln-definitions` 桥接 `references/<domain>.md`。
+
+**新厂商项目**（如 MySQL、MongoDB 进数据库领域）：**只在对应领域 plugin 内加厂商 reference 文件**（资产范围 / 赏金 / 排除项），复用领域形态表与条款，不开新 plugin。
 
 ---
 
