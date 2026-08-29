@@ -10,7 +10,7 @@
 |------|------|----------|--------------------------|
 | **ClickHouse OSS**（github.com/ClickHouse/ClickHouse） | C++ DBMS 引擎，白盒为主 | clickhouse-server 组件；支持版本；最新 release + master 可复现；非实验特性；release 构建 | RBAC 绕过、安全控制绕过（mTLS / 加密配置）、内存破坏与缓冲区溢出 |
 | **ClickHouse Cloud**（控制面 + 数据面） | SaaS Web/API，黑盒为主 | `@bugcrowdninja.com` 测试账号（$300 额度）；只用自己账号 | IDOR、注入、存储型 XSS、SSRF、敏感数据泄露、业务逻辑、RCE、SQLi、认证 / 授权、未授权 API、绕安全控制 |
-| **Langfuse Cloud**（cloud.langfuse.com，2026-07-14 新增） | SaaS Web/API，黑盒为主，源码开源（github.com/langfuse/langfuse） | `@bugcrowdninja.com` 测试账号；只用自己账号 | 同上（多租户 LLM 平台标准攻击面） |
+| **Langfuse Cloud**（cloud.langfuse.com，2026-07-14 新增） | SaaS Web/API，黑盒为主，源码开源（github.com/langfuse/langfuse） | `@bugcrowdninja.com` 测试账号；只用自己账号 | 同上（多租户 LLM 平台标准攻击面）；架构特征与挖掘候选见 **`vendor-langfuse.md`** |
 
 > ClickHouse Cloud 文档入口：https://clickhou.se/bugcrowddocs  
 > Langfuse 文档：https://langfuse.com/docs；负责任披露：https://langfuse.com/security/responsible-disclosure

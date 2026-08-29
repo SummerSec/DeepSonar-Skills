@@ -1,6 +1,6 @@
 ---
 name: vuln-definitions-db
-description: "数据库领域漏洞定义指南。定义 DBMS 通用漏洞形态（认证接入 / 权限模型 RBAC / 查询处理 / 存储引擎 / 外部访问 UDF·表函数 / 复制与集群 / 云控制面多租户 / 数据泄露 / 配置密钥 / 内存安全），并把 Bugcrowd VRT P1–P5 映射为 critical/high/medium/low 四档；含 ClickHouse Bugcrowd 项目资产范围、OSS 合格条款、云平台排除项与赏金资格（不定级），以及历史漏洞模式库（codec 解压、query cache 键、native 协议、library-bridge、UDF 沙箱逃逸、NoSQL 注入等）。用户提到「ClickHouse 漏洞」「数据库漏洞」「DBMS」「SQL 注入定级」「RBAC 绕过」「row policy」「query cache」「Keeper」「clickhouse-server」「ClickHouse Cloud」「Bugcrowd」「VRT」「P1 P2 P3」「Langfuse」或要给数据库类审计目标定级时使用。This skill should be used when the user asks to rate a database / DBMS vulnerability, classify RBAC or row-policy bypasses, map Bugcrowd VRT priorities to severity tiers, check ClickHouse Bugcrowd scope and eligibility, or audits ClickHouse OSS, ClickHouse Cloud, or other database targets."
+description: "数据库领域漏洞定义指南。定义 DBMS 通用漏洞形态（认证接入 / 权限模型 RBAC / 查询处理 / 存储引擎 / 外部访问 UDF·表函数 / 复制与集群 / 云控制面多租户 / 数据泄露 / 配置密钥 / 内存安全），并把 Bugcrowd VRT P1–P5 映射为 critical/high/medium/low 四档；含 ClickHouse Bugcrowd 项目资产范围、OSS 合格条款、云平台排除项与赏金资格（不定级），历史漏洞模式库（codec 解压、query cache 键、native 协议、library-bridge、UDF 沙箱逃逸、NoSQL 注入等），以及 Langfuse 厂商文件（Cloud 4.x 安全架构特征、认证模型、SSRF 防线、挖掘候选）。用户提到「ClickHouse 漏洞」「数据库漏洞」「DBMS」「SQL 注入定级」「RBAC 绕过」「row policy」「query cache」「Keeper」「clickhouse-server」「ClickHouse Cloud」「Bugcrowd」「VRT」「P1 P2 P3」「Langfuse」「cloud.langfuse.com」「ingestion API」「in-app agent」或要给数据库类审计目标定级时使用。This skill should be used when the user asks to rate a database / DBMS vulnerability, classify RBAC or row-policy bypasses, map Bugcrowd VRT priorities to severity tiers, check ClickHouse Bugcrowd scope and eligibility, or audits ClickHouse OSS, ClickHouse Cloud, Langfuse Cloud, or other database targets."
 ---
 
 # 数据库领域漏洞定义指南
@@ -111,3 +111,4 @@ reportable: true | false               # 官方四档且 confidence≠low 为 tr
 | [asset-scope.md](references/asset-scope.md) | 资产范围（OSS / Cloud / Langfuse） |
 | [bugcrowd-rules.md](references/bugcrowd-rules.md) | Bugcrowd 项目纪律 / 赏金表 / 资格（不定级） |
 | [history-patterns.md](references/history-patterns.md) | 历史漏洞模式库 + 定级校准（K1–K6）+ 挖掘切入点 |
+| [vendor-langfuse.md](references/vendor-langfuse.md) | Langfuse Cloud 厂商文件：资产 / 报告要求 / 安全架构特征 / 挖掘候选 |

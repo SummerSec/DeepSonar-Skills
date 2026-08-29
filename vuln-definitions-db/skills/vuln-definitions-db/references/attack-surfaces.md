@@ -53,7 +53,9 @@
 | INGESTION API | 越权写入他人 project、注入 | C2 / Q3 |
 | prompt management / playground | 注入、跨 project 泄露 | C1 / C6 |
 | SSO / 邀请 | 链接枚举、账户接管 | A1 / C1 |
-| webhook / 集成 | SSRF | C3 |
+| webhook / 集成 | SSRF（validateWebhookURL + connection-time 复查，基本已堵） | C3 |
+
+> **架构特征 / 攻防含义 / 挖掘候选**：2026-08 白盒审计（HEAD f6e56cbb）结果见 **`vendor-langfuse.md`**——对象级鉴权统一绑定 key/session 的 projectId，跨 project IDOR 应审计 v2/v3、unstable/、batch/export 等新端点；in-app agent 沙箱与 v4 migration 是未验证候选面。
 
 ---
 
