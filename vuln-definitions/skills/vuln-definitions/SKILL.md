@@ -1,6 +1,6 @@
 ---
 name: vuln-definitions
-description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserialization/file-access/xxe/secrets 等漏洞类型的含义，以及严重(Critical)、高危(High)、中危(Medium)、无危害(None) 的判定标准。白盒/黑盒审计、定级、争议裁决时必须加载。OpenHarmony 等系统类审计时加载 references/openharmony.md；Chrome / Chromium 浏览器审计时加载 references/chromium.md；数据库（ClickHouse 等 DBMS / 数据库云平台）审计时加载 references/database.md。"
+description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserialization/file-access/xxe/secrets 等漏洞类型的含义，以及严重(Critical)、高危(High)、中危(Medium)、无危害(None) 的判定标准。白盒/黑盒审计、定级、争议裁决时必须加载。OpenHarmony 等系统类审计时加载 references/openharmony.md；Chrome / Chromium 浏览器审计时加载 references/chromium.md；数据库（ClickHouse 等 DBMS / 数据库云平台）审计时加载 references/database.md；移动端（Android / iOS App）审计时加载 references/mobile.md。"
 ---
 
 # 漏洞定义模块
@@ -25,6 +25,7 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 - 审计目标为 OpenHarmony / 类移动 OS 系统层、框架层、应用层：加载 `references/openharmony.md` 对齐系统语义
 - 审计目标为 Chrome / Chromium 浏览器：加载 `references/chromium.md` 对齐浏览器四档与非安全条款
 - 审计目标为数据库引擎 / 数据库云平台（ClickHouse OSS / ClickHouse Cloud / Langfuse 等）：加载 `references/database.md` 对齐数据库四档与排除条款
+- 审计目标为 Android / iOS 应用（移动端应用层，非系统层）：加载 `references/mobile.md` 对齐移动端四档与排除条款
 
 ## 全局等级定义
 

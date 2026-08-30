@@ -6,11 +6,12 @@
 2. **vuln-definitions-oh** — OpenHarmony / Phone OS 系统漏洞定义（独立 plugin：四档/无效条款 + 移动 OS 通用类型）  
 2b. **vuln-definitions-chrome** — Chrome / Chromium 浏览器漏洞定义（独立 plugin：官方 S0–S3 + 沙箱/Site Isolation + 非安全条款 + Chrome VRP 资格）  
 2c. **vuln-definitions-db** — 数据库领域漏洞定义（独立 plugin：DBMS 通用形态 + Bugcrowd VRT P1–P5→四档 + ClickHouse 厂商实例）  
+2d. **vuln-definitions-mobile** — 移动端 App（Android / iOS 应用层）漏洞定义（独立 plugin：应用层形态 + HackerOne 移动端惯例→四档 + 历史模式库）  
 3. **vuln-scoring** — 漏洞评分模块（CVSS v3.1 / v4.0 按需 + EPSS/SSVC/KEV）  
 4. **whitebox-*** — 白盒审计（按漏洞类型）  
 5. **blackbox-*** — 黑盒挖掘（按漏洞类型，工具在 agent-env）  
 
-定级含 **严重 / 高危 / 中危 / 无危害**；**wb-*/bb-* 正式报告仅 Critical/High**；**vuln-definitions-oh / vuln-definitions-chrome / vuln-definitions-db 官方四档均可报**。定量分支持 **CVSS v3.1（默认）与 v4.0（按需）**。
+定级含 **严重 / 高危 / 中危 / 无危害**；**wb-*/bb-* 正式报告仅 Critical/High**；**vuln-definitions-oh / vuln-definitions-chrome / vuln-definitions-db / vuln-definitions-mobile 官方四档均可报**。定量分支持 **CVSS v3.1（默认）与 v4.0（按需）**。
 
 ### 领域插件框架（分类纪律）
 
@@ -22,6 +23,7 @@
 | 移动 OS / Phone OS | `vuln-definitions-oh` | OpenHarmony（形态已对齐 Android·iOS） |
 | 浏览器 | `vuln-definitions-chrome` | Chrome / Chromium |
 | 数据库（DBMS + 数据库云平台） | `vuln-definitions-db` | ClickHouse（OSS + Cloud + Bugcrowd 项目内 Langfuse） |
+| 移动 App（Android / iOS 应用层） | `vuln-definitions-mobile` | （新目标只加厂商 reference 文件） |
 | Web 应用 / IoT | （预留；Web 机理暂由 `vuln-definitions` 八类覆盖） | — |
 
 > 本仓内容几乎全是 Markdown（SKILL.md / plugin.json / references），**没有构建、测试、lint 流程**。`package.json` 仅作元数据用途，变更正确性靠结构约定与人工审查保证。
@@ -33,6 +35,7 @@ vuln-definitions/         # 独立插件：定义 + 四级定级
 vuln-definitions-oh/      # 独立插件：OH/Phone OS 系统漏洞定义（四档 + 通用类型）
 vuln-definitions-chrome/  # 独立插件：Chrome/Chromium 浏览器漏洞定义（S0–S3 + 沙箱形态）
 vuln-definitions-db/      # 独立插件：数据库领域漏洞定义（DBMS 形态 + VRT 四档 + ClickHouse 厂商实例）
+vuln-definitions-mobile/  # 独立插件：移动端 App（Android/iOS）漏洞定义（应用层形态 + 四档 + 历史模式库）
 vuln-scoring/             # 独立插件：CVSS v3.1/v4.0 按需评分 + 优先级
 whitebox/<type>/          # 白盒 plugin
   .claude-plugin/plugin.json
@@ -51,7 +54,8 @@ agent-env/                # 黑盒工具内置清单与镜像
 1. **`vuln-definitions/`** 是**严重度定级的唯一语义源**：八类漏洞定义 + 严重/高危/中危/无危害条款（`references/severity-levels.md` + 每类 `references/<type>.md`）。所有 `wb-*`/`bb-*` skill **不自建定级标准**，强制依赖本插件。  
    OpenHarmony 等系统类审计时：机理类型仍以本插件八类为准；**系统四档/无效条款/Phone OS 形态** 加载 `vuln-definitions/.../references/openharmony.md`，或直接用 `vuln-definitions-oh/`（完整：`phone-os-vuln-types.md` + 门禁）。  
    Chrome / Chromium 浏览器审计时：机理类型仍以本插件八类为准；**浏览器四档/非安全条款/沙箱形态** 加载 `vuln-definitions/.../references/chromium.md`，或直接用 `vuln-definitions-chrome/`（完整：`chrome-vuln-types.md` + `process-sandbox.md` + 门禁 + `vrp-rules.md`）。赏金资格不改 `severity`。  
-   数据库（ClickHouse 等 DBMS / 数据库云平台）审计时：机理类型仍以本插件八类为准；**数据库四档/排除条款/DBMS 形态** 加载 `vuln-definitions/.../references/database.md`，或直接用 `vuln-definitions-db/`（完整：`db-vuln-types.md` + `asset-scope.md` + 门禁 + `bugcrowd-rules.md`）。赏金资格不改 `severity`。
+   数据库（ClickHouse 等 DBMS / 数据库云平台）审计时：机理类型仍以本插件八类为准；**数据库四档/排除条款/DBMS 形态** 加载 `vuln-definitions/.../references/database.md`，或直接用 `vuln-definitions-db/`（完整：`db-vuln-types.md` + `asset-scope.md` + 门禁 + `bugcrowd-rules.md`）。赏金资格不改 `severity`。  
+   移动端（Android / iOS App 应用层）审计时：机理类型仍以本插件八类为准；**移动端四档/排除条款/应用层形态** 直接用 `vuln-definitions-mobile/`（完整：`mobile-vuln-types.md` + `attack-surfaces.md` + 门禁 + `history-patterns.md`）。赏金资格不改 `severity`；系统层缺陷（内核/系统服务）走 `vuln-definitions-oh`。
 2. **`vuln-scoring/`** 是**定量评分与利用优先级**模块：支持 **CVSS v3.1 与 v4.0**（先选版本再按需加载指标文件），并映射回四级定级；可选 EPSS / SSVC / CISA KEV 做修复排序。**不替代**定性条款，finding 的 `severity` 仍以 definitions 为准。
 3. **`whitebox/<type>/` 与 `blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
 4. **`shared/`** 是仓库级契约：`severity-policy.md`（默认只报 C/H；OH / Chrome / DB 四档例外）、`finding-schema.md`（统一 finding YAML，含 `cvss` 块）、`authorization.md`。
@@ -102,6 +106,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 /plugin install vuln-definitions-oh@DeepSonar-Skills   # OpenHarmony 系统审计时
 /plugin install vuln-definitions-chrome@DeepSonar-Skills   # Chrome / Chromium 浏览器审计时
 /plugin install vuln-definitions-db@DeepSonar-Skills   # 数据库（ClickHouse 等）审计时
+/plugin install vuln-definitions-mobile@DeepSonar-Skills   # 移动端（Android / iOS App）审计时
 /plugin install whitebox-injection@DeepSonar-Skills
 ```
 
@@ -111,13 +116,14 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 1b. **改 OpenHarmony 系统四档/无效条款** → 只改 `vuln-definitions-oh/`（及 `vuln-definitions/.../references/openharmony.md`），同步 bump 两处 version  
 1c. **改 Chrome / Chromium 浏览器四档/非安全条款 / VRP 资格** → 只改 `vuln-definitions-chrome/`（及 `vuln-definitions/.../references/chromium.md`），同步 bump 两处 version；赏金表不改 `severity`  
 1d. **改数据库四档/排除条款/Bugcrowd 纪律** → 只改 `vuln-definitions-db/`（及 `vuln-definitions/.../references/database.md`），同步 bump 两处 version；赏金表不改 `severity`；**数据库新厂商只加 reference 文件，不开新 plugin**  
+1e. **改移动端四档/排除条款/应用层形态** → 只改 `vuln-definitions-mobile/`，bump 其 version；**移动端新目标（App / SDK）只加厂商 reference 文件，不开新 plugin**  
 2. **改 CVSS/利用评分/优先级标准** → 只改 `vuln-scoring/`，bump 其 version  
 3. 改审计手法 → 对应 `whitebox-*` / `blackbox-*`  
 4. 报告策略（是否上报 medium）→ `shared/severity-policy.md`  
 5. 黑盒新工具 → `agent-env/tools-manifest.json` + 镜像  
 6. marketplace 条目 version 与 plugin.json 对齐  
 7. **新增漏洞类型** → `whitebox/<new-type>/` 与 `blackbox/<new-type>/` 各建插件（复制现有 type），注册进 `.claude-plugin/marketplace.json`，并在 `vuln-definitions` 中加 `references/<new-type>.md`；黑盒需新工具时同步更新 manifest；可在 `vuln-scoring/.../vector-examples.md` 补示例向量  
-8. Finding 输出必须遵守 `shared/finding-schema.md`：`wb-*`/`bb-*` 的 `severity` 只允许 `critical|high`；OH / Chrome / DB 为官方四档 `critical|high|medium|low`。`confidence` 一律禁止 `low`（与官方 `severity: low` 勿混），`severity_rule` 必填；推荐附 CVSS `cvss` 块（`version` 为 `3.1` 或 `4.0`）
+8. Finding 输出必须遵守 `shared/finding-schema.md`：`wb-*`/`bb-*` 的 `severity` 只允许 `critical|high`；OH / Chrome / DB / Mobile 为官方四档 `critical|high|medium|low`。`confidence` 一律禁止 `low`（与官方 `severity: low` 勿混），`severity_rule` 必填；推荐附 CVSS `cvss` 块（`version` 为 `3.1` 或 `4.0`）
 
 ## DeepSonar
 

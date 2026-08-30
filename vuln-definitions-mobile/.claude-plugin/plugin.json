@@ -1,0 +1,8 @@
+{
+  "name": "vuln-definitions-mobile",
+  "version": "0.1.0",
+  "description": "移动端（Android App + iOS App）领域漏洞定义：形态主表（Deep Link / URL Scheme / WebView / Intent / 组件导出 / Content Provider / 广播 / 文件路径 / 认证逻辑 / 数据存储密钥 / SSL-TLS 证书 / 内存安全）与 HackerOne 移动端赏金惯例 → 四档映射；含调整/无效条款、Gate 门禁、Android·iOS 攻击面索引与历史漏洞模式库（案例归纳 + 定级校准 + 挖掘切入点）。",
+  "author": {
+    "name": "DeepSonar"
+  }
+}

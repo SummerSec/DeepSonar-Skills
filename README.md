@@ -5,12 +5,12 @@ DeepSonar / Agent 用的 **高危安全技能仓**（单仓库）：
 | 维度 | 说明 |
 |------|------|
 | **漏洞定义** | 独立插件 **`vuln-definitions`**：每类定义 + 严重/高危/中危/无危害 |
-| **领域定义** | 按领域独立插件：`vuln-definitions-oh`（移动 OS）/ `vuln-definitions-chrome`（浏览器）/ `vuln-definitions-db`（数据库） |
+| **领域定义** | 按领域独立插件：`vuln-definitions-oh`（移动 OS）/ `vuln-definitions-chrome`（浏览器）/ `vuln-definitions-db`（数据库）/ `vuln-definitions-mobile`（移动 App） |
 | **漏洞评分** | 独立插件 **`vuln-scoring`**：**CVSS v3.1 / v4.0**（按需）+ EPSS/SSVC/KEV 优先级 |
 | **白盒** | 源码审计，source→sink 追踪 |
 | **黑盒** | 已授权目标上的漏洞验证；**工具预装进 agent 环境** |
 | **组织方式** | 定义按 **领域**、审计按 **漏洞类型** 各一个 plugin（白盒、黑盒对称） |
-| **报告范围** | `wb-*`/`bb-*` 定级后 **只报告 Critical / High**；**OH / Chrome / DB 官方四档均可报** |
+| **报告范围** | `wb-*`/`bb-*` 定级后 **只报告 Critical / High**；**OH / Chrome / DB / Mobile 官方四档均可报** |
 
 > 使用前阅读 [DISCLAIMER.md](./DISCLAIMER.md) 与 [shared/authorization.md](./shared/authorization.md)。
 
@@ -30,6 +30,8 @@ DeepSonar-Skills/
 │   └── skills/vuln-definitions-chrome/
 ├── vuln-definitions-db/         # 【独立插件】数据库领域四档（ClickHouse 厂商实例）
 │   └── skills/vuln-definitions-db/
+├── vuln-definitions-mobile/     # 【独立插件】移动端 App（Android / iOS 应用层）四档
+│   └── skills/vuln-definitions-mobile/
 ├── vuln-scoring/                # 【独立插件】漏洞评分（CVSS v3.1/v4.0 按需）
 │   └── skills/vuln-scoring/
 │       ├── SKILL.md
@@ -65,6 +67,7 @@ DeepSonar-Skills/
 | **vuln-definitions-oh** | `vuln-definitions-oh` | OpenHarmony / Phone OS 官方四档 + 系统形态 |
 | **vuln-definitions-chrome** | `vuln-definitions-chrome` | Chrome / Chromium 官方 S0–S3 + 沙箱 / Site Isolation + VRP 资格（不定级） |
 | **vuln-definitions-db** | `vuln-definitions-db` | 数据库领域：DBMS 形态 + Bugcrowd VRT P1–P5 → 四档 + ClickHouse 厂商实例 |
+| **vuln-definitions-mobile** | `vuln-definitions-mobile` | 移动端（Android / iOS App）领域：应用层形态 + HackerOne 惯例 → 四档 + 历史模式库 |
 
 > 新审计项目落进已有领域时 **只加厂商 reference 文件，不开新 plugin**（见 CLAUDE/AGENTS.md「领域插件框架」）。
 
@@ -107,6 +110,7 @@ DeepSonar-Skills/
 /plugin install vuln-definitions-oh@DeepSonar-Skills      # OpenHarmony / Phone OS
 /plugin install vuln-definitions-chrome@DeepSonar-Skills  # Chrome / Chromium
 /plugin install vuln-definitions-db@DeepSonar-Skills      # 数据库（ClickHouse 等）
+/plugin install vuln-definitions-mobile@DeepSonar-Skills  # 移动端（Android / iOS App）
 /plugin install whitebox-injection@DeepSonar-Skills
 /plugin install blackbox-injection@DeepSonar-Skills
 # 按需安装其他 type
@@ -149,7 +153,7 @@ npx skills add <org>/DeepSonar-Skills --skill wb-injection
 | 中危 Medium | ❌ | 真实弱点但影响有限或利用受限 |
 | 无危害 None | ❌ | 不可达、已防护、误报、非安全问题 |
 
-OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库走 `vuln-definitions-db` 时例外：官方四档 `critical` / `high` / `medium` / `low` 均可报；INV / Gate 不过仍不报。不要把官方低危写成 `none`。Chrome 的纯 DoS / MiraclePtr PROTECTED、DB 的纯 crash / 理论问题是 **不报**，不是低危。
+OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库走 `vuln-definitions-db`、移动端走 `vuln-definitions-mobile` 时例外：官方四档 `critical` / `high` / `medium` / `low` 均可报；INV / Gate 不过仍不报。不要把官方低危写成 `none`。Chrome 的纯 DoS / MiraclePtr PROTECTED、DB 的纯 crash / 理论问题、Mobile 的纯崩溃 / self-XSS / 需越狱前提是 **不报**，不是低危。
 
 | CVSS Base（v3.1/v4.0 共用档） | 常见 DeepSonar 映射 |
 |-------------------------------|---------------------|
