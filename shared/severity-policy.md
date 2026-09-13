@@ -7,7 +7,7 @@
 ## 本仓报告什么（`wb-*` / `bb-*` 默认）
 
 | 定级结果（按 vuln-definitions） | 是否写入正式 finding |
-|--------------------------------|----------------------|
+| -------------------------------- | ---------------------- |
 | Critical（严重） | ✅ 是 |
 | High（高危） | ✅ 是 |
 | Medium（中危） | ❌ 否（可记入进度否决） |
@@ -53,4 +53,4 @@ OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-d
 
 ## 例外：移动端（`vuln-definitions-mobile`）
 
-仓级「只报 C/H」**不适用于**本例外。移动端（Android App / iOS App 应用层）正式 finding 的 `severity` 为官方四档 `critical` / `high` / `medium` / `low`。排除条款（纯崩溃 DoS / self-XSS / 理论问题 / 需越狱前提 / 非发货构建 / 系统层缺陷等）与 Gate 不过仍不报（`reportable: false`）。`confidence` 仍禁止 `low`。字段另填 `mobile_class`、`platform`、`component`、`attacker`、`prereq`；可选 `bounty_eligible`（见 `finding-schema.md`）。纯崩溃 / self-XSS / 需越狱前提不是低危，是不报。`bounty_eligible: false` 不阻止对内正式 finding；赏金表不改 `severity`。系统层缺陷（内核 / 系统服务）走 `vuln-definitions-oh`。
+仓级「只报 C/H」**不适用于**本例外。移动端（Android App / iOS App 应用层）正式 finding 的 `severity` 为官方四档 `critical` / `high` / `medium` / `low`。排除条款（纯崩溃与资源耗尽 DoS——**破坏性远程 DoS 例外，按 H8** / self-XSS / 理论问题 / 需越狱前提 / 非发货构建 / 系统层缺陷等）与 Gate 不过仍不报（`reportable: false`）。`confidence` 仍禁止 `low`。字段另填 `mobile_class`、`platform`、`component`、`attacker`、`prereq`；可选 `bounty_eligible`（见 `finding-schema.md`）。纯崩溃 / self-XSS / 需越狱前提不是低危，是不报。`bounty_eligible: false` 不阻止对内正式 finding；赏金表不改 `severity`。系统层缺陷（内核 / 系统服务）走 `vuln-definitions-oh`。目标项目为 Google Bug Hunters 的 Android 与 Google 设备项目时，程序规则与资格见 `vuln-definitions-mobile` 的 `google-android-devices-rules.md`。

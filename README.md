@@ -3,7 +3,7 @@
 DeepSonar / Agent 用的 **高危安全技能仓**（单仓库）：
 
 | 维度 | 说明 |
-|------|------|
+| ------ | ------ |
 | **漏洞定义** | 独立插件 **`vuln-definitions`**：每类定义 + 严重/高危/中危/无危害 |
 | **领域定义** | 按领域独立插件：`vuln-definitions-oh`（移动 OS）/ `vuln-definitions-chrome`（浏览器）/ `vuln-definitions-db`（数据库）/ `vuln-definitions-mobile`（移动 App） |
 | **漏洞评分** | 独立插件 **`vuln-scoring`**：**CVSS v3.1 / v4.0**（按需）+ EPSS/SSVC/KEV 优先级 |
@@ -31,7 +31,7 @@ DeepSonar-Skills/
 ├── vuln-definitions-db/         # 【独立插件】数据库领域四档（ClickHouse 厂商实例）
 │   └── skills/vuln-definitions-db/
 ├── vuln-definitions-mobile/     # 【独立插件】移动端 App（Android / iOS 应用层）四档
-│   └── skills/vuln-definitions-mobile/
+│   └── skills/vuln-definitions-mobile/   # 含 google-android-devices-rules.md（项目规则，资格）
 ├── vuln-scoring/                # 【独立插件】漏洞评分（CVSS v3.1/v4.0 按需）
 │   └── skills/vuln-scoring/
 │       ├── SKILL.md
@@ -63,11 +63,11 @@ DeepSonar-Skills/
 ### 领域专项（按领域组织，不按项目）
 
 | Plugin | Skill | 职责 |
-|--------|-------|------|
+| -------- | ------- | ------ |
 | **vuln-definitions-oh** | `vuln-definitions-oh` | OpenHarmony / Phone OS 官方四档 + 系统形态 |
 | **vuln-definitions-chrome** | `vuln-definitions-chrome` | Chrome / Chromium 官方 S0–S3 + 沙箱 / Site Isolation + VRP 资格（不定级） |
 | **vuln-definitions-db** | `vuln-definitions-db` | 数据库领域：DBMS 形态 + Bugcrowd VRT P1–P5 → 四档 + ClickHouse 厂商实例 |
-| **vuln-definitions-mobile** | `vuln-definitions-mobile` | 移动端（Android / iOS App）领域：应用层形态 + HackerOne 惯例 → 四档 + 历史模式库 |
+| **vuln-definitions-mobile** | `vuln-definitions-mobile` | 移动端（Android / iOS App）领域：应用层形态 + HackerOne 惯例 → 四档 + 历史模式库 + Google 设备项目规则（资格，不定级） |
 
 > 新审计项目落进已有领域时 **只加厂商 reference 文件，不开新 plugin**（见 CLAUDE/AGENTS.md「领域插件框架」）。
 
@@ -82,7 +82,7 @@ DeepSonar-Skills/
 ### 白盒 `whitebox-*`
 
 | Plugin | Skill | 只关心 |
-|--------|-------|--------|
+| -------- | ------- | -------- |
 | whitebox-injection | wb-injection | SQL/命令/NoSQL/LDAP 注入 → 泄库/RCE |
 | whitebox-rce | wb-rce | eval/SSTI/表达式 → RCE |
 | whitebox-ssrf | wb-ssrf | SSRF → metadata/内网接管 |
@@ -147,16 +147,16 @@ npx skills add <org>/DeepSonar-Skills --skill wb-injection
 **报告策略**：[`shared/severity-policy.md`](./shared/severity-policy.md)（默认只报严重/高危）。
 
 | 等级 | 是否报告（wb/bb） | 含义（全局） |
-|------|----------|--------------|
+| ------ | ---------- | -------------- |
 | 严重 Critical | ✅ | 沦陷级：RCE/整库/身份或租户接管/云凭证等 |
 | 高危 High | ✅ | 重大数据/权限/子系统沦陷，未达一键全系统 |
 | 中危 Medium | ❌ | 真实弱点但影响有限或利用受限 |
 | 无危害 None | ❌ | 不可达、已防护、误报、非安全问题 |
 
-OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库走 `vuln-definitions-db`、移动端走 `vuln-definitions-mobile` 时例外：官方四档 `critical` / `high` / `medium` / `low` 均可报；INV / Gate 不过仍不报。不要把官方低危写成 `none`。Chrome 的纯 DoS / MiraclePtr PROTECTED、DB 的纯 crash / 理论问题、Mobile 的纯崩溃 / self-XSS / 需越狱前提是 **不报**，不是低危。
+OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库走 `vuln-definitions-db`、移动端走 `vuln-definitions-mobile` 时例外：官方四档 `critical` / `high` / `medium` / `low` 均可报；INV / Gate 不过仍不报。不要把官方低危写成 `none`。Chrome 的纯 DoS / MiraclePtr PROTECTED、DB 的纯 crash / 理论问题、Mobile 的纯崩溃与资源耗尽 DoS（**破坏性远程 DoS 例外，按 high**）/ self-XSS / 需越狱前提是 **不报**，不是低危。
 
 | CVSS Base（v3.1/v4.0 共用档） | 常见 DeepSonar 映射 |
-|-------------------------------|---------------------|
+| ------------------------------- | --------------------- |
 | 9.0 – 10.0 | critical |
 | 7.0 – 8.9 | high |
 | 4.0 – 6.9 | medium（默认不报） |

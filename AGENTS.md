@@ -18,7 +18,7 @@
 漏洞定义按 **领域** 组织，**不按项目**：新审计项目落进已有领域时 **只加厂商 reference 文件，不开新 plugin**；只有全新领域才建新 `vuln-definitions-<domain>`。
 
 | 领域 | plugin | 厂商实例 |
-|------|--------|----------|
+| ------ | -------- | ---------- |
 | 通用机理（八类，跨领域） | `vuln-definitions` | — |
 | 移动 OS / Phone OS | `vuln-definitions-oh` | OpenHarmony（形态已对齐 Android·iOS） |
 | 浏览器 | `vuln-definitions-chrome` | Chrome / Chromium |
@@ -55,7 +55,7 @@ agent-env/                # 黑盒工具内置清单与镜像
    OpenHarmony 等系统类审计时：机理类型仍以本插件八类为准；**系统四档/无效条款/Phone OS 形态** 加载 `vuln-definitions/.../references/openharmony.md`，或直接用 `vuln-definitions-oh/`（完整：`phone-os-vuln-types.md` + 门禁）。  
    Chrome / Chromium 浏览器审计时：机理类型仍以本插件八类为准；**浏览器四档/非安全条款/沙箱形态** 加载 `vuln-definitions/.../references/chromium.md`，或直接用 `vuln-definitions-chrome/`（完整：`chrome-vuln-types.md` + `process-sandbox.md` + 门禁 + `vrp-rules.md`）。赏金资格不改 `severity`。  
    数据库（ClickHouse 等 DBMS / 数据库云平台）审计时：机理类型仍以本插件八类为准；**数据库四档/排除条款/DBMS 形态** 加载 `vuln-definitions/.../references/database.md`，或直接用 `vuln-definitions-db/`（完整：`db-vuln-types.md` + `asset-scope.md` + 门禁 + `bugcrowd-rules.md`）。赏金资格不改 `severity`。  
-   移动端（Android / iOS App 应用层）审计时：机理类型仍以本插件八类为准；**移动端四档/排除条款/应用层形态** 直接用 `vuln-definitions-mobile/`（完整：`mobile-vuln-types.md` + `attack-surfaces.md` + 门禁 + `history-patterns.md`）。赏金资格不改 `severity`；系统层缺陷（内核/系统服务）走 `vuln-definitions-oh`。
+   移动端（Android / iOS App 应用层）审计时：机理类型仍以本插件八类为准；**移动端四档/排除条款/应用层形态** 直接用 `vuln-definitions-mobile/`（完整：`mobile-vuln-types.md` + `attack-surfaces.md` + 门禁 + `history-patterns.md` + `google-android-devices-rules.md`）。赏金资格不改 `severity`；**档位来源**的系统层缺陷（内核/系统服务）走 `vuln-definitions-oh`，但 Google Bug Hunters 的 Android 与 Google 设备项目规则对该类目标仍适用。
 2. **`vuln-scoring/`** 是**定量评分与利用优先级**模块：支持 **CVSS v3.1 与 v4.0**（先选版本再按需加载指标文件），并映射回四级定级；可选 EPSS / SSVC / CISA KEV 做修复排序。**不替代**定性条款，finding 的 `severity` 仍以 definitions 为准。
 3. **`whitebox/<type>/` 与 `blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
 4. **`shared/`** 是仓库级契约：`severity-policy.md`（默认只报 C/H；OH / Chrome / DB 四档例外）、`finding-schema.md`（统一 finding YAML，含 `cvss` 块）、`authorization.md`。
@@ -75,7 +75,7 @@ agent-env/                # 黑盒工具内置清单与镜像
 ## 漏洞类型（type）
 
 | type | 白盒 skill | 黑盒 skill | 焦点 |
-|------|------------|------------|------|
+| ------ | ------------ | ------------ | ------ |
 | injection | wb-injection | bb-injection | SQL/命令/NoSQL 注入 |
 | rce | wb-rce | bb-rce | 代码执行 / SSTI / 表达式 |
 | ssrf | wb-ssrf | bb-ssrf | SSRF → metadata/内网 |
@@ -116,7 +116,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 1b. **改 OpenHarmony 系统四档/无效条款** → 只改 `vuln-definitions-oh/`（及 `vuln-definitions/.../references/openharmony.md`），同步 bump 两处 version  
 1c. **改 Chrome / Chromium 浏览器四档/非安全条款 / VRP 资格** → 只改 `vuln-definitions-chrome/`（及 `vuln-definitions/.../references/chromium.md`），同步 bump 两处 version；赏金表不改 `severity`  
 1d. **改数据库四档/排除条款/Bugcrowd 纪律** → 只改 `vuln-definitions-db/`（及 `vuln-definitions/.../references/database.md`），同步 bump 两处 version；赏金表不改 `severity`；**数据库新厂商只加 reference 文件，不开新 plugin**  
-1e. **改移动端四档/排除条款/应用层形态** → 只改 `vuln-definitions-mobile/`，bump 其 version；**移动端新目标（App / SDK）只加厂商 reference 文件，不开新 plugin**  
+1e. **改移动端四档/排除条款/应用层形态** → 只改 `vuln-definitions-mobile/`，bump 其 version；**移动端新目标（App / SDK）只加厂商 reference 文件，不开新 plugin**（现有厂商/项目规则：`google-android-devices-rules.md`——Google 的 Android 与 Google 设备项目，资格，不定级）  
 2. **改 CVSS/利用评分/优先级标准** → 只改 `vuln-scoring/`，bump 其 version  
 3. 改审计手法 → 对应 `whitebox-*` / `blackbox-*`  
 4. 报告策略（是否上报 medium）→ `shared/severity-policy.md`  

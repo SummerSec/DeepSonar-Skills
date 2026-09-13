@@ -88,6 +88,14 @@ db_class: H2                       # 数据库形态 ID，如 A1 / P2 / Q3 / X1 
 target_asset: clickhouse_oss       # clickhouse_oss | clickhouse_cloud | langfuse_cloud | <other-db>
 vrt_priority: P2                   # Bugcrowd 项目官方档（P1–P4；非 Bugcrowd 目标可省）
 bounty_eligible: true              # 可选：对照 bugcrowd-rules.md；false 仍可 reportable；不改 severity
+
+# 移动端类 / Android · iOS App（用 vuln-definitions-mobile 时必填）
+mobile_class: AD2                  # 移动端形态 ID，如 AD1 / AW1 / AP1 / AT4 / IU1（见 mobile-vuln-types.md）
+platform: android                  # android | ios
+component: exported-activity        # 如 exported-activity | webview | content-provider | url-scheme | permission | …
+attacker: remote_link              # remote_link | malicious_app | nearby_mitm | local_rooted
+prereq: user_click                 # none | user_click | non_latest_version | rooted | specific_config | multi_step
+bounty_eligible: true              # 可选：HackerOne 惯例或 google-android-devices-rules.md；false 仍可 reportable；不改 severity
 ```
 
 ## 命名约定
@@ -98,7 +106,8 @@ bounty_eligible: true              # 可选：对照 bugcrowd-rules.md；false �
 - 系统类（OH / Phone OS）另填 `mechanism`、`phone_os_class`、`asset_repo`、`asset_scope`；名单与分桶见 `vuln-definitions-oh` 的 `asset-scope.md`。`asset_scope` 不是 `in_list_first_party` 时默认不进正式报告（三方/上游内核仅默认路径独立 e2e 可例外）
 - 浏览器类（Chrome / Chromium）另填 `chrome_class`、`chrome_process`、`chrome_sandbox`、`security_impact`；可选 `vrp_eligible`。沙箱、分桶与 VRP 资格见 `vuln-definitions-chrome` 的 `process-sandbox.md` / `asset-scope.md` / `vrp-rules.md`
 - 数据库类（ClickHouse 等 DBMS / 数据库云平台）另填 `db_class`、`target_asset`、`vrt_priority`；可选 `bounty_eligible`。形态表、资产范围与 Bugcrowd 纪律见 `vuln-definitions-db` 的 `db-vuln-types.md` / `asset-scope.md` / `bugcrowd-rules.md`
-- **报告门槛**：`wb-*` / `bb-*` 只写 `critical|high`；`vuln-definitions-oh`、`vuln-definitions-chrome` 与 `vuln-definitions-db` 写官方四档 `critical|high|medium|low`。四种路径 `confidence` 均禁止 `low`（官方 `severity: low` 是低危档，不是置信度）
+- 移动端类（Android / iOS App 应用层）另填 `mobile_class`、`platform`、`component`、`attacker`、`prereq`；可选 `bounty_eligible`。形态表、攻击面与项目规则见 `vuln-definitions-mobile` 的 `mobile-vuln-types.md` / `attack-surfaces.md` / `google-android-devices-rules.md`
+- **报告门槛**：`wb-*` / `bb-*` 只写 `critical|high`；`vuln-definitions-oh`、`vuln-definitions-chrome`、`vuln-definitions-db` 与 `vuln-definitions-mobile` 写官方四档 `critical|high|medium|low`。四种路径 `confidence` 均禁止 `low`（官方 `severity: low` 是低危档，不是置信度）
 
 ## CVSS 字段纪律
 
