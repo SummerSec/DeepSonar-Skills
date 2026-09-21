@@ -43,20 +43,20 @@
 |------|------|--------|
 | **显式 Intent** | 指定 `component`，仅本 App 或指定目标可达 | 组件间数据传递污染 |
 | **隐式 Intent** | 只声明 action / data，系统匹配目标 | 可被恶意 App 拦截（Intent 劫持） |
-| **exported 组件** | `android:exported="true"` 或含 intent-filter，外部可达 | 未授权启动 / 认证绕过 |
+| **exported 组件** | `android:exported="true"` 或含 intent-filter，外部可达 | 未授权启动 / 认证绕过。**入口面本身不是漏洞**（INV26）；须证明未授权敏感 sink（进入认证后界面 / 任意 URL / 凭据或越权操作） |
 | **Deep Link** | App Links（`https` + verify）与 intent scheme（`<scheme>://`） | 路径遍历、参数注入、WebView 加载 |
 | **Content Provider** | `content://` 数据共享，可声明权限 | 信息泄露、SQL 注入、路径遍历、权限重委托 |
 | **Broadcast** | 全局 / 显式 / 粘性广播 | 广播劫持、未受保护隐式广播 |
 | **Fragment** | 动态加载的 UI 单元 | Fragment Injection（类名未校验） |
 | **Task** | 返回栈 / 任务栈 | Task Hijacking / StrandHogg |
 
-**exported 判定**：`android:exported` 显式值优先；否则含 intent-filter 的组件默认对系统（部分版本）可导出——以目标 SDK 版本行为为准。
+**exported 判定**：`android:exported` 显式值优先；否则含 intent-filter 的组件默认对系统（部分版本）可导出——以目标 SDK 版本行为为准。导出是入口条件，不是实害。
 
 ## 4. iOS 组件语义
 
 | 组件 | 语义 | 攻击面 |
 |------|------|--------|
-| **URL Scheme** | `CFBundleURLTypes` 注册的自定义 scheme，任意 App / Safari 可唤起 | 劫持、不当授权、CSRF、信息泄露 |
+| **URL Scheme** | `CFBundleURLTypes` 注册的自定义 scheme，任意 App / Safari 可唤起 | 劫持、不当授权、CSRF、信息泄露。**仅唤起 / 打开默认页、无未授权敏感 sink → INV26** |
 | **Universal Links** | `https://` + associated domains，系统校验 entitlement | 校验绕过 → 同 URL Scheme 风险 |
 | **AppDelegate / SceneDelegate** | `application:openURL:options:` / `scene(_:openURLContexts:)` | URL 处理来源验证 |
 | **ASWebAuthenticationSession** | OAuth 浏览器回调会话 | Redirection URI 劫持、state 验证 |

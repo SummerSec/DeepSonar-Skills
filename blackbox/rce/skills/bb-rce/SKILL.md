@@ -84,5 +84,5 @@ description: "黑盒远程代码执行挖掘。仅报告 Critical/High 的 RCE �
 
 - `references/tooling.md`
 - `references/payloads.md` — 最小验证 payload（非武器库）
-- `../../../vuln-definitions/skills/vuln-definitions/` — 漏洞定义与四级定级
+- `../../../vuln-definitions/` — 漏洞定义与四级定级
 - `../../../shared/severity-policy.md` — 是否写入报告

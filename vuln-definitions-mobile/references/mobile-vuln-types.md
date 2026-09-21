@@ -19,8 +19,9 @@
 | AD3 | 会话劫持 / 账户接管 | 令牌 / cookie 经 Deep Link 参数传递，外部可控 | C2（完整接管） |
 | AD4 | CSRF | 深链接触发敏感操作（改绑手机 / 发消息），无来源校验 | M / H（按实害） |
 | AD5 | JS bridge 接口滥用 | 深链接带参调 `addJavascriptInterface` 暴露方法 | H / C1（若可达 RCE） |
+| AD6 | **已废止（入口面本身）** | 仅证明 exported MainActivity / 自定义 scheme / 不校验调用方可被外部拉起；打开默认页或官方登录页。未证明未授权敏感 sink | 排除（INV26）；新 finding 不得填 `AD6` |
 
-映射：`file-access`（AD1）、`injection`（AD2/AD5 XSS）、`authz`（AD3/AD4）、`rce`（AD1 写 .so / AD5）。
+映射：`file-access`（AD1）、`injection`（AD2/AD5 XSS）、`authz`（AD3/AD4）、`rce`（AD1 写 .so / AD5）。AD6 已废止（INV26，入口面本身不定漏洞）。
 
 ## AW · WebView（Android）
 
@@ -41,8 +42,8 @@
 | AI1 | Intent Redirection | 从传入 Intent 的 extra 取数据再 `startActivity`，二次投递任意 Intent | H |
 | AI2 | Intent 劫持 → XSS | 隐式 Intent 被恶意 App 拦截，替换数据 | M / H |
 | AI3 | Intent 重放 / 组件劫持 | 粘性 Intent、可预测 Intent 重放敏感操作 | M |
-| AI4 | URI 注入 | Intent 的 URI 未校验，注入 scheme / 主机 | H |
-| AI5 | Scheme 认证绕过 | intent scheme 触发认证流，绕过登录 | H |
+| AI4 | URI 注入 | Intent 的 URI 未校验，注入 scheme / 主机，**且**被二次跳转 / `loadUrl` / 路由当可信输入 | H（须未授权敏感 sink）；仅投递 URI → INV26 |
+| AI5 | Scheme 认证绕过 | intent scheme 触发认证流并**绕过登录进入认证后状态**。仅打开登录页不算 | H（须未授权敏感 sink）；仅唤起 → INV26 |
 | AI6 | Path Traversal（读写） | Intent 携带路径，未净化 | H2 |
 
 映射：`authz`（AI1/AI5）、`injection`（AI2）、`file-access`（AI6）。
@@ -51,7 +52,7 @@
 
 | ID | 形态 | 典型机理 | 条款倾向 |
 | ---- | ------ | ---------- | ---------- |
-| AE1 | Activity 认证绕过 / 任意 URL 加载 | `exported` + 无权限校验，外部启动进入认证后界面或加载任意 URL | H |
+| AE1 | Activity 认证绕过 / 任意 URL 加载 | `exported` + 无权限校验，外部启动**进入认证后界面**或加载任意 URL。仅能打开 launcher / 登录页 / 公开内容不算 | H（须未授权敏感 sink）；仅入口面 → INV26 |
 | AE2 | Service 未授权启动 / 绑定 | exported service 被恶意 App 启动 / 绑定，越权操作 | M / H |
 | AE3 | Receiver 导出 | exported receiver 接收伪造广播 | M |
 | AE4 | Provider 导出 → 数据访问 | exported provider 被外部读写 | H |
@@ -155,7 +156,7 @@
 | ID | 形态 | 典型机理 | 条款倾向 |
 | ---- | ------ | ---------- | ---------- |
 | IU1 | 劫持（授权码 / 令牌 / 敏感操作） | `openURL` 处理未验证来源，token / 授权码经 URL 被劫持（对照 Uber `uber://` 系） | C2（授权码 → 完整接管）/ H |
-| IU2 | 不当授权（来源验证缺失） | `application:openURL:options:` 未检查 `sourceApplication` | H |
+| IU2 | 不当授权（来源验证缺失） | `application:openURL:options:` 未检查 `sourceApplication`，**且** URL 参数驱动敏感逻辑。仅能唤起 App / 打开默认页 → INV26 | H（须未授权敏感 sink） |
 | IU3 | CSRF / 跨应用请求伪造 | URL Scheme 触发敏感操作（关注 / 发消息 / 改配置），无 state / 来源校验 | M / H |
 | IU4 | 敏感信息泄露 | URL 参数携带 token / 凭据 | H |
 | IU5 | 应用内 XSS | URL 参数 → UIWebView / WKWebView 未净化 | H |
@@ -232,7 +233,7 @@
 ## 归类优先级（边界情况）
 
 1. **跨平台同形**：同一缺陷 Android 与 iOS 同形（如 Deep Link / URL Scheme 劫持）时，`mobile_class` 按目标平台前缀写（AD vs IU），`platform` 字段写实际平台
-2. **组件导出优先**：同一现象既可归「Deep Link」又可归「组件导出」时，问「入口在哪」——入口是深链接 → AD；入口是 exported 组件 → AE
+2. **组件导出优先**：同一现象既可归「Deep Link」又可归「组件导出」时，问「入口在哪」——入口是深链接 → AD；入口是 exported 组件 → AE。**仅入口面、无未授权敏感 sink → INV26，不定 AD/AE 档**
 3. **数据存储 vs 泄露**：本地存储泄露在未提权访问前多为 M；含可接管级凭据（API key / token 直接接管服务）才抬到 H
 4. **WebView 优先 RCE**：`addJavascriptInterface` 可达反射执行 → AW1 / `rce`，不受「还需要用户点击」过度降档（仍看前提）
 5. **系统层剥离**：内核 / 系统服务 / 框架 / TEE / Secure Element / bootloader / 固件缺陷 → `vuln-definitions-oh`；应用层缺陷（WebView / Deep Link / 组件 / 权限 / UI 覆盖）→ 本插件。目标项目为 Google Bug Hunters 的 Android 与 Google 设备项目时，系统层目标仍在范围内，只是档位来源换成 `vuln-definitions-oh`（见 `google-android-devices-rules.md` §10）

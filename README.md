@@ -21,21 +21,23 @@ DeepSonar / Agent 用的 **高危安全技能仓**（单仓库）：
 ```
 DeepSonar-Skills/
 ├── vuln-definitions/            # 【独立插件】漏洞定义模块（必装）
-│   └── skills/vuln-definitions/
-│       ├── SKILL.md
-│       └── references/          # 全局等级 + 八类四级条款
+│   ├── SKILL.md
+│   └── references/              # 全局等级 + 八类四级条款
 ├── vuln-definitions-oh/         # 【独立插件】OH / Phone OS 系统四档
-│   └── skills/vuln-definitions-oh/
+│   ├── SKILL.md
+│   └── references/
 ├── vuln-definitions-chrome/     # 【独立插件】Chrome / Chromium 浏览器四档
-│   └── skills/vuln-definitions-chrome/
+│   ├── SKILL.md
+│   └── references/
 ├── vuln-definitions-db/         # 【独立插件】数据库领域四档（ClickHouse 厂商实例）
-│   └── skills/vuln-definitions-db/
+│   ├── SKILL.md
+│   └── references/
 ├── vuln-definitions-mobile/     # 【独立插件】移动端 App（Android / iOS 应用层）四档
-│   └── skills/vuln-definitions-mobile/   # 含 google-android-devices-rules.md（项目规则，资格）
+│   ├── SKILL.md
+│   └── references/              # 含 google-android-devices-rules.md（项目规则，资格）
 ├── vuln-scoring/                # 【独立插件】漏洞评分（CVSS v3.1/v4.0 按需）
-│   └── skills/vuln-scoring/
-│       ├── SKILL.md
-│       └── references/          # cvss-v3.1 / cvss-v4、映射、优先级、分版示例
+│   ├── SKILL.md
+│   └── references/              # cvss-v3.1 / cvss-v4、映射、优先级、分版示例
 ├── shared/                      # 报告策略、finding 格式、授权
 │   ├── severity-policy.md       # 默认只报 C/H；OH / Chrome / DB 四档例外（细则见对应插件）
 │   ├── finding-schema.md
@@ -46,7 +48,7 @@ DeepSonar-Skills/
 └── .claude-plugin/marketplace.json
 ```
 
-每个 plugin 含 `.claude-plugin/plugin.json` + `skills/.../SKILL.md`。
+领域 / 评分 plugin 含 `.claude-plugin/plugin.json` + 根目录 `SKILL.md`；白盒 / 黑盒 plugin 仍为 `skills/<skill>/SKILL.md`。
 
 ---
 
@@ -153,7 +155,7 @@ npx skills add <org>/DeepSonar-Skills --skill wb-injection
 | 中危 Medium | ❌ | 真实弱点但影响有限或利用受限 |
 | 无危害 None | ❌ | 不可达、已防护、误报、非安全问题 |
 
-OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库走 `vuln-definitions-db`、移动端走 `vuln-definitions-mobile` 时例外：官方四档 `critical` / `high` / `medium` / `low` 均可报；INV / Gate 不过仍不报。不要把官方低危写成 `none`。Chrome 的纯 DoS / MiraclePtr PROTECTED、DB 的纯 crash / 理论问题、Mobile 的纯崩溃与资源耗尽 DoS（**破坏性远程 DoS 例外，按 high**）/ self-XSS / 需越狱前提是 **不报**，不是低危。
+OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库走 `vuln-definitions-db`、移动端走 `vuln-definitions-mobile` 时例外：官方四档 `critical` / `high` / `medium` / `low` 均可报；INV / Gate 不过仍不报。不要把官方低危写成 `none`。Chrome 的纯 DoS / MiraclePtr PROTECTED、DB 的纯 crash / 理论问题、Mobile 的全部 DoS（含本地杀进程 / 纯崩溃 / 破坏性远程 DoS，INV1）与入口面本身（INV26）/ self-XSS / 需越狱前提是 **不报**，不是低危。
 
 | CVSS Base（v3.1/v4.0 共用档） | 常见 DeepSonar 映射 |
 | ------------------------------- | --------------------- |

@@ -18,16 +18,16 @@
 
 | 文件 | 说明 |
 |------|------|
-| `skills/vuln-definitions-chrome/SKILL.md` | 入口：角色、工作流、输出 |
-| `skills/vuln-definitions-chrome/references/severity-levels.md` | 官方四档条款 + 进程 × 攻击者矩阵 |
-| `skills/vuln-definitions-chrome/references/terminology.md` | 网页内容 / 已沦陷 renderer / Site Isolation / 沙箱 |
-| `skills/vuln-definitions-chrome/references/process-sandbox.md` | 分平台沙箱（按**最弱沙箱平台**定级） |
-| `skills/vuln-definitions-chrome/references/chrome-vuln-types.md` | 浏览器攻击面形态（进程/内存/Web/Mojo/UX/扩展/GPU/AI） |
-| `skills/vuln-definitions-chrome/references/attack-surfaces.md` | Chromium 目录族 → 类型索引 |
-| `skills/vuln-definitions-chrome/references/adjustment-and-invalid.md` | 缓解降档 + 非安全 / 非威胁模型 |
-| `skills/vuln-definitions-chrome/references/gates.md` | Gate T/S/P/D/C/R + 报告要求 |
-| `skills/vuln-definitions-chrome/references/asset-scope.md` | Chrome 浏览器范围 vs ChromeOS / 测试通道 / 实验旗标 |
-| `skills/vuln-definitions-chrome/references/vrp-rules.md` | Chrome VRP 范围 / 投递 / 资格（不定级） |
+| `SKILL.md` | 入口：角色、工作流、输出 |
+| `references/severity-levels.md` | 官方四档条款 + 进程 × 攻击者矩阵 |
+| `references/terminology.md` | 网页内容 / 已沦陷 renderer / Site Isolation / 沙箱 |
+| `references/process-sandbox.md` | 分平台沙箱（按**最弱沙箱平台**定级） |
+| `references/chrome-vuln-types.md` | 浏览器攻击面形态（进程/内存/Web/Mojo/UX/扩展/GPU/AI） |
+| `references/attack-surfaces.md` | Chromium 目录族 → 类型索引 |
+| `references/adjustment-and-invalid.md` | 缓解降档 + 非安全 / 非威胁模型 |
+| `references/gates.md` | Gate T/S/P/D/C/R + 报告要求 |
+| `references/asset-scope.md` | Chrome 浏览器范围 vs ChromeOS / 测试通道 / 实验旗标 |
+| `references/vrp-rules.md` | Chrome VRP 范围 / 投递 / 资格（不定级） |
 
 ## 规则
 

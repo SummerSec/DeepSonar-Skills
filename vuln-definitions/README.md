@@ -14,7 +14,7 @@
 
 | 文件 | 说明 |
 |------|------|
-| `skills/vuln-definitions/SKILL.md` | 入口：何时用、定级流程 |
+| `SKILL.md` | 入口：何时用、定级流程 |
 | `references/severity-levels.md` | 严重/高危/中危/无危害 全局定义 |
 | `references/classification.md` | 多类型冲突时如何归类 |
 | `references/injection.md` 等 | 八类漏洞各自的定义与四级条款 |

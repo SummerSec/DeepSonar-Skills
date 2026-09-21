@@ -83,5 +83,5 @@ description: "黑盒任意文件读写与危险上传挖掘。仅报告 Critical
 
 - `references/tooling.md`
 - `references/payloads.md` — 最小验证 payload（非武器库）
-- `../../../vuln-definitions/skills/vuln-definitions/` — 漏洞定义与四级定级
+- `../../../vuln-definitions/` — 漏洞定义与四级定级
 - `../../../shared/severity-policy.md` — 是否写入报告

@@ -75,6 +75,6 @@ description: "白盒不安全反序列化审计。仅报告 Critical/High 的 De
 ## 参考
 
 - `references/sinks.md` — sink 与模式
-- `../../../vuln-definitions/skills/vuln-definitions/` — 漏洞定义与四级定级
+- `../../../vuln-definitions/` — 漏洞定义与四级定级
 - `../../../shared/severity-policy.md` — 是否写入报告
 - `../../../shared/finding-schema.md`

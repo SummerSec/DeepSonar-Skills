@@ -19,17 +19,17 @@
 
 | 文件 | 说明 |
 |------|------|
-| `skills/vuln-definitions-db/SKILL.md` | 入口：角色、工作流、输出 |
-| `skills/vuln-definitions-db/references/severity-levels.md` | VRT P1–P5 → 四档 + 领域条款 |
-| `skills/vuln-definitions-db/references/terminology.md` | 威胁模型：权限边界 / 租户模型 / 实验特性 |
-| `skills/vuln-definitions-db/references/db-vuln-types.md` | 数据库形态主表（A/P/Q/S/X/R/C/D/F/M） |
-| `skills/vuln-definitions-db/references/attack-surfaces.md` | ClickHouse 源码目录族 + 云控制面攻击面 |
-| `skills/vuln-definitions-db/references/adjustment-and-invalid.md` | 降档条款 + Bugcrowd 排除项 |
-| `skills/vuln-definitions-db/references/gates.md` | Gate T/S/E/C/R + 报告要求 |
-| `skills/vuln-definitions-db/references/asset-scope.md` | 资产范围：OSS / Cloud / Langfuse + 范围外 |
-| `skills/vuln-definitions-db/references/bugcrowd-rules.md` | Bugcrowd 纪律 / 赏金表 / 资格（不定级） |
-| `skills/vuln-definitions-db/references/history-patterns.md` | 历史漏洞模式库（ClickHouse 官方案例 + 其他 DBMS 经典模式）+ 定级校准 K1–K6 + 挖掘切入点 |
-| `skills/vuln-definitions-db/references/vendor-langfuse.md` | Langfuse Cloud 厂商文件：资产 / 报告要求 / 安全架构特征（认证模型·SSRF 防线）/ 挖掘候选 |
+| `SKILL.md` | 入口：角色、工作流、输出 |
+| `references/severity-levels.md` | VRT P1–P5 → 四档 + 领域条款 |
+| `references/terminology.md` | 威胁模型：权限边界 / 租户模型 / 实验特性 |
+| `references/db-vuln-types.md` | 数据库形态主表（A/P/Q/S/X/R/C/D/F/M） |
+| `references/attack-surfaces.md` | ClickHouse 源码目录族 + 云控制面攻击面 |
+| `references/adjustment-and-invalid.md` | 降档条款 + Bugcrowd 排除项 |
+| `references/gates.md` | Gate T/S/E/C/R + 报告要求 |
+| `references/asset-scope.md` | 资产范围：OSS / Cloud / Langfuse + 范围外 |
+| `references/bugcrowd-rules.md` | Bugcrowd 纪律 / 赏金表 / 资格（不定级） |
+| `references/history-patterns.md` | 历史漏洞模式库（ClickHouse 官方案例 + 其他 DBMS 经典模式）+ 定级校准 K1–K6 + 挖掘切入点 |
+| `references/vendor-langfuse.md` | Langfuse Cloud 厂商文件：资产 / 报告要求 / 安全架构特征（认证模型·SSRF 防线）/ 挖掘候选 |
 
 ## 规则
 

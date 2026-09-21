@@ -1,7 +1,7 @@
 {
   "name": "vuln-definitions-mobile",
-  "version": "0.2.0",
-  "description": "移动端（Android App + iOS App）领域漏洞定义：形态主表（Deep Link / URL Scheme / WebView / Intent / 组件导出 / Content Provider / 广播 / 文件路径 / 认证逻辑 / 权限与 WIU / UI 覆盖与点按劫持 / 跨用户与 Private Space / 数据存储密钥 / SSL-TLS 证书 / 内存安全）与 HackerOne 移动端赏金惯例 → 四档映射；含调整/无效条款、Gate 门禁、Android·iOS 攻击面索引、历史漏洞模式库（案例归纳 + 定级校准 + 挖掘切入点），以及 Google Bug Hunters 的 Android 与 Google 设备项目规则（范围 / 资格 / PoC 与补丁要求 / 奖金与 SNR 纪律，不定级）。全部 DoS（含本地杀进程 / 纯崩溃 / 破坏性远程 DoS）按 INV1 不报。",
+  "version": "0.2.2",
+  "description": "移动端（Android App + iOS App）领域漏洞定义：形态主表（Deep Link / URL Scheme / WebView / Intent / 组件导出 / Content Provider / 广播 / 文件路径 / 认证逻辑 / 权限与 WIU / UI 覆盖与点按劫持 / 跨用户与 Private Space / 数据存储密钥 / SSL-TLS 证书 / 内存安全）与 HackerOne 移动端赏金惯例 → 四档映射；含调整/无效条款、Gate 门禁、Android·iOS 攻击面索引、历史漏洞模式库（案例归纳 + 定级校准 + 挖掘切入点），以及 Google Bug Hunters 的 Android 与 Google 设备项目规则（范围 / 资格 / PoC 与补丁要求 / 奖金与 SNR 纪律，不定级）。全部 DoS（含本地杀进程 / 纯崩溃 / 破坏性远程 DoS）按 INV1 不报。入口面本身（exported / 自定义 scheme / 不校验调用方）按 INV26 不报。",
   "author": {
     "name": "DeepSonar"
   }

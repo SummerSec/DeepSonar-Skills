@@ -53,7 +53,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 
 - **只挖**：已授权目标 App 的**应用层**组件与数据（APK / IPA 内逻辑、WebView、Deep Link、URL Scheme、导出组件、权限与 UI 面、本地存储、网络栈）；目标项目（HackerOne / Google Bug Hunters 等）的范围以项目页为准
 - **报告**：官方四档 `critical` / `high` / `medium` / `low`
-- **明确不报**：**全部 DoS**（远程 / 本地杀进程 / 纯崩溃 / 资源耗尽 / 破坏性远程 DoS，见 INV1；**无 H8 例外**）、self-XSS、理论无 PoC、静态分析器原始输出、依赖清单、缺限速 / 缺安全头、版本披露、需已越狱 / root 前提、仅非支持版本可复现、第三方库在出货路径不可达、系统层缺陷（档位走 `vuln-definitions-oh`）（见 `adjustment-and-invalid.md`）
+- **明确不报**：**全部 DoS**（远程 / 本地杀进程 / 纯崩溃 / 资源耗尽 / 破坏性远程 DoS，见 INV1；**无 H8 例外**）、**入口面本身**（exported / 自定义 scheme / 不校验调用方仅打开 App 或官方登录页，无未授权敏感 sink，见 INV26；**不要写成 M/L**）、self-XSS、理论无 PoC、静态分析器原始输出、依赖清单、缺限速 / 缺安全头、版本披露、需已越狱 / root 前提、仅非支持版本可复现、第三方库在出货路径不可达、系统层缺陷（档位走 `vuln-definitions-oh`）（见 `adjustment-and-invalid.md`）
 
 ## 定级工作流
 
@@ -65,7 +65,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 5. attack-surfaces.md 对照组件（若目标为 Android / iOS 应用）
 6. gates.md：T 威胁模型 → S 资产范围 → E 环境合格 → C 安全实害 → R 可复现
 7. 八类 references/<type>.md 确认 vuln_type 成立
-8. severity-levels.md 匹配 严重→高危→中危→低危；边界情况对照 history-patterns.md §3 校准（K1–K7）
+8. severity-levels.md 匹配 严重→高危→中危→低危；边界情况对照 history-patterns.md §3 校准（K1–K8）
 9. adjustment-and-invalid.md 查降档 / 排除
 10. 官方四档且 confidence≥medium、Gate 全过 → 输出 finding（附 CVSS，默认 v3.1）
 11. 对照目标项目页填 bounty_eligible（HackerOne 惯例，或 `google-android-devices-rules.md`；赏金不改 severity）
@@ -100,5 +100,5 @@ bounty_eligible: true | false           # 目标项目资格，不改 severity�
 | [attack-surfaces.md](references/attack-surfaces.md) | Android / iOS 组件攻击面 → 形态索引 |
 | [adjustment-and-invalid.md](references/adjustment-and-invalid.md) | 调整 + 排除条款 |
 | [gates.md](references/gates.md) | Gate + 报告要求 |
-| [history-patterns.md](references/history-patterns.md) | 历史漏洞模式库 + 定级校准（K1–K7）+ 挖掘切入点 |
+| [history-patterns.md](references/history-patterns.md) | 历史漏洞模式库 + 定级校准（K1–K8）+ 挖掘切入点 |
 | [google-android-devices-rules.md](references/google-android-devices-rules.md) | Google 的 Android 与 Google 设备项目规则（范围 / 影响类别映射 / PoC 与补丁 / 奖金 / SNR / 合法与披露；资格，不定级） |

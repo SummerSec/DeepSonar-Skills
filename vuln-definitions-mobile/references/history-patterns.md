@@ -34,8 +34,8 @@
 
 **方向启示**（Android）：
 
-1. **深链接是最大入口面**：android.md 约四成案例落在深链接（路径遍历 / 验证绕过 / 会话劫持）——`getLastPathSegment()`、`loadUrl`、URL 解码不一致是高频缺陷点
-2. **导出组件是第二入口面**：manifest 里 `exported="true"` 的 Activity / Provider / Receiver，优先看认证与路径校验
+1. **深链接是最大入口面**：android.md 约四成案例落在深链接（路径遍历 / 验证绕过 / 会话劫持）——`getLastPathSegment()`、`loadUrl`、URL 解码不一致是高频缺陷点。**仅 scheme 可达 / 不校验调用方、无未授权敏感 sink → INV26 / K8，不要报**
+2. **导出组件是第二入口面**：manifest 里 `exported="true"` 的 Activity / Provider / Receiver，优先看认证与路径校验。**纯可启动无未授权敏感 sink → INV26，不要写成 M/L**
 3. **WebView 历史缺陷按版本校准**：`addJavascriptInterface` RCE 族多数已修复，须证明目标当前版本仍暴露
 4. **本地存储默认低档**：明文存储多数是 Medium，只有含可接管凭据才抬档
 5. **单点无害的链式组合**：深链接路径遍历（写文件）× 覆盖代码文件 = RCE；审计时把「写原语」和「执行原语」连起来看
@@ -68,7 +68,7 @@
 
 **方向启示**（iOS）：
 
-1. **URL Scheme 是最大入口面**：IOS.md 约六成案例落在 URL Scheme / 深链接（劫持 / CSRF / 信息泄露）——`openURL:options:` 的来源验证与参数校验是核心
+1. **URL Scheme 是最大入口面**：IOS.md 约六成案例落在 URL Scheme / 深链接（劫持 / CSRF / 信息泄露）——`openURL:options:` 的来源验证与参数校验是核心。**仅唤起 App / 打开默认页、无未授权敏感 sink → INV26 / K8，不要报**
 2. **SSL/TLS 是第二大族**：证书验证缺失 / 绕过是 Twitter 系高发，MITM 前提下档位看「能窃到什么」
 3. **OAuth 回调是账户层高价值面**：state 验证、redirection URI 劫持直接关系账户接管档位
 4. **数据存储默认低档**：与 Android 一致，明文存储多数 Medium，含接管凭据才 H
@@ -89,8 +89,9 @@
 | K5 | **不安全数据存储默认 M3**（本地未提权），只有含可接管级凭据（API key / token 直接接管）才 H4 | Vine / Uber / Twitter 存储族 | AS1/ID1 → M3 / H4 |
 | K6 | **需已越狱 / root 前提 → 降档或排除**；本地读取类通常不报 | 移动端赏金惯例（默认设备未越狱） | ADJ1 / INV15 |
 | K7 | **StrandHogg / Task Hijacking 历史型 → 确认目标最新版本仍受影响才报**，否则排除 | Reddit #1325649（2020 后多数大厂已修） | AT1 → H（前提强）/ INV |
+| K8 | **入口面本身不定漏洞。** exported MainActivity / 自定义 scheme / 不校验调用方是平台固有入口面，**不是**自动成立的漏洞。须证明未授权方能让 App 做出敏感行为或泄露敏感数据（深链直接特权操作、URI/extra 当可信输入、OAuth 一次性码可截获、带登录态加载攻击者 URL）。仅唤起、打开公开/默认首页、冷启动进官方登录或自家 SSO Custom Tab、敏感操作仍要登录+用户确认、参数有白名单 → 不报。不要写成 M/L | 赏金惯例：可达性备注不是 finding；与 K1 对照——K1 要求 **实际 `loadUrl` / 未授权敏感 sink** | INV26 |
 
-**写 finding 时**：命中 K1–K7 任一校准，在 `rationale` 里写明「对照 history-patterns.md#K_」。
+**写 finding 时**：命中 K1–K8 任一校准，在 `rationale` 里写明「对照 history-patterns.md#K_」。
 
 ---
 
@@ -98,8 +99,8 @@
 
 ### Android（当前）
 
-1. **深链接处理链**（`Uri.getLastPathSegment`、`loadUrl`、URL 解码不一致、`shouldOverrideUrlLoading`）：约四成历史产出；产出 AD / AW 族
-2. **导出组件清单**（manifest 扫描 `exported="true"`）：Activity 认证绕过、Provider 任意文件读、Receiver 伪造广播；产出 AE / AC / AB
+1. **深链接处理链**（`Uri.getLastPathSegment`、`loadUrl`、URL 解码不一致、`shouldOverrideUrlLoading`）：约四成历史产出；产出 AD / AW 族。先闭合未授权敏感 sink 再报，否则 INV26
+2. **导出组件清单**（manifest 扫描 `exported="true"`）：Activity 认证绕过、Provider 任意文件读、Receiver 伪造广播；产出 AE / AC / AB。纯可启动无未授权敏感 sink → INV26
 3. **WebView 配置审计**（`setJavaScriptEnabled` + `addJavascriptInterface`、任意 URL 加载）：产出 AW 族（按版本校准）
 4. **Intent 重定向链**（从传入 Intent 取 extra 再 `startActivity`）：产出 AI1
 5. **认证逻辑**（2FA / OTP 失效、短信重发限速、账户绑定归属校验、邮箱归一化）：产出 AA 族
@@ -107,7 +108,7 @@
 
 ### iOS（当前）
 
-1. **URL Scheme 处理链**（`CFBundleURLTypes` + `openURL:options:` 来源验证 / 参数校验）：约六成历史产出；产出 IU 族
+1. **URL Scheme 处理链**（`CFBundleURLTypes` + `openURL:options:` 来源验证 / 参数校验）：约六成历史产出；产出 IU 族。仅唤起无未授权敏感 sink → INV26
 2. **OAuth 回调**（`state` 验证、`ASWebAuthenticationSession` redirection URI）：产出 IO 族
 3. **SSL/TLS / 证书固定**（自定义网络栈、`NSURLSessionDelegate` 错误处理、pinning 实现）：产出 IL 族
 4. **数据存储**（NSUserDefaults / 明文 plist / SQLite / Keychain 访问性）：产出 ID 族

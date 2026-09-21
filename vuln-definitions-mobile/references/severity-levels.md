@@ -39,6 +39,7 @@
 
 - **列（前提）比行（影响）先看**：同一技术缺陷，前提不同档位不同
 - **全部 DoS 不报**（INV1）：纯崩溃、资源耗尽、本地杀进程（含导出 Service + FGS 5s 超时）、破坏性远程 DoS（原 H8）一律 `reportable: false`。同一入口另有 C/I 实害时按那条定档，不以可用性撑档
+- **入口面本身不定漏洞**（INV26）：exported launcher / MainActivity、自定义 scheme、不校验调用方是平台固有入口面，不是漏洞。须证明未授权敏感 sink（深链直接特权操作、URI/extra 当可信输入、OAuth 一次性码可截获、带登录态加载攻击者 URL）。仅唤起 / 打开默认页 / 官方登录 Custom Tab / 参数白名单 + 登录门控 → `reportable: false`，**不要写成 M/L**
 - 「已越狱后可读 Keychain」不是漏洞；「普通用户路径可读明文凭据」才是
 - 深链接 / URL Scheme 类 **默认算「远程诱导点击」**，除非需要额外本地能力
 
@@ -61,7 +62,7 @@
 | --- | ---------- |
 | H1 | 需前提的 RCE：需用户多步操作、非最新版本、需特定 WebView 配置才可达的代码执行 |
 | H2 | 任意文件读写：Content Provider 路径遍历、深链接路径遍历、符号链接攻击——越出应用沙箱读写文件（未到代码执行） |
-| H3 | WebView XSS / UXSS 打会话、越权访问他人账户 / 数据：深链接验证绕过加载任意 URL、Intent 劫持换数据、组件导出认证绕过 |
+| H3 | WebView XSS / UXSS 打会话、越权访问他人账户 / 数据：深链接验证绕过**实际加载**任意 URL、Intent 劫持换数据、组件导出认证绕过（进入认证后界面）。仅入口面（exported / 自定义 scheme / 不校验调用方）/ 打开官方登录页不够（INV26） |
 | H4 | 可接管级凭据泄露：硬编码 API key / token 可直接接管服务或账户（secrets 类） |
 | H5 | MITM 窃取会话：证书验证缺失 / 固定绕过，邻近网络窃取 OAuth 令牌 / 会话 |
 | H6 | 认证 / 授权绕过：2FA / OTP 可暴力破解、账户覆盖（邮箱大小写）、认证链缺陷 |
@@ -97,7 +98,7 @@
 | L2 | 自身账号内配置缺陷：无跨用户影响但有轻微安全含义 |
 | L3 | 有限 UI / 逻辑缺陷：带轻微安全含义（注意：纯「缺安全头 / 版本披露 / 缺限速」已被排除，不是低危） |
 
-> 项目排除项（缺限速、缺安全头、版本披露、self-XSS、**任何 DoS / 纯崩溃 / 本地杀进程**）**不落在低危**，直接 `reportable: false`——见 `adjustment-and-invalid.md` INV1。
+> 项目排除项（缺限速、缺安全头、版本披露、self-XSS、**任何 DoS / 纯崩溃 / 本地杀进程**、**入口面本身**）**不落在低危 / 中危**，直接 `reportable: false`——见 `adjustment-and-invalid.md` INV1、INV26。
 
 ---
 
@@ -106,6 +107,6 @@
 - 先走 `gates.md`：**威胁模型 → 资产范围 → 环境合格 → 安全实害 → 可复现**
 - `severity_rule` 填本文件锚点，如 `severity-levels.md#H2`。另填 `mobile_class`、`platform`、`component`、`attacker`、`prereq`
 - 与 CVSS：本文件定性；量化用 `vuln-scoring`（默认 v3.1）。CVSS **不得**单独抬档
-- **边界情况对照 `history-patterns.md` §3 定级校准**：深链接 → WebView 任意 URL 加载按 H3（K1）；URL Scheme 劫持需用户点击按降档（K2）；`addJavascriptInterface` 旧版 RCE 按版本校准（K3）；SSL/TLS 缺失按 MITM 前提 H5（K4）；不安全数据存储默认 M、含接管凭据才 H（K5）；需已越狱按降档（K6）；StrandHogg 类已修复历史型需确认最新版本仍受影响（K7）。命中校准点在 `rationale` 写 `history-patterns.md#K_`
+- **边界情况对照 `history-patterns.md` §3 定级校准**：深链接 → WebView 任意 URL 加载按 H3（K1）；URL Scheme 劫持需用户点击按降档（K2）；`addJavascriptInterface` 旧版 RCE 按版本校准（K3）；SSL/TLS 缺失按 MITM 前提 H5（K4）；不安全数据存储默认 M、含接管凭据才 H（K5）；需已越狱按降档（K6）；StrandHogg 类已修复历史型需确认最新版本仍受影响（K7）；入口面本身按 INV26 不报（K8）。命中校准点在 `rationale` 写 `history-patterns.md#K_`
 - **不收录具体 case**：无 CVE / 报告清单
 - **厂商项目规则不改档**：目标项目为 Google Bug Hunters 的 Android 与 Google 设备项目时，范围、PoC 与补丁要求、奖金与 SNR 纪律见 `google-android-devices-rules.md`；其判定写 `bounty_eligible`，**不写** `severity`

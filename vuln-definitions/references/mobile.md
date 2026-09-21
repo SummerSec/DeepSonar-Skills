@@ -60,7 +60,7 @@
 | --- | ---------- |
 | H1 | 需前提的 RCE（多步交互 / 非最新版本 / 特定 WebView 配置） |
 | H2 | 任意文件读写：Content Provider / 深链接路径遍历、符号链接攻击（未到代码执行） |
-| H3 | WebView XSS / UXSS 打会话、越权访问他人账户 / 数据、组件导出认证绕过 |
+| H3 | WebView XSS / UXSS 打会话、越权访问他人账户 / 数据、组件导出认证绕过（须实际加载任意 URL / 进入认证后界面；仅入口面 / 打开官方登录页 → INV26） |
 | H4 | 可接管级凭据泄露（硬编码 API key / token 直接接管） |
 | H5 | MITM 窃取会话（证书验证缺失 / 固定绕过） |
 | H6 | 认证 / 授权绕过（2FA / OTP 可暴力、账户覆盖、认证链缺陷） |
@@ -101,7 +101,7 @@
 | ADJ1 | 需已越狱 / root 设备 | 降档（本地读取类通常不报） |
 | ADJ2 | 仅非最新支持版本可复现 | 降档或排除 |
 | ADJ3 | 受害者高度配合的交互链 | 降一档 |
-| ADJ4 | 仅理论影响未演示 | L / 不报 |
+| ADJ4 | 仅理论影响未演示 | L / 不报。入口面本身（exported / 自定义 scheme / 不校验调用方）走 INV26，不要写成 L |
 | ADJ5 | 仅本地 OS 管理员 / 已控设备可达 | 不在威胁模型 |
 | ADJ6 | 泄露仅为低敏元数据 | M1 / L |
 | ADJ7 | 仅影响自己账号 / 自伤 | 不报 |
@@ -119,6 +119,7 @@
 | INV8 | 社工 / 物理攻击 / 需物理设备访问 |
 | INV11 | 依赖清单无 PoC |
 | INV12/13 | 静态分析原始输出 / 理论问题 |
+| INV26 | **入口面本身不定漏洞**：exported launcher / MainActivity、自定义 scheme、不校验调用方是平台固有入口面，不是漏洞。须证明未授权敏感 sink（深链直接特权操作、URI/extra 当可信输入、OAuth 一次性码可截获、带登录态加载攻击者 URL）。仅唤起 / 打开默认页 / 官方登录 Custom Tab / 参数白名单 + 登录门控 → `reportable: false`。不要写成 M/L |
 | INV15 | 已越狱 / root 后才能观察到的本地读取 |
 | INV16 | 非 release / debug 构建、模拟器专用行为 |
 | INV17 | 环境依赖（特定设备 / ROM / 系统版本行为） |
@@ -163,7 +164,7 @@
 | 内存内核 | 内存破坏 / UAF / 内核损坏（偏系统层） | C / 系统层 |
 | 其他 | 不当认证、CARA、路径遍历、私有 API 滥用 | H / M |
 
-**归类纪律**：深链接 / URL Scheme 默认 `remote_link` 前提；WebView 优先 RCE；本地存储默认 M、含接管凭据才 H；系统层剥离到 `vuln-definitions-oh`。
+**归类纪律**：深链接 / URL Scheme 默认 `remote_link` 前提；WebView 优先 RCE；本地存储默认 M、含接管凭据才 H；系统层剥离到 `vuln-definitions-oh`。**入口面本身（INV26 / K8）不定档、不报。**
 
 > 目标项目为 **Google Bug Hunters 的 Android 与 Google 设备项目** 时：范围与资格（Pixel / Nest / Fitbit、90 天 EOL、AOSP/TEE/bootloader/固件、在范围内影响类别映射、PoC 与补丁要求、奖金与 SNR 纪律、兜底读规则页）见 `vuln-definitions-mobile` 的 **`google-android-devices-rules.md`**（不定级）。系统层目标仍在范围内，只是档位来源换 `vuln-definitions-oh`。
 
@@ -174,5 +175,5 @@
 - 定级前先跑 Gate：**威胁模型 → 资产范围 → 环境合格 → 安全实害 → 可复现**（完整见 `gates.md`）
 - `severity_rule` 填本文件锚点，如 `mobile.md#H2`、`mobile.md#INV7`（完整插件亦可用 `severity-levels.md#H2`）。另填 `mobile_class`、`platform`、`component`、`attacker`、`prereq`；可选 `bounty_eligible`（见 `shared/finding-schema.md`）
 - 与 CVSS：本文件定性；量化用 `vuln-scoring`（默认 v3.1）。CVSS **不得**单独抬档
-- **边界情况对照 `vuln-definitions-mobile` 的 `history-patterns.md` §3 定级校准**（K1–K7：深链接→WebView 按 H3、URL Scheme 按远程前提、WebView 旧版 RCE 按版本、SSL 缺失按 MITM、明文存储默认 M、越狱前提降档、StrandHogg 按版本）
+- **边界情况对照 `vuln-definitions-mobile` 的 `history-patterns.md` §3 定级校准**（K1–K8：深链接→WebView 按 H3、URL Scheme 按远程前提、WebView 旧版 RCE 按版本、SSL 缺失按 MITM、明文存储默认 M、越狱前提降档、StrandHogg 按版本、入口面本身按 INV26 不报）
 - **不收录具体 case**：无 CVE / 报告清单
