@@ -29,7 +29,7 @@
 
 | # | 条款 |
 | --- | --- |
-| INV1 | DoS / DDoS；资源耗尽、纯崩溃、crash-only 内存破坏（**例外**：破坏性远程 DoS 按 `severity-levels.md#H8` 报，不落本条） |
+| INV1 | **全部 DoS 不报**（无例外）：远程 / 本地 / 邻近；DDoS；资源耗尽；纯崩溃；crash-only 内存破坏；同设备恶意 App 拉导出组件 / `startForegroundService` 超时杀进程等**本地 DoS**；需恢复出厂、永久删除用户 / Profile、无交互卸载 App、干扰紧急呼叫的**破坏性远程 DoS**（原 H8 / AP4，已废止，不再可报） |
 | INV2 | 缺限速且无具体安全实害 |
 | INV3 | 缺安全头（CSP / X-Frame-Options / cookie flag 等）且无利用展示 |
 | INV4 | 版本披露 / 软件指纹（`App-Version` 头、版本号泄露） |
@@ -83,7 +83,7 @@
 | 「StrandHogg / Task Hijacking = high」 | 历史型漏洞，多数大厂已修；须确认目标最新版本仍受影响（K7），否则排除 |
 | 「addJavascriptInterface RCE = critical」 | 平台已修复旧版；须证明目标当前版本 + 当前 WebView 配置仍可达（K3），否则 ADJ11 |
 | 「导出 Activity = critical」 | 只有能越权进入认证后界面 / 触发高权限操作才 H6；纯可启动无敏感面 → M/L |
-| 「DoS 一律排除」 | 排除的只是纯崩溃与资源耗尽；需恢复出厂设置、永久删除用户 / Profile 状态、无交互卸载 App 的**破坏性远程 DoS** 按 H8 |
+| 「破坏性远程 DoS / 本地杀进程还能报」 | **不能。** INV1 覆盖全部可用性攻击，含本地 App 崩溃与原 H8；同一入口若另有机密性 / 完整性实害（越权 API、会话、文件读写），按那条实害定档，**不得**用崩溃撑档或当独立 finding |
 | 「Tapjacking / 覆盖界面 = low」 | 能覆盖敏感界面并捕获凭据或安全确认 → H10；无可演示捕获才 M8 |
 | 「能截屏 / `FLAG_SECURE` 失效 = 无危害」 | 敏感界面可截屏且内容可外流 → H10；仅演示截屏无外流 → M8 |
 | 「拿不到系统权限就不算提权」 | WIU / 一次性权限跨进程死亡或重启保留、Special App Access 未授权取得均算：取得敏感数据 → H9，有限面 → M9 |

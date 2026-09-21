@@ -77,7 +77,7 @@
 | 覆盖窗口 / 点按劫持 | 叠加 Activity / overlay 覆盖隐私与安全敏感界面、隐藏隐私指示器、伪造 UI 真实性 | AT4 |
 | `FLAG_SECURE` / 截屏保护 | 敏感界面可截屏 / 录屏或内容外流 | AT5 |
 | 组件启动路径 | 非导出敏感 Activity 可被任意启动；Intent Redirect 加固可绕过 | AE5 / AI1 |
-| 拒绝服务面 | 远程持久 DoS（需恢复出厂 / 删除用户状态 / 无交互卸载 / 干扰紧急呼叫） | AP4 |
+| 拒绝服务面 | 任意可用性攻击（崩溃 / 杀进程 / 资源耗尽 / 破坏性远程 DoS）一律不报 | 排除（INV1）；不得填 AP4 |
 | 企业管理 / DPC | 未授权移除 Device Policy Controller | AP5 |
 
 ---

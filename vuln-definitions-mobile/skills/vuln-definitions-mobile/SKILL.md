@@ -1,6 +1,6 @@
 ---
 name: vuln-definitions-mobile
-description: "移动端（Android App + iOS App）领域漏洞定义指南。定义移动应用安全通用漏洞形态（Deep Link / URL Scheme 劫持与验证绕过、WebView XSS·RCE·JS bridge、Intent 重定向与劫持、组件导出、Content Provider 信息泄露·SQL 注入·路径遍历、广播劫持、数据存储与密钥、SSL/TLS 证书验证与固定绕过、认证与账户逻辑、权限绕过与 WIU 保留、UI 覆盖与点按劫持、跨用户与 Private Space、破坏性远程 DoS、内存安全），并把 HackerOne 移动端赏金惯例映射为 critical/high/medium/low 四档；含调整/无效条款、Gate 门禁、Android·iOS 攻击面索引、历史漏洞模式库（案例归纳 + 定级校准 + 挖掘切入点），以及 Google Bug Hunters 的 Android 与 Google 设备项目规则（范围 / 资格 / PoC 与补丁要求 / 奖金与 SNR 纪律，不定级）。用户提到「移动端漏洞」「Android 漏洞」「iOS 漏洞」「APK」「IPA」「Deep Link」「URL Scheme」「WebView XSS」「addJavascriptInterface」「Intent 重定向」「组件导出」「Content Provider」「StrandHogg」「Task Hijacking」「证书固定绕过」「不安全数据存储」「移动端定级」「Google Bug Hunters」「Android 与 Google 设备项目」「Pixel / Nest / Fitbit」「Android Security Reward」或要给 Android / iOS 应用类审计目标定级时使用。This skill should be used when the user asks to rate a mobile app vulnerability (Android / iOS), classify deep link or URL scheme hijacking, WebView XSS or RCE, exported component or Content Provider issues, insecure data storage, certificate pinning bypass, permission bypass or WIU retention, tapjacking or FLAG_SECURE bypass, or the Android and Google Devices Security Reward Program rules, or audits Android / iOS application targets."
+description: "移动端（Android App + iOS App）领域漏洞定义指南。定义移动应用安全通用漏洞形态（Deep Link / URL Scheme 劫持与验证绕过、WebView XSS·RCE·JS bridge、Intent 重定向与劫持、组件导出、Content Provider 信息泄露·SQL 注入·路径遍历、广播劫持、数据存储与密钥、SSL/TLS 证书验证与固定绕过、认证与账户逻辑、权限绕过与 WIU 保留、UI 覆盖与点按劫持、跨用户与 Private Space、内存安全），并把 HackerOne 移动端赏金惯例映射为 critical/high/medium/low 四档；含调整/无效条款、Gate 门禁、Android·iOS 攻击面索引、历史漏洞模式库（案例归纳 + 定级校准 + 挖掘切入点），以及 Google Bug Hunters 的 Android 与 Google 设备项目规则（范围 / 资格 / PoC 与补丁要求 / 奖金与 SNR 纪律，不定级）。用户提到「移动端漏洞」「Android 漏洞」「iOS 漏洞」「APK」「IPA」「Deep Link」「URL Scheme」「WebView XSS」「addJavascriptInterface」「Intent 重定向」「组件导出」「Content Provider」「StrandHogg」「Task Hijacking」「证书固定绕过」「不安全数据存储」「移动端定级」「Google Bug Hunters」「Android 与 Google 设备项目」「Pixel / Nest / Fitbit」「Android Security Reward」或要给 Android / iOS 应用类审计目标定级时使用。This skill should be used when the user asks to rate a mobile app vulnerability (Android / iOS), classify deep link or URL scheme hijacking, WebView XSS or RCE, exported component or Content Provider issues, insecure data storage, certificate pinning bypass, permission bypass or WIU retention, tapjacking or FLAG_SECURE bypass, or the Android and Google Devices Security Reward Program rules, or audits Android / iOS application targets."
 ---
 
 # 移动端领域漏洞定义指南
@@ -53,7 +53,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 
 - **只挖**：已授权目标 App 的**应用层**组件与数据（APK / IPA 内逻辑、WebView、Deep Link、URL Scheme、导出组件、权限与 UI 面、本地存储、网络栈）；目标项目（HackerOne / Google Bug Hunters 等）的范围以项目页为准
 - **报告**：官方四档 `critical` / `high` / `medium` / `low`
-- **明确不报**：纯崩溃与资源耗尽 DoS（**破坏性远程 DoS 例外，按 H8**）、self-XSS、理论无 PoC、静态分析器原始输出、依赖清单、缺限速 / 缺安全头、版本披露、需已越狱 / root 前提、仅非支持版本可复现、第三方库在出货路径不可达、系统层缺陷（档位走 `vuln-definitions-oh`）（见 `adjustment-and-invalid.md`）
+- **明确不报**：**全部 DoS**（远程 / 本地杀进程 / 纯崩溃 / 资源耗尽 / 破坏性远程 DoS，见 INV1；**无 H8 例外**）、self-XSS、理论无 PoC、静态分析器原始输出、依赖清单、缺限速 / 缺安全头、版本披露、需已越狱 / root 前提、仅非支持版本可复现、第三方库在出货路径不可达、系统层缺陷（档位走 `vuln-definitions-oh`）（见 `adjustment-and-invalid.md`）
 
 ## 定级工作流
 
