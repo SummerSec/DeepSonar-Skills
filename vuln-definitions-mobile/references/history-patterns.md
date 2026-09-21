@@ -25,7 +25,7 @@
 | **广播劫持 / 隐式广播泄露** | Nextcloud #167481、Shopify #56002、Bitwarden #289000（导出 Receiver） | AB1 / AB2 | M / H |
 | **不安全数据存储 / 明文凭据** | Vine #44727、Coinbase #201855、Whisper #57918 | AS1 | M（默认）/ H4（接管凭据） |
 | **硬编码 API 密钥** | Reverb #351555、Coinbase #5786 | AS2 | H4 |
-| **2FA / OTP 绕过** | Grab #202425（2FA 暴力破解）、Shopify #1416964（短信重发；**仅轰炸 / 锁定按 INV1 不报**） | AA1 / AA2 | H（接管）/ 排除（INV1，纯 DoS） |
+| **2FA / OTP 绕过** | Grab #202425（2FA 暴力破解）、Shopify #1416964（短信重发；仅轰炸 / 锁定按实害，本地崩溃式锁定走 INV1） | AA1 / AA2 | H（接管）/ M（远程有限 DoS） |
 | **账户覆盖（邮箱大小写）** | Vine #187714 | AA3 | H（接管） |
 | **认证令牌泄露（含搜索引擎缓存）** | Grab #221558 | AA4 | H |
 | **StrandHogg / Task Hijacking** | Reddit #1325649 | AT1 | H（须确认最新版仍受影响，K7） |
@@ -58,7 +58,7 @@
 | **WebView XSS / Stored XSS** | Quora #189793、ThisData #136396、Nextcloud #136318 | IW1 / IW2 | H |
 | **WebView 信息泄露（通过深链接）** | Grab #136271（iOS/Android） | IW3 | M / H |
 | **深链接 / URI Scheme 处理不当** | Uber #136349、Microsoft OneDrive #136251、Grab #136313 | IU5 / IU4 | M / H |
-| **内存消耗 DoS** | Safari #136299 | IM1 | 排除（INV1） |
+| **内存消耗 DoS** | Safari #136299 | IM1 | 本地 → INV1；远程达 H8 门槛才报 |
 | **内存破坏 / UAF（WebKit）** | WebKit #136344、Telepat #136259 | IM2 | C / H（按前提） |
 | **内核损坏 / 提权 / 竞态** | Apple iOS Kernel #136320 / XNU #136375 / #136363 / #136351 | IM3 | 系统层（走 `vuln-definitions-oh`） |
 | **跨应用资源访问（CARA）** | Evernote #136316 | IA2 | H |

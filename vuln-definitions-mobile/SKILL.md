@@ -53,7 +53,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 
 - **只挖**：已授权目标 App 的**应用层**组件与数据（APK / IPA 内逻辑、WebView、Deep Link、URL Scheme、导出组件、权限与 UI 面、本地存储、网络栈）；目标项目（HackerOne / Google Bug Hunters 等）的范围以项目页为准
 - **报告**：官方四档 `critical` / `high` / `medium` / `low`
-- **明确不报**：**全部 DoS**（远程 / 本地杀进程 / 纯崩溃 / 资源耗尽 / 破坏性远程 DoS，见 INV1；**无 H8 例外**）、**入口面本身**（exported / 自定义 scheme / 不校验调用方仅打开 App 或官方登录页，无未授权敏感 sink，见 INV26；**不要写成 M/L**）、self-XSS、理论无 PoC、静态分析器原始输出、依赖清单、缺限速 / 缺安全头、版本披露、需已越狱 / root 前提、仅非支持版本可复现、第三方库在出货路径不可达、系统层缺陷（档位走 `vuln-definitions-oh`）（见 `adjustment-and-invalid.md`）
+- **明确不报**：**本地 DoS**（同设备杀进程 / 本地纯崩溃 / 本地资源耗尽，见 INV1；**不含远程**）、**入口面本身**（exported / 自定义 scheme / 不校验调用方仅打开 App 或官方登录页，无未授权敏感 sink，见 INV26；**不要写成 M/L**）、self-XSS、理论无 PoC、静态分析器原始输出、依赖清单、缺限速 / 缺安全头、版本披露、需已越狱 / root 前提、仅非支持版本可复现、第三方库在出货路径不可达、系统层缺陷（档位走 `vuln-definitions-oh`）（见 `adjustment-and-invalid.md`）。破坏性远程 DoS 按 H8 报
 
 ## 定级工作流
 

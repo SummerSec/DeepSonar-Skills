@@ -32,7 +32,7 @@
 ## 规则
 
 - **官方四档均可报**：正式报告含 `critical`/`high`/`medium`/`low`；排除条款与 Gate 不过不报
-- **无效即停**：**全部 DoS**（含本地杀进程 / 纯崩溃 / 资源耗尽 / 破坏性远程 DoS）、**入口面本身**（exported / 自定义 scheme / 不校验调用方仅打开 App，无未授权敏感 sink，INV26）、self-XSS、理论问题、无 PoC 的静态分析、依赖清单、缺限速 / 缺安全头 → `reportable: false`（不要写成低危 / 中危）
+- **无效即停**：**本地 DoS**（含本地杀进程 / 本地纯崩溃 / 本地资源耗尽，INV1；**不含远程**）、**入口面本身**（exported / 自定义 scheme / 不校验调用方仅打开 App，无未授权敏感 sink，INV26）、self-XSS、理论问题、无 PoC 的静态分析、依赖清单、缺限速 / 缺安全头 → `reportable: false`（不要写成低危 / 中危）。破坏性远程 DoS 按 H8 报
 - **定性定量分离**：本插件定性；CVSS（默认 v3.1，可按需 v4.0）由 `vuln-scoring` 负责
 - **前提改变档位**：未认证远程 / 恶意 App / 邻近网络 MITM / 需用户点击 / 已越狱——同一缺陷前提不同档位不同
 - **平台版本门槛**：非最新支持版本上才可复现的 WebView 历史 RCE（如 `addJavascriptInterface` 旧版缺陷）须按 ADJ 降档；`critical` 要求主路径可稳定控制

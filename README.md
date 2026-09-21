@@ -155,7 +155,7 @@ npx skills add <org>/DeepSonar-Skills --skill wb-injection
 | 中危 Medium | ❌ | 真实弱点但影响有限或利用受限 |
 | 无危害 None | ❌ | 不可达、已防护、误报、非安全问题 |
 
-OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库走 `vuln-definitions-db`、移动端走 `vuln-definitions-mobile` 时例外：官方四档 `critical` / `high` / `medium` / `low` 均可报；INV / Gate 不过仍不报。不要把官方低危写成 `none`。Chrome 的纯 DoS / MiraclePtr PROTECTED、DB 的纯 crash / 理论问题、Mobile 的全部 DoS（含本地杀进程 / 纯崩溃 / 破坏性远程 DoS，INV1）与入口面本身（INV26）/ self-XSS / 需越狱前提是 **不报**，不是低危。
+OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库走 `vuln-definitions-db`、移动端走 `vuln-definitions-mobile` 时例外：官方四档 `critical` / `high` / `medium` / `low` 均可报；INV / Gate 不过仍不报。不要把官方低危写成 `none`。Chrome 的纯 DoS / MiraclePtr PROTECTED、DB 的纯 crash / 理论问题、Mobile 的**本地 DoS**（杀进程 / 纯崩溃 / 资源耗尽，INV1；破坏性远程 DoS 按 H8）与入口面本身（INV26）/ self-XSS / 需越狱前提是 **不报**，不是低危。
 
 | CVSS Base（v3.1/v4.0 共用档） | 常见 DeepSonar 映射 |
 | ------------------------------- | --------------------- |

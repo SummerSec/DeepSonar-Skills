@@ -29,7 +29,7 @@
 | 应用层 vs 系统层 | 本文件只管应用层；系统层走 `vuln-definitions-oh` |
 | 可接管级凭据 | OAuth token / session / API key / 私钥，泄露可直接接管 |
 
-**不在威胁模型**：已越狱前提、物理设备访问、管理员自伤、**全部 DoS**（远程 / 本地杀进程 / 纯崩溃 / 资源耗尽 / 破坏性远程 DoS）。
+**不在威胁模型**：已越狱前提、物理设备访问、管理员自伤、**本地 DoS**（本地杀进程 / 本地纯崩溃 / 本地资源耗尽）。破坏性远程 DoS 按 H8。
 
 ---
 
@@ -65,7 +65,7 @@
 | H5 | MITM 窃取会话（证书验证缺失 / 固定绕过） |
 | H6 | 认证 / 授权绕过（2FA / OTP 可暴力、账户覆盖、认证链缺陷） |
 | H7 | 存储型 / 持久的 WebView XSS 打他人（self-XSS 被排除） |
-| H8 | **已废止，不报。** 原「破坏性远程 DoS」并入 INV1。编号保留以免旧锚点断裂；新报告不得填 `mobile.md#H8` |
+| H8 | 破坏性远程 DoS：远程触发且需恢复出厂、永久删除用户 / Profile、无交互卸载 App、或干扰紧急呼叫。本地杀进程 / 纯崩溃走 INV1 |
 | H9 | 权限绕过与保留：绕过系统 / signature / dangerous 权限取得敏感数据；Special App Access 未授权获取；一次过 / 使用时（WIU）权限跨进程死亡或重启后保留；后台非法启动 FGS 取得 WIU 权限 |
 | H10 | UI 覆盖 / 点按劫持 / `FLAG_SECURE` 绕过：能捕获凭据或安全确认 |
 | H11 | 跨用户 / Private Space 越界：跨用户读他人敏感数据；未用指定锁定因子解锁 Private Space |
@@ -113,7 +113,7 @@
 
 | # | 条款 |
 | --- | --- |
-| INV1 | **全部 DoS 不报**（无例外）：远程 / 本地 / 邻近；DDoS；资源耗尽；纯崩溃；crash-only 内存破坏；同设备恶意 App 拉导出组件 / FGS 超时杀进程等本地 DoS；原 H8 破坏性远程 DoS |
+| INV1 | **本地 DoS 不报**：同设备杀进程 / 本地纯崩溃 / 本地资源耗尽 / crash-only。**不含远程。** 破坏性远程 DoS 按 H8 |
 | INV2/3/4 | 缺限速（无实害）/ 缺安全头 / 版本披露 |
 | INV7 | self-XSS / POST 反射 XSS |
 | INV8 | 社工 / 物理攻击 / 需物理设备访问 |
@@ -149,7 +149,7 @@
 | 认证逻辑 | 2FA / OTP 绕过、短信重发缺陷、账户覆盖、令牌泄露 | H |
 | 数据存储密钥 | 明文存储、硬编码密钥、SSL 配置、日志泄露 | M3 / H4 |
 | 任务窗口 | StrandHogg、Fragment 注入、Confused Deputy、UI 覆盖 / 点按劫持、`FLAG_SECURE` 绕过 | H（按版本）/ H10 / M8 |
-| 权限与访问控制 | 权限绕过 / WIU 保留、Special App Access、跨用户与 Private Space、企业 DPC 绕过（破坏性远程 DoS 已废止，INV1） | H9–H11 / M9 |
+| 权限与访问控制 | 权限绕过 / WIU 保留、Special App Access、跨用户与 Private Space、企业 DPC 绕过、破坏性远程 DoS（H8） | H8–H11 / M9 |
 | 内存安全 | UAF / 堆溢出 / 越界读（JNI / 原生库） | C4 / H1 |
 
 ### iOS
