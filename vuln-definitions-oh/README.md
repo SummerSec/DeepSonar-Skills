@@ -15,7 +15,7 @@
 
 | 文件 | 说明 |
 |------|------|
-| `skills/vuln-definitions-oh/SKILL.md` | 入口：角色、工作流、输出 |
+| `SKILL.md` | 入口：角色、工作流、输出 |
 | `references/asset-scope.md` | **资产范围**：官方 bounty 实时名单 + 分桶 |
 | `references/mechanism-types.md` | **官方公告机理**：2021–2026 自研披露类型全表 + 定义（越界/UAF/权限绕过/路径穿越/SA 中继/明文 PIN 等） |
 | `references/phone-os-vuln-types.md` | **攻击面形态**：内核/HDF/IPC/沙箱/权限/Ability·WantAgent/文件·UDMF·分布式 KV/广播·推送/媒体/Ark·Web·NAPI/近场·软总线·投屏/OTA·动态包/账号·USB 等 |

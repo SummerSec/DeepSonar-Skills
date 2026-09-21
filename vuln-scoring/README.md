@@ -26,13 +26,13 @@
 - **默认 v3.1**（OH/厂商公告、NVD 存量常见）  
 - 用户指定或数据源已是 `CVSS:4.0/` → **v4.0**  
 - 用户要求对照 → **两版各评一次**（`cvss` + `cvss_alt`）  
-- 细则见 `skills/vuln-scoring/SKILL.md`「版本选择 / 按需加载」
+- 细则见 `SKILL.md`「版本选择 / 按需加载」
 
 ## 内容
 
 | 文件 | 说明 |
 |------|------|
-| `skills/vuln-scoring/SKILL.md` | 入口：版本选择、按需加载、流程、输出 |
+| `SKILL.md` | 入口：版本选择、按需加载、流程、输出 |
 | `references/cvss-v3.1.md` | **按需**：v3.1 指标与决策 |
 | `references/cvss-v4.md` | **按需**：v4.0 指标与决策 |
 | `references/vector-examples-v3.1.md` | **按需**：v3.1 示例向量 |

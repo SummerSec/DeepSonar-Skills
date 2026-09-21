@@ -12,7 +12,7 @@
 
 | 攻击面 | 检查项 | 形态 |
 | -------- | -------- | ------ |
-| 导出 Activity | `android:exported="true"`、intent-filter；能否外部启动进入认证后界面 / 加载任意 URL | AE1 |
+| 导出 Activity | `android:exported="true"`、intent-filter；能否外部启动**进入认证后界面 / 加载任意 URL**。仅打开 launcher / 登录页 → INV26 | AE1（须未授权敏感 sink） |
 | 导出 Service | exported service 能否被恶意 App 启动 / 绑定 | AE2 |
 | 导出 BroadcastReceiver | exported receiver 接收伪造广播 | AE3 / AB3 |
 | 导出 Provider | `content://` 能否被外部读写 | AE4 / AC1 |
@@ -23,11 +23,12 @@
 
 | 攻击面 | 检查项 | 形态 |
 | -------- | -------- | ------ |
-| intent-filter（action/data） | 隐式 Intent 可被拦截；Deep Link 声明不当 | AI2 / AD |
+| intent-filter（action/data） | 隐式 Intent 可被拦截；Deep Link 声明不当。仅声明、无未授权敏感 sink → INV26 | AI2 / AD |
 | Deep Link 路径处理 | `getLastPathSegment()`、文件名未净化、`%2f` 解码 | AD1 |
-| Deep Link → WebView | 参数未校验直接 `loadUrl` | AD2 / AD5 |
+| Deep Link → WebView | 参数未校验直接 `loadUrl`（须实际加载） | AD2 / AD5 |
 | Intent extra 二次投递 | 从传入 Intent 取数据再 `startActivity` | AI1 |
-| Intent scheme | `<scheme>://` 触发认证流 | AI5 |
+| Intent scheme | `<scheme>://` 触发认证流并绕过登录。仅唤起 / 打开登录页 → INV26 | AI5 |
+| 入口面本身 | 仅 `exported` / 自定义 scheme / 不校验调用方 / `START` / `onNewIntent` / 打开默认页或官方 SSO Custom Tab | 排除（INV26）；不得填 AD6 |
 
 ## 3. WebView
 
@@ -77,7 +78,7 @@
 | 覆盖窗口 / 点按劫持 | 叠加 Activity / overlay 覆盖隐私与安全敏感界面、隐藏隐私指示器、伪造 UI 真实性 | AT4 |
 | `FLAG_SECURE` / 截屏保护 | 敏感界面可截屏 / 录屏或内容外流 | AT5 |
 | 组件启动路径 | 非导出敏感 Activity 可被任意启动；Intent Redirect 加固可绕过 | AE5 / AI1 |
-| 拒绝服务面 | 任意可用性攻击（崩溃 / 杀进程 / 资源耗尽 / 破坏性远程 DoS）一律不报 | 排除（INV1）；不得填 AP4 |
+| 拒绝服务面 | 本地崩溃 / 杀进程 / 资源耗尽 → INV1 不报；破坏性远程 DoS（恢复出厂级）→ AP4 / H8 | AP4（远程破坏性）；本地 → 排除（INV1） |
 | 企业管理 / DPC | 未授权移除 Device Policy Controller | AP5 |
 
 ---
@@ -88,7 +89,7 @@
 
 | 攻击面 | 检查项 | 形态 |
 | -------- | -------- | ------ |
-| `CFBundleURLTypes` | 注册的自定义 scheme、可被外部唤起 | IU1 / IU2 |
+| `CFBundleURLTypes` | 注册的自定义 scheme、可被外部唤起。仅唤起 / 打开默认页 → INV26 | IU1 / IU2（须未授权敏感 sink） |
 | Universal Links | associated domains 校验 | IU1 |
 | ATS（App Transport Security） | `NSAllowsArbitraryLoads`、例外域 | IL 前提 |
 
@@ -96,7 +97,7 @@
 
 | 攻击面 | 检查项 | 形态 |
 | -------- | -------- | ------ |
-| `application:openURL:options:` | 是否检查 `sourceApplication`、参数校验 | IU1 / IU2 |
+| `application:openURL:options:` | 是否检查 `sourceApplication`、参数是否驱动未授权敏感 sink。仅唤起 → INV26 | IU1 / IU2 |
 | `scene(_:openURLContexts:)` | `sourceApp` 未验证 | IU2 |
 | OAuth 回调 | `state` 验证、回调 URL 可被劫持 | IO1 / IO2 |
 | `ASWebAuthenticationSession` | redirection URI 劫持 | IO2 |

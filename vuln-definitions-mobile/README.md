@@ -19,20 +19,20 @@
 
 | 文件 | 说明 |
 | ------ | ------ |
-| `skills/vuln-definitions-mobile/SKILL.md` | 入口：角色、工作流、输出 |
-| `skills/vuln-definitions-mobile/references/severity-levels.md` | HackerOne 移动端赏金惯例 → 四档 + 前提×影响矩阵 |
-| `skills/vuln-definitions-mobile/references/terminology.md` | 威胁模型：恶意 App / 远程网页 / 邻近网络 / 已越狱；组件语义 |
-| `skills/vuln-definitions-mobile/references/mobile-vuln-types.md` | 移动端形态主表（Android AD/AW/AI/AE/AC/AB/AF/AA/AS/AT/AM + iOS IU/IO/IL/ID/IW/IM/IA） |
-| `skills/vuln-definitions-mobile/references/attack-surfaces.md` | Android / iOS 组件攻击面 → 形态索引 |
-| `skills/vuln-definitions-mobile/references/adjustment-and-invalid.md` | 调整条款 + 排除条款 |
-| `skills/vuln-definitions-mobile/references/gates.md` | Gate T/S/E/C/R + HackerOne 报告要求 |
-| `skills/vuln-definitions-mobile/references/history-patterns.md` | 历史漏洞模式库（android.md / IOS.md 案例归纳）+ 定级校准 + 挖掘切入点 |
-| `skills/vuln-definitions-mobile/references/google-android-devices-rules.md` | Google 的 Android 与 Google 设备项目规则：范围 / 影响类别映射 / PoC 与补丁要求 / 奖金结构 / 重复判定 / SNR 与披露纪律（**资格，不定级**） |
+| `SKILL.md` | 入口：角色、工作流、输出 |
+| `references/severity-levels.md` | HackerOne 移动端赏金惯例 → 四档 + 前提×影响矩阵 |
+| `references/terminology.md` | 威胁模型：恶意 App / 远程网页 / 邻近网络 / 已越狱；组件语义 |
+| `references/mobile-vuln-types.md` | 移动端形态主表（Android AD/AW/AI/AE/AC/AB/AF/AA/AS/AT/AM + iOS IU/IO/IL/ID/IW/IM/IA） |
+| `references/attack-surfaces.md` | Android / iOS 组件攻击面 → 形态索引 |
+| `references/adjustment-and-invalid.md` | 调整条款 + 排除条款 |
+| `references/gates.md` | Gate T/S/E/C/R + HackerOne 报告要求 |
+| `references/history-patterns.md` | 历史漏洞模式库（android.md / IOS.md 案例归纳）+ 定级校准 + 挖掘切入点 |
+| `references/google-android-devices-rules.md` | Google 的 Android 与 Google 设备项目规则：范围 / 影响类别映射 / PoC 与补丁要求 / 奖金结构 / 重复判定 / SNR 与披露纪律（**资格，不定级**） |
 
 ## 规则
 
 - **官方四档均可报**：正式报告含 `critical`/`high`/`medium`/`low`；排除条款与 Gate 不过不报
-- **无效即停**：**全部 DoS**（含本地杀进程 / 纯崩溃 / 资源耗尽 / 破坏性远程 DoS）、self-XSS、理论问题、无 PoC 的静态分析、依赖清单、缺限速 / 缺安全头 → `reportable: false`（不要写成低危）
+- **无效即停**：**本地 DoS**（含本地杀进程 / 本地纯崩溃 / 本地资源耗尽，INV1；**不含远程**）、**入口面本身**（exported / 自定义 scheme / 不校验调用方仅打开 App，无未授权敏感 sink，INV26）、self-XSS、理论问题、无 PoC 的静态分析、依赖清单、缺限速 / 缺安全头 → `reportable: false`（不要写成低危 / 中危）。破坏性远程 DoS 按 H8 报
 - **定性定量分离**：本插件定性；CVSS（默认 v3.1，可按需 v4.0）由 `vuln-scoring` 负责
 - **前提改变档位**：未认证远程 / 恶意 App / 邻近网络 MITM / 需用户点击 / 已越狱——同一缺陷前提不同档位不同
 - **平台版本门槛**：非最新支持版本上才可复现的 WebView 历史 RCE（如 `addJavascriptInterface` 旧版缺陷）须按 ADJ 降档；`critical` 要求主路径可稳定控制
@@ -43,7 +43,7 @@
 ## 与 vuln-definitions 的关系
 
 - **机理**（injection/rce/ssrf/authz/…）→ `vuln-definitions`（八类）
-- **移动端四档 + 形态** → 本插件（`references/mobile.md` 为精简镜像，映射回 `vuln-definitions/.../references/`）
+- **移动端四档 + 形态** → 本插件（精简镜像为 `vuln-definitions/references/mobile.md`）
 
 ## 语义基线
 

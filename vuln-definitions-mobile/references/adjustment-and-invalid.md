@@ -11,7 +11,7 @@
 | ADJ1 | 需已越狱 / root 设备 | 降档（本地读取类通常不报；需已 root 才能读的本地存储不构成漏洞） |
 | ADJ2 | 仅非最新支持版本可复现 | 降档或排除（INV7）；须在目标项目支持的最新版本确认 |
 | ADJ3 | 需受害者高度配合的交互链 | 降一档（如多步深链接诱导、需登录态） |
-| ADJ4 | 仅理论影响未演示 | 降到 L / 不报（理论问题被排除） |
+| ADJ4 | 仅理论影响未演示 | 降到 L / 不报（理论问题被排除）。**入口面本身**（exported / 自定义 scheme / 不校验调用方）走 INV26，不要写成 L |
 | ADJ5 | 仅本地 OS 管理员 / 已控设备可达 | 不在威胁模型，不报 |
 | ADJ6 | 泄露仅为低敏元数据 | 降到 M1 / L |
 | ADJ7 | 仅影响自己账号 / 自伤 | 不报 |
@@ -29,7 +29,7 @@
 
 | # | 条款 |
 | --- | --- |
-| INV1 | **全部 DoS 不报**（无例外）：远程 / 本地 / 邻近；DDoS；资源耗尽；纯崩溃；crash-only 内存破坏；同设备恶意 App 拉导出组件 / `startForegroundService` 超时杀进程等**本地 DoS**；需恢复出厂、永久删除用户 / Profile、无交互卸载 App、干扰紧急呼叫的**破坏性远程 DoS**（原 H8 / AP4，已废止，不再可报） |
+| INV1 | **本地 DoS 不报**（不要写成 M/L）：同设备恶意 App 拉导出组件 / `startForegroundService` 超时杀进程、本地纯崩溃、本地资源耗尽、crash-only 内存破坏。**不含远程。** 破坏性远程 DoS（需恢复出厂、永久删除用户 / Profile、无交互卸载 App、干扰紧急呼叫）按 `severity-levels.md#H8` 报，不落本条 |
 | INV2 | 缺限速且无具体安全实害 |
 | INV3 | 缺安全头（CSP / X-Frame-Options / cookie flag 等）且无利用展示 |
 | INV4 | 版本披露 / 软件指纹（`App-Version` 头、版本号泄露） |
@@ -56,6 +56,7 @@
 | INV20 | 对真实用户数据 / 账户的破坏性验证 |
 | INV21 | 需要用户先安装恶意 App（若恶意 App 前提本身超范围） |
 | INV22 | 非官方渠道（侧载 / 越狱商店）版本才可复现 |
+| INV26 | **入口面本身不定漏洞**（无例外，不要写成 M/L）：exported launcher / MainActivity、自定义 scheme（无 host / 无 autoVerify）、不校验调用方是 Android / iOS 深链的**固有入口面**，不是漏洞。自定义 scheme 无系统级所有权校验；隐式 `VIEW`/`BROWSABLE` 上 `getCallingPackage()` 常为 null。须证明未授权方能让 App **做出敏感行为或泄露敏感数据**：① 深链直接执行登录 / 改密 / 支付 / 绑定 / 授权 / 改设置，且无二次确认与登录态检查；② URI / extra 被当可信输入（query `url` 进 WebView、path 读写文件、extra Intent 再 `startActivity`、token/code/session 当凭据）；③ OAuth / Magic Link 回调走自定义 scheme 且可截获一次性码（无 PKCE / 一次性校验不足）；④ 打开的页面带登录态加载攻击者 URL。仅唤起 App、打开公开 / 默认首页、冷启动进官方登录或自家 SSO Custom Tab、敏感操作仍要登录+用户确认、参数有白名单 → `reportable: false`。scheme 抢占须单独证明截获一次性凭据，不得用「本 App 吃掉了 Intent」代替 |
 
 ### 目标项目范围排除（Google 与 Google 设备项目口径）
 
@@ -82,8 +83,12 @@
 | 「不安全数据存储 = high」 | 本地未提权访问，默认 M3；只有含可接管级凭据（API key / token 直接接管）才 H4 |
 | 「StrandHogg / Task Hijacking = high」 | 历史型漏洞，多数大厂已修；须确认目标最新版本仍受影响（K7），否则排除 |
 | 「addJavascriptInterface RCE = critical」 | 平台已修复旧版；须证明目标当前版本 + 当前 WebView 配置仍可达（K3），否则 ADJ11 |
-| 「导出 Activity = critical」 | 只有能越权进入认证后界面 / 触发高权限操作才 H6；纯可启动无敏感面 → M/L |
-| 「破坏性远程 DoS / 本地杀进程还能报」 | **不能。** INV1 覆盖全部可用性攻击，含本地 App 崩溃与原 H8；同一入口若另有机密性 / 完整性实害（越权 API、会话、文件读写），按那条实害定档，**不得**用崩溃撑档或当独立 finding |
+| 「导出 Activity / 自定义 scheme / 不校验调用方 = 漏洞」 | **不是。** 这是平台固有入口面 → INV26 不报（不要写成 M/L）。未授权敏感 sink（越权进认证后界面 / 特权操作 / 任意 URL / 凭据当输入 / 带登录态加载攻击者 URL）才按 AE1 / AD / H3 / H6 / C2 定档 |
+| 「深链打开后出现官方登录 Custom Tab = 钓鱼 / 已利用」 | 冷启动未登录默认进自家 SSO ≠ 攻击者 `redirect` / `token` / 未知 path 被当可信输入（INV26） |
+| 「scheme 无 host / 无调用方校验 = medium」 | 入口条件，不是实害；自定义 scheme 上调用方校验经常做不到。真正该做的是不信任深链数据、不让它单独完成特权操作 |
+| 「总线收到伪造 URI（如 RN `emitNewIntentReceived`）= 已利用」 | 投递到总线 ≠ 敏感 sink；须证明 JS / native 按攻击者 path/query 改变状态、加载攻击者 URL 或对外发请求 |
+| 「本地杀进程 / 本地崩溃还能报」 | **不能。** INV1 只管本地可用性（杀进程 / 纯崩溃 / 资源耗尽）；同一入口若另有机密性 / 完整性实害，按那条定档，**不得**用本地崩溃撑档 |
+| 「远程 DoS 一律不报」 | **不是。** 破坏性远程 DoS 按 H8 / AP4 报；仅远程纯崩溃、未达恢复出厂 / 永久删除 / 无交互卸载 / 干扰紧急呼叫门槛 → 不够 H8，按项目页或 ADJ4，不要写成 INV1 |
 | 「Tapjacking / 覆盖界面 = low」 | 能覆盖敏感界面并捕获凭据或安全确认 → H10；无可演示捕获才 M8 |
 | 「能截屏 / `FLAG_SECURE` 失效 = 无危害」 | 敏感界面可截屏且内容可外流 → H10；仅演示截屏无外流 → M8 |
 | 「拿不到系统权限就不算提权」 | WIU / 一次性权限跨进程死亡或重启保留、Special App Access 未授权取得均算：取得敏感数据 → H9，有限面 → M9 |
