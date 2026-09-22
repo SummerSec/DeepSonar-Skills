@@ -8,8 +8,8 @@
 2c. **vuln-definitions-db** — 数据库领域漏洞定义（独立 plugin：DBMS 通用形态 + Bugcrowd VRT P1–P5→四档 + ClickHouse 厂商实例）  
 2d. **vuln-definitions-mobile** — 移动端 App（Android / iOS 应用层）漏洞定义（独立 plugin：应用层形态 + HackerOne 移动端惯例→四档 + 历史模式库）  
 3. **vuln-scoring** — 漏洞评分模块（CVSS v3.1 / v4.0 按需 + EPSS/SSVC/KEV）  
-4. **whitebox-*** — 白盒审计（按漏洞类型）  
-5. **blackbox-*** — 黑盒挖掘（按漏洞类型，工具在 agent-env）  
+4. **web-whitebox-*** — Web 白盒审计（按漏洞类型）  
+5. **web-blackbox-*** — Web 黑盒挖掘（按漏洞类型，工具在 agent-env）  
 6. **mobile-audit** — 移动客户端 App（APK/IPA）审计**方法论**（不定级；定级依赖 vuln-definitions + vuln-definitions-mobile）  
 
 定级含 **严重 / 高危 / 中危 / 无危害**；**wb-*/bb-* 正式报告仅 Critical/High**；**vuln-definitions-oh / vuln-definitions-chrome / vuln-definitions-db / vuln-definitions-mobile 官方四档均可报**。定量分支持 **CVSS v3.1（默认）与 v4.0（按需）**。
@@ -27,6 +27,8 @@
 | 移动 App（Android / iOS 应用层） | `vuln-definitions-mobile` | （新目标只加厂商 reference 文件） |
 | Web 应用 / IoT | （预留；Web 机理暂由 `vuln-definitions` 八类覆盖） | — |
 
+> **审计 / 挖掘插件命名**：`web-whitebox-*`（源码审计）与 `web-blackbox-*`（动态挖掘）中的 `web-` 前缀表示 **Web 安全领域**；机理类型仍以 `vuln-definitions` 八类为准。
+
 **方法论 plugin（非 definitions 领域）**：`mobile-audit/` 是移动 App **怎么挖/复现/取证** 的执行层，**不是** 新的 `vuln-definitions-<domain>`。移动端定级语义仍只在 `vuln-definitions-mobile`；新 App/SDK 目标仍只加厂商 reference，不开新 definitions plugin。
 
 > 本仓内容几乎全是 Markdown（SKILL.md / plugin.json / references），**没有构建、测试、lint 流程**。`package.json` 仅作元数据用途，变更正确性靠结构约定与人工审查保证。
@@ -43,10 +45,10 @@ vuln-scoring/             # 独立插件：CVSS v3.1/v4.0 按需评分 + 优先�
 mobile-audit/             # 方法论插件：移动 App（APK/IPA）怎么挖/复现/取证（不定级）
   .claude-plugin/plugin.json
   skills/mobile-app-audit/SKILL.md + references/
-whitebox/<type>/          # 白盒 plugin
+web-whitebox/<type>/      # Web 白盒 plugin
   .claude-plugin/plugin.json
   skills/wb-<type>/SKILL.md
-blackbox/<type>/          # 黑盒 plugin（同 type 集合）
+web-blackbox/<type>/      # Web 黑盒 plugin（同 type 集合）
   .claude-plugin/plugin.json
   skills/bb-<type>/SKILL.md
 shared/                   # 报告策略、finding 格式、授权
@@ -63,7 +65,7 @@ agent-env/                # 黑盒工具内置清单与镜像（当前偏 Web；
    数据库（ClickHouse 等 DBMS / 数据库云平台）审计时：机理类型仍以本插件八类为准；**数据库四档/排除条款/DBMS 形态** 加载 `vuln-definitions/.../references/database.md`，或直接用 `vuln-definitions-db/`（完整：`db-vuln-types.md` + `asset-scope.md` + 门禁 + `bugcrowd-rules.md`）。赏金资格不改 `severity`。  
    移动端（Android / iOS App 应用层）审计时：机理类型仍以本插件八类为准；**移动端四档/排除条款/应用层形态** 直接用 `vuln-definitions-mobile/`（完整：`mobile-vuln-types.md` + `attack-surfaces.md` + 门禁 + `history-patterns.md` + `google-android-devices-rules.md`）。赏金资格不改 `severity`；**档位来源**的系统层缺陷（内核/系统服务）走 `vuln-definitions-oh`，但 Google Bug Hunters 的 Android 与 Google 设备项目规则对该类目标仍适用。
 2. **`vuln-scoring/`** 是**定量评分与利用优先级**模块：支持 **CVSS v3.1 与 v4.0**（先选版本再按需加载指标文件），并映射回四级定级；可选 EPSS / SSVC / CISA KEV 做修复排序。**不替代**定性条款，finding 的 `severity` 仍以 definitions 为准。
-3. **`whitebox/<type>/` 与 `blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
+3. **`web-whitebox/<type>/` 与 `web-blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
 3b. **`mobile-audit/`** 是移动 App **方法论** plugin（单 skill `mobile-app-audit`）：静态/动态/PoC/取证工作流；**NEVER 自产 severity**；强制依赖 `vuln-definitions` + `vuln-definitions-mobile`。不是新 definitions 领域。
 4. **`shared/`** 是仓库级契约：`severity-policy.md`（默认只报 C/H；OH / Chrome / DB / Mobile 四档例外）、`finding-schema.md`（统一 finding YAML，含 `cvss` 块）、`authorization.md`。
 
@@ -116,7 +118,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 /plugin install vuln-definitions-db@DeepSonar-Skills   # 数据库（ClickHouse 等）审计时
 /plugin install vuln-definitions-mobile@DeepSonar-Skills   # 移动端（Android / iOS App）定级时
 /plugin install mobile-audit@DeepSonar-Skills              # 移动 App（APK/IPA）审计方法论（须同时装上两定义插件）
-/plugin install whitebox-injection@DeepSonar-Skills
+/plugin install web-whitebox-injection@DeepSonar-Skills
 ```
 
 ## 改 skill 时
@@ -127,17 +129,17 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 1d. **改数据库四档/排除条款/Bugcrowd 纪律** → 只改 `vuln-definitions-db/`（及 `vuln-definitions/.../references/database.md`），同步 bump 两处 version；赏金表不改 `severity`；**数据库新厂商只加 reference 文件，不开新 plugin**  
 1e. **改移动端四档/排除条款/应用层形态** → 只改 `vuln-definitions-mobile/`，bump 其 version；**移动端新目标（App / SDK）只加厂商 reference 文件，不开新 plugin**（现有厂商/项目规则：`google-android-devices-rules.md`——Google 的 Android 与 Google 设备项目，资格，不定级）  
 2. **改 CVSS/利用评分/优先级标准** → 只改 `vuln-scoring/`，bump 其 version  
-3. 改审计手法 → 对应 `whitebox-*` / `blackbox-*`；**改移动 App 挖洞/复现/取证手法** → 只改 `mobile-audit/`（bump version；**不要**把方法写进 vuln-definitions-mobile）  
+3. 改审计手法 → 对应 `web-whitebox-*` / `web-blackbox-*`；**改移动 App 挖洞/复现/取证手法** → 只改 `mobile-audit/`（bump version；**不要**把方法写进 vuln-definitions-mobile）  
 4. 报告策略（是否上报 medium）→ `shared/severity-policy.md`  
 5. 黑盒新工具 → `agent-env/tools-manifest.json` + 镜像  
 6. marketplace 条目 version 与 plugin.json 对齐  
-7. **新增漏洞类型** → `whitebox/<new-type>/` 与 `blackbox/<new-type>/` 各建插件（复制现有 type），注册进 `.claude-plugin/marketplace.json`，并在 `vuln-definitions` 中加 `references/<new-type>.md`；黑盒需新工具时同步更新 manifest；可在 `vuln-scoring/.../vector-examples.md` 补示例向量  
+7. **新增漏洞类型** → `web-whitebox/<new-type>/` 与 `web-blackbox/<new-type>/` 各建插件（复制现有 type），注册进 `.claude-plugin/marketplace.json`，并在 `vuln-definitions` 中加 `references/<new-type>.md`；黑盒需新工具时同步更新 manifest；可在 `vuln-scoring/.../vector-examples.md` 补示例向量  
 8. Finding 输出必须遵守 `shared/finding-schema.md`：`wb-*`/`bb-*` 的 `severity` 只允许 `critical|high`；OH / Chrome / DB / Mobile 为官方四档 `critical|high|medium|low`。`confidence` 一律禁止 `low`（与官方 `severity: low` 勿混），`severity_rule` 必填；推荐附 CVSS `cvss` 块（`version` 为 `3.1` 或 `4.0`）
 
 ## DeepSonar
 
 - `POST /skill-sources` 指向本仓 URL，sync 后 catalog 按 plugin 分组  
-- Profile 按角色勾选：`whitebox-*` 给 audit/explore，`blackbox-*` 给 blackbox/test  
+- Profile 按角色勾选：`web-whitebox-*` 给 audit/explore，`web-blackbox-*` 给 blackbox/test  
 - 白盒沙箱可断网；黑盒沙箱需目标网络 + 工具镜像  
 
 <!-- STL:RULES:BEGIN -->

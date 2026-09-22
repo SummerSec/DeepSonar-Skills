@@ -7,8 +7,8 @@ DeepSonar / Agent 用的 **高危安全技能仓**（单仓库）：
 | **漏洞定义** | 独立插件 **`vuln-definitions`**：每类定义 + 严重/高危/中危/无危害 |
 | **领域定义** | 按领域独立插件：`vuln-definitions-oh`（移动 OS）/ `vuln-definitions-chrome`（浏览器）/ `vuln-definitions-db`（数据库）/ `vuln-definitions-mobile`（移动 App） |
 | **漏洞评分** | 独立插件 **`vuln-scoring`**：**CVSS v3.1 / v4.0**（按需）+ EPSS/SSVC/KEV 优先级 |
-| **白盒** | 源码审计，source→sink 追踪 |
-| **黑盒** | 已授权目标上的漏洞验证；**工具预装进 agent 环境** |
+| **Web 白盒** | `web-whitebox-*`：Web 源码审计，source→sink 追踪 |
+| **Web 黑盒** | `web-blackbox-*`：已授权 Web 目标上的漏洞验证；**工具预装进 agent 环境** |
 | **组织方式** | 定义按 **领域**、审计按 **漏洞类型** 各一个 plugin（白盒、黑盒对称）；另有 **方法论** plugin（如 `mobile-audit`） |
 | **移动方法论** | **`mobile-audit`**：APK/IPA 怎么挖/复现/取证；**不定级**（配合 `vuln-definitions` + `vuln-definitions-mobile`） |
 | **报告范围** | `wb-*`/`bb-*` 定级后 **只报告 Critical / High**；**OH / Chrome / DB / Mobile 官方四档均可报** |
@@ -46,13 +46,13 @@ DeepSonar-Skills/
 │   ├── severity-policy.md       # 默认只报 C/H；OH / Chrome / DB 四档例外（细则见对应插件）
 │   ├── finding-schema.md
 │   └── authorization.md
-├── whitebox/<type>/             # 白盒 plugin ×8
-├── blackbox/<type>/             # 黑盒 plugin ×8（类型对称）
+├── web-whitebox/<type>/         # Web 白盒 plugin ×8
+├── web-blackbox/<type>/         # Web 黑盒 plugin ×8（类型对称）
 ├── agent-env/                   # 黑盒工具内置
 └── .claude-plugin/marketplace.json
 ```
 
-领域 / 评分 plugin 含 `.claude-plugin/plugin.json` + 根目录 `SKILL.md`；白盒 / 黑盒 / **mobile-audit** plugin 为 `skills/<skill>/SKILL.md`。
+领域 / 评分 plugin 含 `.claude-plugin/plugin.json` + 根目录 `SKILL.md`；Web 白盒 / Web 黑盒 / **mobile-audit** plugin 为 `skills/<skill>/SKILL.md`。
 
 ---
 
@@ -91,23 +91,25 @@ DeepSonar-Skills/
 | -------- | ------- | ------ |
 | **mobile-audit** | `mobile-app-audit` | Android APK / iOS IPA：静态攻击面、代码流、混合栈/SDK、真机与 PoC、证据包；**NEVER 自产 severity**（须同时启用 vuln-definitions + vuln-definitions-mobile） |
 
-### 白盒 `whitebox-*`
+### 白盒 `web-whitebox-*`（Web 安全）
 
 | Plugin | Skill | 只关心 |
 | -------- | ------- | -------- |
-| whitebox-injection | wb-injection | SQL/命令/NoSQL/LDAP 注入 → 泄库/RCE |
-| whitebox-rce | wb-rce | eval/SSTI/表达式 → RCE |
-| whitebox-ssrf | wb-ssrf | SSRF → metadata/内网接管 |
-| whitebox-authz | wb-authz | 认证绕过、提权、大规模越权 |
-| whitebox-deserialization | wb-deserialization | 反序列化 → RCE |
-| whitebox-file-access | wb-file-access | 任意文件读写、上传 RCE |
-| whitebox-xxe | wb-xxe | XXE → 读文件/SSRF |
-| whitebox-secrets | wb-secrets | 仍有效且可接管的密钥 |
+| web-whitebox-injection | wb-injection | SQL/命令/NoSQL/LDAP 注入 → 泄库/RCE |
+| web-whitebox-rce | wb-rce | eval/SSTI/表达式 → RCE |
+| web-whitebox-ssrf | wb-ssrf | SSRF → metadata/内网接管 |
+| web-whitebox-authz | wb-authz | 认证绕过、提权、大规模越权 |
+| web-whitebox-deserialization | wb-deserialization | 反序列化 → RCE |
+| web-whitebox-file-access | wb-file-access | 任意文件读写、上传 RCE |
+| web-whitebox-xxe | wb-xxe | XXE → 读文件/SSRF |
+| web-whitebox-secrets | wb-secrets | 仍有效且可接管的密钥 |
 
-### 黑盒 `blackbox-*`
+### 黑盒 `web-blackbox-*`（Web 安全）
 
 与上表 **type 一一对应**，skill 名为 `bb-<type>`。  
 运行依赖 `agent-env` 预装工具（httpx、ffuf、nuclei、sqlmap、interactsh-client 等）。
+
+> **命名约定**：`web-whitebox-<type>` / `web-blackbox-<type>` 中 `web-` 前缀表示 **Web 安全领域**（源码审计 / 动态挖掘）；`<type>` 与 `vuln-definitions` 八类机理一致，skill 名仍为 `wb-<type>` / `bb-<type>`。
 
 ---
 
@@ -124,8 +126,8 @@ DeepSonar-Skills/
 /plugin install vuln-definitions-db@DeepSonar-Skills      # 数据库（ClickHouse 等）
 /plugin install vuln-definitions-mobile@DeepSonar-Skills  # 移动端（Android / iOS App）定级
 /plugin install mobile-audit@DeepSonar-Skills             # 移动 App（APK/IPA）审计方法论
-/plugin install whitebox-injection@DeepSonar-Skills
-/plugin install blackbox-injection@DeepSonar-Skills
+/plugin install web-whitebox-injection@DeepSonar-Skills
+/plugin install web-blackbox-injection@DeepSonar-Skills
 # 按需安装其他 type
 ```
 
@@ -142,8 +144,8 @@ POST /skill-sources
 
 然后 `POST /skill-sources/:id/sync`，在 Agent Profile 中勾选模块，例如：
 
-- 审计角色：`whitebox-injection`、`whitebox-rce`、…  
-- 黑盒角色：`blackbox-ssrf`、`blackbox-authz`、…  
+- 审计角色：`web-whitebox-injection`、`web-whitebox-rce`、…  
+- 黑盒角色：`web-blackbox-ssrf`、`web-blackbox-authz`、…  
 - 移动 App：`mobile-audit` + `vuln-definitions` + `vuln-definitions-mobile`  
 
 ### 本地 skills CLI
@@ -196,7 +198,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 
 **新漏洞类型**（audit 手法维度）：
 
-1. 在 `whitebox/<new-type>/` 与 `blackbox/<new-type>/` 各建 plugin（复制现有 type）。  
+1. 在 `web-whitebox/<new-type>/` 与 `web-blackbox/<new-type>/` 各建 plugin（复制现有 type）。  
 2. 更新 `.claude-plugin/marketplace.json`。  
 3. 若黑盒需要新工具 → 写入 `agent-env/tools-manifest.json` 并重建镜像。  
 4. 确认仍只覆盖 Critical/High。  

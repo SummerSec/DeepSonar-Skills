@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepSonar"
+               },
+    "description":  "白盒鉴权与认证绕过审计",
+    "name":  "web-whitebox-authz",
+    "version":  "0.2.0"
+}

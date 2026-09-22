@@ -1,8 +1,0 @@
-{
-    "author":  {
-                   "name":  "DeepSonar"
-               },
-    "description":  "黑盒 SSRF 挖掘",
-    "name":  "blackbox-ssrf",
-    "version":  "0.1.0"
-}

@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepSonar"
+               },
+    "description":  "白盒远程代码执行审计",
+    "name":  "web-whitebox-rce",
+    "version":  "0.2.0"
+}

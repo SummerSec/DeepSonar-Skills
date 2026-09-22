@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepSonar"
+               },
+    "description":  "黑盒注入挖掘（SQL/命令/NoSQL）",
+    "name":  "web-blackbox-injection",
+    "version":  "0.2.0"
+}

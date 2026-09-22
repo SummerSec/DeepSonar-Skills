@@ -1,8 +1,0 @@
-{
-    "author":  {
-                   "name":  "DeepSonar"
-               },
-    "description":  "黑盒鉴权与认证绕过挖掘",
-    "name":  "blackbox-authz",
-    "version":  "0.1.0"
-}
