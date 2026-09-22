@@ -80,6 +80,7 @@ description: "移动客户端 App（Android APK / iOS IPA）安全审计方法�
 
 - **不定级、不复制** 形态表 / 四档条款 / INV 全文（只引用路径与条款号）  
 - **不报 INV**：本地 DoS（INV1）、入口面本身（exported / 自定义 scheme / `am start` 成功且无未授权敏感 sink → **INV26**）、self-XSS、理论问题、无 PoC 的纯静态猜测、依赖清单式「发现」  
+- **Bugcrowd Android OOS 硬门禁**：目标为 Bugcrowd（含 Android / 移动 App brief）时，对外投递前必须对照 `references/bugcrowd-android-oos-rules.md`（BC-OOS-01..10 / M1..M8）；命中 → `bounty_eligible: false`，**不改** `severity`；**live brief 赢快照**  
 - **系统层** → 停止本 skill 路径，路由 `vuln-definitions-oh`  
 - **破坏真实用户数据**、未授权扫描、持久化后门 → 立即停止  
 - **不收录** 具体 CVE 目录；**不写** 完整武器化 exploit / 免杀 / 免脱壳对抗细节
@@ -95,13 +96,15 @@ description: "移动客户端 App（Android APK / iOS IPA）安全审计方法�
 
 - 获取与校验包；平台/ABI/版本指纹  
 - 加固/壳/混淆初判；混合栈与第三方 SDK 盘点  
-- 产出 `assets.json` 初稿 + 审计计划（见 `references/recon-and-triage.md`）
+- 产出 `assets.json` 初稿 + 审计计划（见 `references/recon-and-triage.md`）  
+- **第三方 Android App**：同时按 `references/android-third-party-attack-surfaces.md` 做五层攻击面初筛（入口→组件→数据→网络→供应链；优先导出组件 / Deep Link / WebView / Provider / 本地 Token / 后端越权）
 
 ### 2. Manifest / 组件攻击面（static-manifest）
 
 - 解析 AXML/arsc 或 Info.plist；组件表、Deep Link、Provider、广播、NSC、meta-data  
 - 产出 `components.json` + 基线 diff（见 `references/static-manifest.md`）  
-- **禁止** 将「exported=true」单独升级为 finding（INV26）
+- **禁止** 将「exported=true」单独升级为 finding（INV26）  
+- **第三方 Android App**：本阶段以 `references/android-third-party-attack-surfaces.md` 为普通攻击面 checklist（Manifest / 四大组件 / Deep Link / WebView / Intent；INV26/INV1 过滤后再进候选）
 
 ### 3. 代码与数据流（static-code）
 
@@ -126,6 +129,7 @@ description: "移动客户端 App（Android APK / iOS IPA）安全审计方法�
 - 按证据包目录规范归档；每条候选最小证据集  
 - 移交定级：指向 `severity-levels` / `history-patterns` / Gate T/S/E/C/R；INV → `reportable: false`  
 - finding 骨架遵守 `finding-schema`；**本阶段仍不填写最终 severity**（由定义插件裁定后回填）  
+- **硬门禁（写报告 / Submit 前）**：若目标为 Bugcrowd Android / 移动 App engagement → 必须过 `references/bugcrowd-android-oos-rules.md` §6.3 硬门禁（BC-OOS + live brief）；OOS 命中只落 `bounty_eligible: false`，**禁止**据此把 severity 改成 none 或抹掉对内 finding  
 - 见 `references/evidence-and-report.md`
 
 ### 7. 清理
@@ -152,6 +156,8 @@ Finding 字段按 `../../../shared/finding-schema.md` 准备；`mode` 可用 `bl
 
 - `references/recon-and-triage.md` — 指纹与可审计性  
 - `references/static-manifest.md` — Manifest / 组件攻击面  
+- `references/android-third-party-attack-surfaces.md` — 第三方 Android App 攻击面清单（五层 + INV26/INV1 + OWASP/MASVS 对照 + SRC 矩阵）  
+- `references/bugcrowd-android-oos-rules.md` — Bugcrowd Android OOS 审计规则（BC-OOS-01..10 / M1..M8；资格/投递，不定级；投递前硬门禁）  
 - `references/static-code.md` — 代码 source→sink  
 - `references/hybrid-and-sdk.md` — 混合栈与 SDK  
 - `references/runtime-harness.md` — 真机动态验证  
