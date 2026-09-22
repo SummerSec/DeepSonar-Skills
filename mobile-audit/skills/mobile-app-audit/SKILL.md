@@ -129,7 +129,7 @@ description: "移动客户端 App（Android APK / iOS IPA）安全审计方法�
 - 按证据包目录规范归档；每条候选最小证据集  
 - 移交定级：指向 `severity-levels` / `history-patterns` / Gate T/S/E/C/R；INV → `reportable: false`  
 - finding 骨架遵守 `finding-schema`；**本阶段仍不填写最终 severity**（由定义插件裁定后回填）  
-- **硬门禁（写报告 / Submit 前）**：若目标为 Bugcrowd Android / 移动 App engagement → 必须过 `references/bugcrowd-android-oos-rules.md` §5（BC-OOS + live brief）；OOS 命中只落 `bounty_eligible: false`，**禁止**据此把 severity 改成 none 或抹掉对内 finding  
+- **硬门禁（写报告 / Submit 前）**：若目标为 Bugcrowd Android / 移动 App engagement → 必须过 `references/bugcrowd-android-oos-rules.md` §6.3 硬门禁（BC-OOS + live brief）；OOS 命中只落 `bounty_eligible: false`，**禁止**据此把 severity 改成 none 或抹掉对内 finding  
 - 见 `references/evidence-and-report.md`
 
 ### 7. 清理
