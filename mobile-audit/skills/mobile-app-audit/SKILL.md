@@ -95,13 +95,15 @@ description: "移动客户端 App（Android APK / iOS IPA）安全审计方法�
 
 - 获取与校验包；平台/ABI/版本指纹  
 - 加固/壳/混淆初判；混合栈与第三方 SDK 盘点  
-- 产出 `assets.json` 初稿 + 审计计划（见 `references/recon-and-triage.md`）
+- 产出 `assets.json` 初稿 + 审计计划（见 `references/recon-and-triage.md`）  
+- **第三方 Android App**：同时按 `references/android-third-party-attack-surfaces.md` 做五层攻击面初筛（入口→组件→数据→网络→供应链；优先导出组件 / Deep Link / WebView / Provider / 本地 Token / 后端越权）
 
 ### 2. Manifest / 组件攻击面（static-manifest）
 
 - 解析 AXML/arsc 或 Info.plist；组件表、Deep Link、Provider、广播、NSC、meta-data  
 - 产出 `components.json` + 基线 diff（见 `references/static-manifest.md`）  
-- **禁止** 将「exported=true」单独升级为 finding（INV26）
+- **禁止** 将「exported=true」单独升级为 finding（INV26）  
+- **第三方 Android App**：本阶段以 `references/android-third-party-attack-surfaces.md` 为普通攻击面 checklist（Manifest / 四大组件 / Deep Link / WebView / Intent；INV26/INV1 过滤后再进候选）
 
 ### 3. 代码与数据流（static-code）
 
@@ -152,6 +154,7 @@ Finding 字段按 `../../../shared/finding-schema.md` 准备；`mode` 可用 `bl
 
 - `references/recon-and-triage.md` — 指纹与可审计性  
 - `references/static-manifest.md` — Manifest / 组件攻击面  
+- `references/android-third-party-attack-surfaces.md` — 第三方 Android App 攻击面清单（五层 + INV26/INV1 + OWASP/MASVS 对照 + SRC 矩阵）  
 - `references/static-code.md` — 代码 source→sink  
 - `references/hybrid-and-sdk.md` — 混合栈与 SDK  
 - `references/runtime-harness.md` — 真机动态验证  

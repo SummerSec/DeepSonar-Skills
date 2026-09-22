@@ -26,6 +26,7 @@ definitions 是语义/定级源；本 plugin 是执行层，随工具与 harness
 | `skills/mobile-app-audit/SKILL.md` | 入口：角色、强制前置、定级依赖、范围、不做、工作流 0–7、输出 |
 | `references/recon-and-triage.md` | 获取校验 / 指纹 / 加固混淆 / 混合栈 / SDK 盘点 / 审计计划 |
 | `references/static-manifest.md` | AXML·组件表 / Deep Link / Provider / FileProvider / NSC / meta-data |
+| `references/android-third-party-attack-surfaces.md` | 第三方 Android 攻击面清单（五层框架、INV26/INV1、OWASP 2024×MASVS×mobile_class、SRC 矩阵） |
 | `references/static-code.md` | source→sink、高危 API 面、调用方校验、JNI/NDK |
 | `references/hybrid-and-sdk.md` | JS bridge、内嵌 SDK 组件与网络栈、可达性 |
 | `references/runtime-harness.md` | 未 root 真机、adb、Frida（验证用）、MITM、观察点 |
