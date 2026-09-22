@@ -1,6 +1,6 @@
 {
   "name": "mobile-audit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "移动客户端 App（Android APK / iOS IPA）安全审计方法论：静态解包与攻击面枚举、代码/数据流、混合栈与内嵌 SDK、真机动态验证、PoC 攻击者 App、证据包。不定级；定级配合 vuln-definitions 与 vuln-definitions-mobile。",
   "author": {
     "name": "DeepSonar"
