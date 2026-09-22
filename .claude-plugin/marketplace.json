@@ -1,6 +1,6 @@
 {
   "name": "DeepSonar-Skills",
-  "description": "DeepSonar security skills: vulnerability definitions by domain (general / OpenHarmony / Chrome / database / mobile), CVSS v3.1/v4.0 scoring, and whitebox/blackbox plugins by vuln type (wb/bb report Critical/High only).",
+  "description": "DeepSonar security skills: vulnerability definitions by domain (general / OpenHarmony / Chrome / database / mobile), CVSS v3.1/v4.0 scoring, and whitebox/blackbox plugins by vuln type (wb/bb report Critical/High only); plus mobile-audit methodology plugin for APK/IPA audit (no severity — uses vuln-definitions + vuln-definitions-mobile).",
   "owner": {
     "name": "DeepSonar"
   },
@@ -40,6 +40,12 @@
       "description": "漏洞评分模块：CVSS v3.1 与 v4.0 按需评分、向量串、与 DeepSonar 四级映射，以及 EPSS/SSVC/KEV 优先级。",
       "version": "0.2.4",
       "source": "./vuln-scoring"
+    },
+    {
+      "name": "mobile-audit",
+      "description": "移动客户端 App（Android APK / iOS IPA）安全审计方法论：静态解包与攻击面枚举、代码/数据流、混合栈与内嵌 SDK、真机动态验证、PoC 攻击者 App、证据包。不定级；定级配合 vuln-definitions 与 vuln-definitions-mobile。",
+      "version": "0.1.0",
+      "source": "./mobile-audit"
     },
     {
       "name": "whitebox-injection",
