@@ -9,7 +9,8 @@ DeepSonar / Agent 用的 **高危安全技能仓**（单仓库）：
 | **漏洞评分** | 独立插件 **`vuln-scoring`**：**CVSS v3.1 / v4.0**（按需）+ EPSS/SSVC/KEV 优先级 |
 | **白盒** | 源码审计，source→sink 追踪 |
 | **黑盒** | 已授权目标上的漏洞验证；**工具预装进 agent 环境** |
-| **组织方式** | 定义按 **领域**、审计按 **漏洞类型** 各一个 plugin（白盒、黑盒对称） |
+| **组织方式** | 定义按 **领域**、审计按 **漏洞类型** 各一个 plugin（白盒、黑盒对称）；另有 **方法论** plugin（如 `mobile-audit`） |
+| **移动方法论** | **`mobile-audit`**：APK/IPA 怎么挖/复现/取证；**不定级**（配合 `vuln-definitions` + `vuln-definitions-mobile`） |
 | **报告范围** | `wb-*`/`bb-*` 定级后 **只报告 Critical / High**；**OH / Chrome / DB / Mobile 官方四档均可报** |
 
 > 使用前阅读 [DISCLAIMER.md](./DISCLAIMER.md) 与 [shared/authorization.md](./shared/authorization.md)。
@@ -38,6 +39,9 @@ DeepSonar-Skills/
 ├── vuln-scoring/                # 【独立插件】漏洞评分（CVSS v3.1/v4.0 按需）
 │   ├── SKILL.md
 │   └── references/              # cvss-v3.1 / cvss-v4、映射、优先级、分版示例
+├── mobile-audit/                # 【方法论插件】移动 App（APK/IPA）审计（不定级）
+│   ├── README.md
+│   └── skills/mobile-app-audit/ # SKILL.md + references/（recon…tooling）
 ├── shared/                      # 报告策略、finding 格式、授权
 │   ├── severity-policy.md       # 默认只报 C/H；OH / Chrome / DB 四档例外（细则见对应插件）
 │   ├── finding-schema.md
@@ -48,7 +52,7 @@ DeepSonar-Skills/
 └── .claude-plugin/marketplace.json
 ```
 
-领域 / 评分 plugin 含 `.claude-plugin/plugin.json` + 根目录 `SKILL.md`；白盒 / 黑盒 plugin 仍为 `skills/<skill>/SKILL.md`。
+领域 / 评分 plugin 含 `.claude-plugin/plugin.json` + 根目录 `SKILL.md`；白盒 / 黑盒 / **mobile-audit** plugin 为 `skills/<skill>/SKILL.md`。
 
 ---
 
@@ -81,6 +85,12 @@ DeepSonar-Skills/
 
 在定性定级之后补全 finding 的 `cvss` 块；**不替代** `vuln-definitions` 的报告门槛。
 
+### 方法论 `mobile-audit`
+
+| Plugin | Skill | 职责 |
+| -------- | ------- | ------ |
+| **mobile-audit** | `mobile-app-audit` | Android APK / iOS IPA：静态攻击面、代码流、混合栈/SDK、真机与 PoC、证据包；**NEVER 自产 severity**（须同时启用 vuln-definitions + vuln-definitions-mobile） |
+
 ### 白盒 `whitebox-*`
 
 | Plugin | Skill | 只关心 |
@@ -112,7 +122,8 @@ DeepSonar-Skills/
 /plugin install vuln-definitions-oh@DeepSonar-Skills      # OpenHarmony / Phone OS
 /plugin install vuln-definitions-chrome@DeepSonar-Skills  # Chrome / Chromium
 /plugin install vuln-definitions-db@DeepSonar-Skills      # 数据库（ClickHouse 等）
-/plugin install vuln-definitions-mobile@DeepSonar-Skills  # 移动端（Android / iOS App）
+/plugin install vuln-definitions-mobile@DeepSonar-Skills  # 移动端（Android / iOS App）定级
+/plugin install mobile-audit@DeepSonar-Skills             # 移动 App（APK/IPA）审计方法论
 /plugin install whitebox-injection@DeepSonar-Skills
 /plugin install blackbox-injection@DeepSonar-Skills
 # 按需安装其他 type
@@ -133,6 +144,7 @@ POST /skill-sources
 
 - 审计角色：`whitebox-injection`、`whitebox-rce`、…  
 - 黑盒角色：`blackbox-ssrf`、`blackbox-authz`、…  
+- 移动 App：`mobile-audit` + `vuln-definitions` + `vuln-definitions-mobile`  
 
 ### 本地 skills CLI
 
