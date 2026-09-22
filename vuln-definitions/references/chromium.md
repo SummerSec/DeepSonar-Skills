@@ -1,7 +1,7 @@
 # Chrome / Chromium 浏览器漏洞定级规则
 
-本文件为 **浏览器类（Chrome / Chromium）审计** 的定级规则。  
-审计目标为 **出货 Chrome / Chromium 浏览器**（Windows / macOS / Linux / Android）时，优先以本文件条款定级；与全局 `severity-levels.md` / `<type>.md` 冲突时，**浏览器语义以本文件为准**。
+本文件为 **浏览器类（Chrome / Chromium）审计** 的定级**摘要索引**（供不装 `vuln-definitions-chrome` 时快速对照；条款编号与插件一致）。  
+审计目标为 **出货 Chrome / Chromium 浏览器**（Windows / macOS / Linux / Android）时，**权威条款在 `vuln-definitions-chrome/references/severity-levels.md`**：与全局 `severity-levels.md` / `<type>.md` 冲突时，浏览器语义以插件条款为准；**本摘要与插件不一致时以插件为准**。
 
 > 语义基线：[Chromium Severity Guidelines](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/severity-guidelines.md)（对照日 2026-08-23）。  
 > 完整形态、沙箱表、门禁、VRP 资格见插件 `vuln-definitions-chrome`。  
@@ -182,6 +182,6 @@ iframe/`sandbox` 与 CSP sandbox **不是** OS 沙箱逃逸。
 ## 7. 报告与定级纪律
 
 - 定级前先跑 Gate：**威胁模型 → 资产范围 → 进程沙箱 → 出货可达 → 安全实害 → 可复现**。
-- `severity_rule` 填本文件锚点，如 `chromium.md#H4`、`chromium.md#INV3`（完整插件亦可用 `severity-levels.md#H4`）。另填 `chrome_class` / `chrome_process` / `chrome_sandbox`；可选 `vrp_eligible`（见 `shared/finding-schema.md`）。
+- `severity_rule` 权威锚点为 `vuln-definitions-chrome/references/severity-levels.md#H4`（本摘要的 `chromium.md#H4` / `#INV3` 为等价锚点）。另填 `chrome_class` / `chrome_process` / `chrome_sandbox`；可选 `vrp_eligible`（见 `shared/finding-schema.md`）。
 - 与 CVSS：本文件定性；量化用 `vuln-scoring`（默认 v3.1）。CVSS **不得**单独抬档；官方低危按 `low` 报。
 - **不收录具体 case**：无 CVE / crbug 清单。
