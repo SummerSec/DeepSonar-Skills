@@ -8,8 +8,6 @@
 /plugin install vuln-definitions@DeepSonar-Skills
 ```
 
-或 DeepSonar Profile **始终勾选** 本模块 + 任一 `web-whitebox-*` / `web-blackbox-*`。
-
 ## 内容
 
 | 文件 | 说明 |
