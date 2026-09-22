@@ -28,6 +28,7 @@
 | Deep Link → WebView | 参数未校验直接 `loadUrl`（须实际加载） | AD2 / AD5 |
 | Intent extra 二次投递 | 从传入 Intent 取数据再 `startActivity` | AI1 |
 | Intent scheme | `<scheme>://` 触发认证流并绕过登录。仅唤起 / 打开登录页 → INV26 | AI5 |
+| PendingIntent | 可变（mutable）`PendingIntent` 可被外部 App 填充指向高权限组件；隐式 PendingIntent 可被截获后以宿主权限执行 | AI7 |
 | 入口面本身 | 仅 `exported` / 自定义 scheme / 不校验调用方 / `START` / `onNewIntent` / 打开默认页或官方 SSO Custom Tab | 排除（INV26）；不得填 AD6 |
 
 ## 3. WebView
@@ -46,8 +47,9 @@
 | SharedPreferences / SQLite | 明文敏感数据、备份可读 | AS1 |
 | 外部存储 | `getExternalFilesDir` / 公有存储写敏感数据 | AS1 |
 | 源码内嵌 | 硬编码 API key / token / 密钥 | AS2 |
-| 日志 / 缓存 | Log.d 打 token、缓存敏感数据 | AS4 |
+| 日志 / 缓存 / 通知 | Log.d 打 token、缓存敏感数据、通知内容 / 输入法缓存 / 自动填充库泄露 | AS4 |
 | 剪贴板 | 敏感数据写剪贴板 | AS4 |
+| 加密实现 | ECB / IV 复用 / 弱随机 / 密钥派生不当 / 硬编码 IV、KeyStore 用法错误 | AS5 |
 | 文件操作 | File 路径未净化、symlink 攻击 | AF1 / AF2 |
 
 ## 5. 网络栈
@@ -66,6 +68,7 @@
 | 原生库（JNI / .so） | 不可信输入进解析器 | AM1 |
 | 认证逻辑 | 2FA / OTP 失效、短信重发限速 | AA1 / AA2 |
 | 账户绑定 | 手机 / 邮箱归属校验缺失（Confused Deputy） | AA2 / AA3 |
+| 近场 / 外部配件 | BLE GATT、NFC、USB / MFi 未授权读写或触发特权操作；纯本地崩溃 / 资源耗尽 → INV1 | 按实害归 AE / AC / AT（跨边界越权）；本地 → 排除（INV1） |
 
 ## 7. 权限、UI 与多用户
 
@@ -74,6 +77,7 @@
 | 权限声明 / 运行时权限 | `uses-permission` 过度申请；系统 / signature / dangerous 权限检查缺失；敏感权限可被阻止撤销 | AP1 |
 | 一次性 / 使用时（WIU）权限 | 跨进程死亡或重启后权限未回收；后台启动 FGS 取得 WIU 权限 | AP1 |
 | Special App Access | 未授权取得或阻止撤销特权 Special App Access | AP2 |
+| 无障碍 / 通知监听 | `BIND_ACCESSIBILITY_SERVICE` / `NotificationListenerService` 未授权取得或滥用：读屏窃取凭据、自动化特权操作、读通知内容 | AP6 |
 | 多用户 / Private Space | 跨用户访问敏感数据；未用指定锁定因子解锁 | AP3 |
 | 覆盖窗口 / 点按劫持 | 叠加 Activity / overlay 覆盖隐私与安全敏感界面、隐藏隐私指示器、伪造 UI 真实性 | AT4 |
 | `FLAG_SECURE` / 截屏保护 | 敏感界面可截屏 / 录屏或内容外流 | AT5 |
@@ -92,6 +96,7 @@
 | `CFBundleURLTypes` | 注册的自定义 scheme、可被外部唤起。仅唤起 / 打开默认页 → INV26 | IU1 / IU2（须未授权敏感 sink） |
 | Universal Links | associated domains 校验 | IU1 |
 | ATS（App Transport Security） | `NSAllowsArbitraryLoads`、例外域 | IL 前提 |
+| entitlements | 声明能力与实际使用不符；未声明能力（共享容器 / 后台模式 / 关键 API）被实际使用或被外部触发 | IP1 |
 
 ## 2. URL 处理
 
@@ -118,8 +123,10 @@
 | NSUserDefaults / plist | 明文敏感数据 | ID1 |
 | Keychain | `kSecAttrAccessible` 误用、同组共享 | ID2 |
 | 文件目录 | `Library/`、`Documents/` 明文凭证 | ID4 |
-| 日志 / 备份 | 敏感数据落日志、iTunes 备份可读 | ID3 |
+| 日志 / 备份 | 敏感数据落日志、备份可读 | ID3 |
 | 剪贴板 / 私有 API | 追踪、数据外带 | IA4 |
+| App Group / 共享容器 | `group.*` 共享容器归属校验缺失，跳 App 读写他人数据 | IP3 |
+| 加密实现 | ECB / IV 复用 / 弱随机 / 明文密钥落盘 | ID5 |
 
 ## 5. 网络栈
 
@@ -137,3 +144,11 @@
 | 文件路径 | 路径未净化 | IA3 |
 | 认证逻辑 | 认证链缺陷 | IA1 |
 | 第三方 SDK | 集成的 SDK 网络栈 / 存储缺陷 | 厂商 reference（按项目加） |
+
+## 7. 权限与共享容器
+
+| 攻击面 | 检查项 | 形态 |
+| -------- | -------- | ------ |
+| TCC 隐私权限 | 未取得授权即访问相机 / 麦克风 / 通讯录 / 照片 / 位置，或绕过 TCC 判定 | IP2 |
+| App Extension | 扩展以宿主 App 的 entitlements / 共享容器运行，未校验调用来源 | IP4 |
+| 生物识别 / 本地认证 | `LAContext` / `evaluatePolicy` 可降级、hook 或 fallback 绕过 | IP5 |

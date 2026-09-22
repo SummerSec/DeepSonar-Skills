@@ -28,7 +28,8 @@
 | 影响 \ 前提 | 远程（诱导点击） | 恶意 App | 邻近网络 MITM | 已越狱 / root |
 | ------------- | ------------------ | ---------- | --------------- | ---------------- |
 | RCE / 完整账户接管 | **C1** / **C2** | **C3**（高权限应用）/ H1 | H5（窃会话后接管） | 降档（ADJ1） |
-| 任意文件读写（应用数据） | **H1** | **H2** | — | 降档 |
+| 内存破坏（应用侧原生库 / WebView 引擎） | **C4** / H1 | **C4** / H1 | — | 降档 |
+| 任意文件读写（应用数据） | **H2**（写可执行文件 → 上行 **C1**） | **H2** | — | 降档 |
 | 越权访问他人账户 / 数据 | **H3** | **H3** | — | 降档 |
 | 权限绕过 / WIU 保留 / 跨用户与 Private Space 越界 | **H9** / **H11** | **H9** / **H11** | — | 降档 |
 | UI 覆盖 / 点按劫持（捕获凭据或安全确认） | **H10** | **H10** | — | 降档 |
@@ -43,6 +44,7 @@
 - **入口面本身不定漏洞**（INV26）：exported launcher / MainActivity、自定义 scheme、不校验调用方是平台固有入口面，不是漏洞。须证明未授权敏感 sink（深链直接特权操作、URI/extra 当可信输入、OAuth 一次性码可截获、带登录态加载攻击者 URL）。仅唤起 / 打开默认页 / 官方登录 Custom Tab / 参数白名单 + 登录门控 → `reportable: false`，**不要写成 M/L**
 - 「已越狱后可读 Keychain」不是漏洞；「普通用户路径可读明文凭据」才是
 - 深链接 / URL Scheme 类 **默认算「远程诱导点击」**，除非需要额外本地能力
+- 本矩阵只列常见影响面；其余形态（加密实现误用、无障碍 / 通知监听、PendingIntent 委派、iOS entitlements / TCC / 共享容器等）的精确条款逐行写在 `mobile-vuln-types.md` 的「条款倾向（定档 / 排除）」列，取值即 `severity-levels.md#X`
 
 ---
 
@@ -106,7 +108,7 @@
 ## 7. 定级纪律
 
 - 先走 `gates.md`：**威胁模型 → 资产范围 → 环境合格 → 安全实害 → 可复现**
-- `severity_rule` 填本文件锚点，如 `severity-levels.md#H2`。另填 `mobile_class`、`platform`、`component`、`attacker`、`prereq`
+- `severity_rule` 填本文件锚点，如 `severity-levels.md#H2`（形态 → 条款的逐行映射见 `mobile-vuln-types.md`）。另填 `mobile_class`、`platform`、`component`、`attacker`、`prereq`
 - 与 CVSS：本文件定性；量化用 `vuln-scoring`（默认 v3.1）。CVSS **不得**单独抬档
 - **边界情况对照 `history-patterns.md` §3 定级校准**：深链接 → WebView 任意 URL 加载按 H3（K1）；URL Scheme 劫持需用户点击按降档（K2）；`addJavascriptInterface` 旧版 RCE 按版本校准（K3）；SSL/TLS 缺失按 MITM 前提 H5（K4）；不安全数据存储默认 M、含接管凭据才 H（K5）；需已越狱按降档（K6）；StrandHogg 类已修复历史型需确认最新版本仍受影响（K7）；入口面本身按 INV26 不报（K8）。命中校准点在 `rationale` 写 `history-patterns.md#K_`
 - **不收录具体 case**：无 CVE / 报告清单

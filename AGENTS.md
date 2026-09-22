@@ -127,7 +127,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 1b. **改 OpenHarmony 系统四档/无效条款** → 只改 `vuln-definitions-oh/`（及 `vuln-definitions/.../references/openharmony.md`），同步 bump 两处 version  
 1c. **改 Chrome / Chromium 浏览器四档/非安全条款 / VRP 资格** → 只改 `vuln-definitions-chrome/`（及 `vuln-definitions/.../references/chromium.md`），同步 bump 两处 version；赏金表不改 `severity`  
 1d. **改数据库四档/排除条款/Bugcrowd 纪律** → 只改 `vuln-definitions-db/`（及 `vuln-definitions/.../references/database.md`），同步 bump 两处 version；赏金表不改 `severity`；**数据库新厂商只加 reference 文件，不开新 plugin**  
-1e. **改移动端四档/排除条款/应用层形态** → 只改 `vuln-definitions-mobile/`，bump 其 version；**移动端新目标（App / SDK）只加厂商 reference 文件，不开新 plugin**（现有厂商/项目规则：`google-android-devices-rules.md`——Google 的 Android 与 Google 设备项目，资格，不定级）  
+1e. **改移动端四档/排除条款/应用层形态** → 只改 `vuln-definitions-mobile/`，bump 其 version（并同步 `vuln-definitions/references/mobile.md` 摘要，bump `vuln-definitions` version）；**移动端新目标（App / SDK）只加厂商 reference 文件，不开新 plugin**（现有厂商/项目规则：`google-android-devices-rules.md`——Google 的 Android 与 Google 设备项目，资格，不定级）  
 2. **改 CVSS/利用评分/优先级标准** → 只改 `vuln-scoring/`，bump 其 version  
 3. 改审计手法 → 对应 `web-whitebox-*` / `web-blackbox-*`；**改移动 App 挖洞/复现/取证手法** → 只改 `mobile-audit/`（bump version；**不要**把方法写进 vuln-definitions-mobile）  
 4. 报告策略（是否上报 medium）→ `shared/severity-policy.md`  
