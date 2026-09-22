@@ -1,7 +1,7 @@
 # 数据库领域（DBMS / 数据库云平台）定级规则
 
-本文件为 **数据库领域（DBMS 引擎与数据库云平台，当前厂商实例 ClickHouse）** 的定级规则。  
-审计目标为 **ClickHouse OSS / ClickHouse Cloud / Langfuse Cloud 或其它数据库引擎 / 数据库云平台** 时，优先以本文件条款定级；与全局 `severity-levels.md` / `<type>.md` 冲突时，**数据库语义以本文件为准**。
+本文件为 **数据库领域（DBMS 引擎与数据库云平台，当前厂商实例 ClickHouse）** 的定级**摘要索引**（供不装 `vuln-definitions-db` 时快速对照；条款编号与插件一致）。  
+审计目标为 **ClickHouse OSS / ClickHouse Cloud / Langfuse Cloud 或其它数据库引擎 / 数据库云平台** 时，**权威条款在 `vuln-definitions-db/references/severity-levels.md`**：与全局 `severity-levels.md` / `<type>.md` 冲突时，数据库语义以插件条款为准；**本摘要与插件不一致时以插件为准**。
 
 > 语义基线：[Bugcrowd VRT](https://bugcrowd.com/vulnerability-rating-taxonomy) + [ClickHouse 项目页](https://bugcrowd.com/engagements/clickhouse)（对照日 2026-08-28）。  
 > 完整形态表、门禁、资产范围与 Bugcrowd 纪律见插件 `vuln-definitions-db`。赏金表 **不** 改本文件档位。
@@ -98,25 +98,33 @@
 | ADJ3 | 受害者高度配合的交互链 | 降一档 |
 | ADJ4 | 仅理论影响未演示 | P5 / 不报 |
 | ADJ5 | 仅本地 OS 管理员可达 | 不在威胁模型 |
+| ADJ6 | 泄露仅为低敏元数据 | 降到 M1 / P3 |
+| ADJ7 | 仅影响自己账号 / 自伤 | 不报 |
+| ADJ8 | 已修复于最新版 / 不再支持版本 | 不报（须在支持版本可复现） |
 | ADJ9 | 利用链上的单环 | 看整链定档 |
 | ADJ10 | 野外利用 / 已公开 | 只提优先级，不改档 |
+| ADJ11 | 影响仅限排除目标（learn.clickhouse.com、支持表单等） | 不报 |
 | ADJ12 | Postgres offering 租户内隔离 | 不报，除非跨租户 |
 
 ## 5. 排除（Bugcrowd 明文，命中即停）
 
 | # | 条款 |
 |---|------|
-| INV1 | DoS / DDoS / 纯崩溃 / crash-only 内存破坏 |
+| INV1 | DoS / DDoS；资源耗尽、纯崩溃、crash-only 内存破坏 |
 | INV2/3/4 | 缺限速（无实害）/ 缺安全头 / 版本披露 |
+| INV5/6 | EXIF 地理位置 / 邮件安全记录缺失（SPF / DKIM / DMARC） |
 | INV7 | POST 反射 XSS / self-XSS |
-| INV11 | 依赖清单无 PoC |
-| INV12/13 | 静态分析原始输出 / 理论问题 |
+| INV8/9/10 | 社工与物理攻击 / 支付处理 / 第三方系统（非 ClickHouse 资产） |
+| INV11 | 依赖清单（过时依赖列表），除非有 PoC 证明可严重利用 |
+| INV12/13 | 静态分析器 / 扫描器原始输出（无人工验证）/ 理论问题 |
+| INV14 | 已发表 / 他人已报（重复） |
 | INV15/16/17/18 | system 表不可利用枚举 / 客户端组件 / 非 release 构建 / 环境依赖 |
-| INV19 | 非支持版本 |
-| INV20 | Play HTTP 本地服务器 Web 漏洞 |
-| INV22/23 | learn 子域、表单面、未列出资产 |
+| INV19 | 未在支持版本可复现（Security Policy） |
+| INV20 | Play HTTP 服务器（默认本地 setup）的 Web 漏洞（clickjacking / CSRF / 缺头等） |
+| INV21 | 对真实用户 / 客户数据的破坏性验证 |
+| INV22/23 | learn.clickhouse.com、支持 / 聊天 / 反馈表单；未列出的子域与资产（范围外，可报无赏金） |
 
-完整 ADJ/INV 表见 `vuln-definitions-db` 的 `adjustment-and-invalid.md`。
+编号与插件一致（ADJ1–ADJ12 / INV1–INV23）；完整条款文字见 `vuln-definitions-db` 的 `adjustment-and-invalid.md`。
 
 ---
 
@@ -143,6 +151,6 @@
 ## 7. 报告与定级纪律
 
 - 定级前先跑 Gate：**威胁模型 → 资产范围 → 环境合格 → 安全实害 → 可复现**（完整见 `gates.md`）
-- `severity_rule` 填本文件锚点，如 `database.md#H2`、`database.md#INV1`（完整插件亦可用 `severity-levels.md#H2`）。另填 `db_class`、`target_asset`、`vrt_priority`；可选 `bounty_eligible`（见 `shared/finding-schema.md`）
+- `severity_rule` 权威锚点为 `vuln-definitions-db/references/severity-levels.md#H2`（本摘要的 `database.md#H2` / `#INV1` 为等价锚点）。另填 `db_class`、`target_asset`、`vrt_priority`；可选 `bounty_eligible`（见 `shared/finding-schema.md`）
 - 与 CVSS：本文件定性；量化用 `vuln-scoring`（默认 v3.1）。CVSS **不得**单独抬档
 - **不收录具体 case**：无 CVE / issue 清单

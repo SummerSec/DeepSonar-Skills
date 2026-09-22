@@ -22,9 +22,9 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 - 发现可疑点后：对照该类的四级标准定级  
 - 白盒与黑盒结论冲突：以本模块定义裁决  
 - 用户问「这算高危还是中危」：直接引用对应 `references/*.md`
-- 审计目标为 OpenHarmony / 类移动 OS 系统层、框架层、应用层：加载 `references/openharmony.md` 对齐系统语义
-- 审计目标为 Chrome / Chromium 浏览器：加载 `references/chromium.md` 对齐浏览器四档与非安全条款
-- 审计目标为数据库引擎 / 数据库云平台（ClickHouse OSS / ClickHouse Cloud / Langfuse 等）：加载 `references/database.md` 对齐数据库四档与排除条款
+- 审计目标为 OpenHarmony / 类移动 OS 系统层、框架层、应用层：加载 `references/openharmony.md`（**摘要索引**，权威条款在 `vuln-definitions-oh`）对齐系统语义
+- 审计目标为 Chrome / Chromium 浏览器：加载 `references/chromium.md`（**摘要索引**，权威条款在 `vuln-definitions-chrome`）对齐浏览器四档与非安全条款
+- 审计目标为数据库引擎 / 数据库云平台（ClickHouse OSS / ClickHouse Cloud / Langfuse 等）：加载 `references/database.md`（**摘要索引**，权威条款在 `vuln-definitions-db`）对齐数据库四档与排除条款
 - 审计目标为 Android / iOS 应用（移动端应用层，非系统层）：加载 `references/mobile.md`（**摘要索引**，权威条款在 `vuln-definitions-mobile`）对齐移动端四档与排除条款
 
 ## 全局等级定义

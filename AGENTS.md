@@ -63,7 +63,7 @@ agent-env/                # 黑盒工具内置清单与镜像（当前偏 Web；
    OpenHarmony 等系统类审计时：机理类型仍以本插件八类为准；**系统四档/无效条款/Phone OS 形态** 加载 `vuln-definitions/.../references/openharmony.md`，或直接用 `vuln-definitions-oh/`（完整：`phone-os-vuln-types.md` + 门禁）。  
    Chrome / Chromium 浏览器审计时：机理类型仍以本插件八类为准；**浏览器四档/非安全条款/沙箱形态** 加载 `vuln-definitions/.../references/chromium.md`，或直接用 `vuln-definitions-chrome/`（完整：`chrome-vuln-types.md` + `process-sandbox.md` + 门禁 + `vrp-rules.md`）。赏金资格不改 `severity`。  
    数据库（ClickHouse 等 DBMS / 数据库云平台）审计时：机理类型仍以本插件八类为准；**数据库四档/排除条款/DBMS 形态** 加载 `vuln-definitions/.../references/database.md`，或直接用 `vuln-definitions-db/`（完整：`db-vuln-types.md` + `asset-scope.md` + 门禁 + `bugcrowd-rules.md`）。赏金资格不改 `severity`。  
-   移动端（Android / iOS App 应用层）审计时：机理类型仍以本插件八类为准；**移动端四档/排除条款/应用层形态** 直接用 `vuln-definitions-mobile/`（完整：`mobile-vuln-types.md` + `attack-surfaces.md` + 门禁 + `history-patterns.md` + `google-android-devices-rules.md`）。赏金资格不改 `severity`；**档位来源**的系统层缺陷（内核/系统服务）走 `vuln-definitions-oh`，但 Google Bug Hunters 的 Android 与 Google 设备项目规则对该类目标仍适用。
+   移动端（Android / iOS App 应用层）审计时：机理类型仍以本插件八类为准；**移动端四档/排除条款/应用层形态** 直接用 `vuln-definitions-mobile/`（完整：`mobile-vuln-types.md` + `attack-surfaces.md` + 门禁 + `history-patterns.md` + `google-android-devices-rules.md`；`vuln-definitions/.../references/mobile.md` 仅为摘要索引）。赏金资格不改 `severity`；**档位来源**的系统层缺陷（内核/系统服务）走 `vuln-definitions-oh`，但 Google Bug Hunters 的 Android 与 Google 设备项目规则对该类目标仍适用。
 2. **`vuln-scoring/`** 是**定量评分与利用优先级**模块：支持 **CVSS v3.1 与 v4.0**（先选版本再按需加载指标文件），并映射回四级定级；可选 EPSS / SSVC / CISA KEV 做修复排序。**不替代**定性条款，finding 的 `severity` 仍以 definitions 为准。
 3. **`web-whitebox/<type>/` 与 `web-blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
 3b. **`mobile-audit/`** 是移动 App **方法论** plugin（单 skill `mobile-app-audit`）：静态/动态/PoC/取证工作流；**NEVER 自产 severity**；强制依赖 `vuln-definitions` + `vuln-definitions-mobile`。不是新 definitions 领域。
@@ -71,7 +71,7 @@ agent-env/                # 黑盒工具内置清单与镜像（当前偏 Web；
 
 ### SKILL.md 通用骨架
 
-每个 skill 遵循同一模板：角色 → 强制前置（读 `shared/*`，防 prompt injection）→ **定级依赖**（加载 vuln-definitions，finding 填 `severity_rule` 如 `injection.md#C1`；移动方法论另加载 vuln-definitions-mobile，且 **不自产 severity**）→ 范围/只报/明确不报 → 工作流 → 参考相对路径（`../../../vuln-definitions/...`、`../../../vuln-definitions-mobile/...`、`../../../shared/...`）。改 skill 时保持骨架不变。
+每个 skill 遵循同一模板：角色 → 强制前置（读 `shared/*`，防 prompt injection）→ **定级依赖**（加载 vuln-definitions，finding 填 `severity_rule` 如 `injection.md#C1`；域内审计填域文件锚点，如 `openharmony.md#H5` / `mobile.md#H2`（或插件 `severity-levels.md#H2`）；移动方法论另加载 vuln-definitions-mobile，且 **不自产 severity**）→ 范围/只报/明确不报 → 工作流 → 参考相对路径（`../../../vuln-definitions/...`、`../../../vuln-definitions-mobile/...`、`../../../shared/...`）。改 skill 时保持骨架不变。
 
 ### 版本对齐
 
@@ -124,9 +124,9 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 ## 改 skill 时
 
 1. **改漏洞定义/定级标准** → 只改 `vuln-definitions/`，bump 其 version  
-1b. **改 OpenHarmony 系统四档/无效条款** → 只改 `vuln-definitions-oh/`（及 `vuln-definitions/.../references/openharmony.md`），同步 bump 两处 version  
-1c. **改 Chrome / Chromium 浏览器四档/非安全条款 / VRP 资格** → 只改 `vuln-definitions-chrome/`（及 `vuln-definitions/.../references/chromium.md`），同步 bump 两处 version；赏金表不改 `severity`  
-1d. **改数据库四档/排除条款/Bugcrowd 纪律** → 只改 `vuln-definitions-db/`（及 `vuln-definitions/.../references/database.md`），同步 bump 两处 version；赏金表不改 `severity`；**数据库新厂商只加 reference 文件，不开新 plugin**  
+1b. **改 OpenHarmony 系统四档/无效条款** → 只改 `vuln-definitions-oh/`（及 `vuln-definitions/.../references/openharmony.md` 摘要索引），同步 bump 插件与 marketplace 两处 version（改镜像则另 bump `vuln-definitions`）  
+1c. **改 Chrome / Chromium 浏览器四档/非安全条款 / VRP 资格** → 只改 `vuln-definitions-chrome/`（及 `vuln-definitions/.../references/chromium.md` 摘要索引），同步 bump 插件与 marketplace 两处 version（改镜像则另 bump `vuln-definitions`）；赏金表不改 `severity`  
+1d. **改数据库四档/排除条款/Bugcrowd 纪律** → 只改 `vuln-definitions-db/`（及 `vuln-definitions/.../references/database.md` 摘要索引），同步 bump 插件与 marketplace 两处 version（改镜像则另 bump `vuln-definitions`）；赏金表不改 `severity`；**数据库新厂商只加 reference 文件，不开新 plugin**  
 1e. **改移动端四档/排除条款/应用层形态** → 只改 `vuln-definitions-mobile/`，bump 其 version（并同步 `vuln-definitions/references/mobile.md` 摘要，bump `vuln-definitions` version）；**移动端新目标（App / SDK）只加厂商 reference 文件，不开新 plugin**（现有厂商/项目规则：`google-android-devices-rules.md`——Google 的 Android 与 Google 设备项目，资格，不定级）  
 2. **改 CVSS/利用评分/优先级标准** → 只改 `vuln-scoring/`，bump 其 version  
 3. 改审计手法 → 对应 `web-whitebox-*` / `web-blackbox-*`；**改移动 App 挖洞/复现/取证手法** → 只改 `mobile-audit/`（bump version；**不要**把方法写进 vuln-definitions-mobile）  

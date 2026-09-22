@@ -1,7 +1,7 @@
 # OpenHarmony 系统漏洞定级规则
 
-本文件为 **系统类（OpenHarmony / 类移动 OS）审计** 的定级规则。  
-审计目标为 OH **标准系统（standard）、小型系统（small）、轻量系统（mini）** 的 **系统服务层、框架层、应用层** 时，优先以本文件条款定级；与 `severity-levels.md` / `<type>.md` 冲突时，**系统语义以本文件为准**。
+本文件为 **系统类（OpenHarmony / 类移动 OS）审计** 的定级**摘要索引**（供不装 `vuln-definitions-oh` 时快速对照；条款编号与插件一致）。  
+审计目标为 OH **标准系统（standard）、小型系统（small）、轻量系统（mini）** 的 **系统服务层、框架层、应用层** 时，**权威条款在 `vuln-definitions-oh/references/severity-levels.md`**：与全局 `severity-levels.md` / `<type>.md` 冲突时，系统语义以插件 OH 条款为准；**本摘要与插件不一致时以插件为准**。
 
 > 语义基线：OpenHarmony 安全漏洞奖励计划（官方口径，2026-05 版本）。  
 > 漏洞**形态**按 Phone OS 共性覆盖（见 `vuln-definitions-oh` / `phone-os-vuln-types.md`），不局限单一厂商历史披露。
@@ -149,7 +149,7 @@ OH 组件索引见同插件 `attack-surfaces.md`；**bounty 资产范围**见 `a
 ## 7. 报告与定级纪律
 
 - 定级前先跑 Gate 检查：**资产范围（S）→ 活树/最新公开版本（V）→ 攻击者是谁 → 默认与可达 → 直接实害 → 利用链闭合**；S/V 不过或任一不过 → `reportable: false` / 对内（详见 `vuln-definitions-oh` 的 `gates.md`、`asset-scope.md`）。
-- finding 的 `severity_rule` 填本文件锚点，如 `openharmony.md#H5`、`openharmony.md#INV1`、`openharmony.md#ADJ3`（完整插件亦可用 `severity-levels.md#H5`）。系统类另填 `mechanism` / `phone_os_class` / `asset_repo` / `asset_scope`（见 `shared/finding-schema.md`）。
+- finding 的 `severity_rule` 权威锚点为 `vuln-definitions-oh/references/severity-levels.md#H5`（本摘要的 `openharmony.md#H5` / `#INV1` / `#ADJ3` 为等价锚点）。系统类另填 `mechanism` / `phone_os_class` / `asset_repo` / `asset_scope`（见 `shared/finding-schema.md`）。
 - 报告至少写清：影响与根因（版本/模块/代码逻辑）、**恢复出厂后** 分步复现 + 截图、完整可编译 PoC（源码/依赖/构建说明）。
 - 与 CVSS 的关系：本文件负责 **定性**；量化用 `vuln-scoring`（**默认 CVSS v3.1**，可按需 v4.0）。CVSS **不得**单独抬档；官方低危按 `low` 报，不要写成 high，也不要写成 `none`。
 - **不收录具体 case**：本文件只提供条款与判定规则，不写具体漏洞样例或历史漏洞清单。

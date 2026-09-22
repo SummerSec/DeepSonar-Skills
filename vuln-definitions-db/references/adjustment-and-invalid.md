@@ -40,7 +40,7 @@
 | INV9 | 支付处理（三方处理） |
 | INV10 | 第三方系统（ClickHouse 员工在用的非 ClickHouse 资产） |
 | INV11 | 依赖清单（过时依赖列表）；除非有 PoC 证明严重且可利用 |
-| INV12 | 静态分析器原始输出，无人工验证 / PoC |
+| INV12 | 静态分析器 / 扫描器原始输出，无人工验证 / PoC |
 | INV13 | 理论安全问题 |
 | INV14 | 已发表 / 他人已报（重复） |
 
@@ -54,12 +54,11 @@
 | INV18 | 环境依赖问题（特定内核 / libc / DNS / SSL / 块设备 / 硬件故障） |
 | INV19 | 未在支持版本可复现（Security Policy） |
 | INV20 | Play HTTP 服务器（默认本地 setup）上的 Web 漏洞（clickjacking / CSRF / 缺头等） |
-| INV20 | 扫描器原始输出 |
 | INV21 | 对真实用户/客户数据的破坏性验证 |
 | INV22 | learn.clickhouse.com、支持 / 聊天 / 反馈表单 |
 | INV23 | 未经列出的 ClickHouse 子域 / 资产（范围外；可报但无赏金） |
 
-> 注：INV 编号如有冲突，以「排除语义」为准；写 finding 否决理由时引用条款文字。
+> 编号说明：INV1–INV14 为通用排除（Bugcrowd 项目明文），INV15–INV23 为数据库领域排除；原重复的 INV20「扫描器原始输出」已并入 INV12，现编号连续（INV1–INV23 / ADJ1–ADJ12），引用以条款文字为准。
 
 ---
 
