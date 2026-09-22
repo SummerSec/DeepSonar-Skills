@@ -1,8 +1,0 @@
-{
-    "author":  {
-                   "name":  "DeepSonar"
-               },
-    "description":  "白盒不安全反序列化审计",
-    "name":  "whitebox-deserialization",
-    "version":  "0.1.0"
-}

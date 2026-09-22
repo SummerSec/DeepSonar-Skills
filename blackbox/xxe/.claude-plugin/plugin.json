@@ -1,8 +1,0 @@
-{
-    "author":  {
-                   "name":  "DeepSonar"
-               },
-    "description":  "黑盒 XXE 挖掘",
-    "name":  "blackbox-xxe",
-    "version":  "0.1.0"
-}

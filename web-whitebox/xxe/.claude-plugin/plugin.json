@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepSonar"
+               },
+    "description":  "白盒 XXE 审计",
+    "name":  "web-whitebox-xxe",
+    "version":  "0.2.0"
+}

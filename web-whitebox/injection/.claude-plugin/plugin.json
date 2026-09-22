@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepSonar"
+               },
+    "description":  "白盒注入审计（SQL/命令/NoSQL/LDAP）",
+    "name":  "web-whitebox-injection",
+    "version":  "0.2.0"
+}

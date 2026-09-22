@@ -1,0 +1,8 @@
+{
+    "author":  {
+                   "name":  "DeepSonar"
+               },
+    "description":  "黑盒 SSRF 挖掘",
+    "name":  "web-blackbox-ssrf",
+    "version":  "0.2.0"
+}

@@ -1,7 +1,7 @@
 {
   "name": "DeepSonar-Skills",
-  "version": "0.2.1",
-  "description": "Vulnerability definitions, CVSS v3.1/v4.0 scoring, white-box audit and black-box hunting skills by vuln type (Critical/High only).",
+  "version": "0.2.2",
+  "description": "Vulnerability definitions, CVSS v3.1/v4.0 scoring, web white-box audit and web black-box hunting skills by vuln type (Critical/High only).",
   "author": {
     "name": "DeepSonar",
     "url": "https://github.com/SummerSec/DeepSonar"
@@ -10,8 +10,8 @@
   "repository": "https://github.com/SummerSec/DeepSonar-Skills",
   "license": "Apache-2.0",
   "keywords": [
-    "whitebox",
-    "blackbox",
+    "web-whitebox",
+    "web-blackbox",
     "security-audit",
     "vulnerability",
     "agent-skills"
