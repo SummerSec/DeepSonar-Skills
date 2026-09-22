@@ -117,7 +117,7 @@ ChromeOS 系统镜像、iOS WebKit 壳不当本专项。
 | `web-blackbox-*` | 用本定义做 Web 动态验证；只产出 critical/high finding |
 | `shared/severity-policy.md` | 仓库报告策略（只报 C/H；OH / Chrome / DB 官方四档例外） |
 
-Profile 配置：**凡启用任一 wb-*/bb-*，必须同时启用本插件**；需要向量/分数时再启用 `vuln-scoring`。
+**依赖约束**：凡启用任一 `wb-*` / `bb-*`，必须同时启用本插件；需要向量 / 分数时再启用 `vuln-scoring`。
 
 ## 输出（仅定级场景）
 

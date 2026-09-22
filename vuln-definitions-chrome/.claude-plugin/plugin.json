@@ -1,6 +1,6 @@
 {
   "name": "vuln-definitions-chrome",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Chrome / Chromium 浏览器漏洞定义：官方四档（S0–S3）与缓解/非安全条款，外加进程沙箱、Site Isolation、浏览器形态与 Chrome VRP 资格（不定级）。",
   "author": {
     "name": "DeepSonar"
