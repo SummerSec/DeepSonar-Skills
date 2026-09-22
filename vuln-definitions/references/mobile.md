@@ -1,7 +1,7 @@
 # 移动端领域（Android App / iOS App）定级规则
 
-本文件为 **移动端领域（Android App 与 iOS App 应用层）** 的定级规则。  
-审计目标为 **Android / iOS 应用（APK / IPA / 应用内 WebView / 混合栈）** 时，优先以本文件条款定级；与全局 `severity-levels.md` / `<type>.md` 冲突时，**移动端语义以本文件为准**。系统层缺陷（内核 / 系统服务 / 框架）走 `openharmony.md` / `vuln-definitions-oh`。
+本文件为 **移动端领域（Android App 与 iOS App 应用层）** 的定级**摘要索引**（供不装 `vuln-definitions-mobile` 时快速对照；条款编号与插件完全一致）。  
+**权威条款在 `vuln-definitions-mobile/references/severity-levels.md`**：与全局 `severity-levels.md` / `<type>.md` 冲突时，以插件移动端条款为准；**本摘要与插件不一致时以插件为准**。系统层缺陷（内核 / 系统服务 / 框架）走 `openharmony.md` / `vuln-definitions-oh`。
 
 > 语义基线：HackerOne 移动端赏金惯例 + OWASP Mobile Top 10（对照日 2026-08-30）。  
 > 完整形态表、攻击面索引、门禁、历史模式库与**项目规则**（`google-android-devices-rules.md`）见插件 `vuln-definitions-mobile`。赏金表 **不** 改本文件档位。
@@ -11,7 +11,7 @@
 ## 1. 何时使用
 
 - 目标是 Android / iOS **应用**（APK / IPA、应用内 WebView / React Native / Flutter 混合壳、第三方移动 SDK）
-- finding 涉及：Deep Link / intent scheme、URL Scheme / Universal Links、WebView XSS·RCE·JS bridge、Intent 与组件导出、Content Provider、广播、文件与路径遍历、数据存储与密钥、SSL/TLS 证书与固定、OAuth 回调、认证与账户逻辑、任务 / 窗口
+- finding 涉及：Deep Link / intent scheme、URL Scheme / Universal Links、WebView XSS·RCE·JS bridge、Intent 与组件导出、Content Provider、广播、文件与路径遍历、数据存储与密钥、加密实现（ECB / IV 复用 / 弱随机）、SSL/TLS 证书与固定、OAuth 回调、认证与账户逻辑、任务 / 窗口、权限与无障碍 / 通知监听、iOS entitlements / TCC / App Group
 - 需要按 HackerOne 移动端惯例定档，或判断是否合格 / 排除
 - 已授权参与移动端赏金项目时：范围 / 纪律 / `bounty_eligible` 见完整插件（本文件不定资格）
 
@@ -105,8 +105,10 @@
 | ADJ5 | 仅本地 OS 管理员 / 已控设备可达 | 不在威胁模型 |
 | ADJ6 | 泄露仅为低敏元数据 | M1 / L |
 | ADJ7 | 仅影响自己账号 / 自伤 | 不报 |
-| ADJ9 | 利用链上的单环 | 看整链定档 |
-| ADJ11 | WebView 历史缺陷（`addJavascriptInterface` 旧版族） | 平台已全局修复 → 降档或排除 |
+| ADJ8 | 利用链上的单环 | 看整链定档 |
+| ADJ9 | 野外利用 / 已公开 | 只提优先级，不改档 |
+| ADJ10 | 影响仅限排除目标（官方测试域、非发货构建等） | 不报 |
+| ADJ11 | WebView 历史缺陷（`addJavascriptInterface` 旧版族） | 平台已全局修复 / 默认配置不可达 → 降档或排除 |
 | ADJ12 | 项目奖金规则缺项（如内存破坏缺补丁方案、占坑 shell 报告、违规披露） | **不改 `severity`**，只把 `bounty_eligible` 置 `false` |
 
 ## 5. 排除（命中即停）
@@ -115,17 +117,24 @@
 | --- | --- |
 | INV1 | **本地 DoS 不报**：同设备杀进程 / 本地纯崩溃 / 本地资源耗尽 / crash-only。**不含远程。** 破坏性远程 DoS 按 H8 |
 | INV2/3/4 | 缺限速（无实害）/ 缺安全头 / 版本披露 |
+| INV5/6 | EXIF 地理位置 / 邮件安全记录缺失 |
 | INV7 | self-XSS / POST 反射 XSS |
 | INV8 | 社工 / 物理攻击 / 需物理设备访问 |
+| INV9/10 | 支付处理（三方职责）/ 第三方非目标资产 |
 | INV11 | 依赖清单无 PoC |
 | INV12/13 | 静态分析原始输出 / 理论问题 |
-| INV26 | **入口面本身不定漏洞**：exported launcher / MainActivity、自定义 scheme、不校验调用方是平台固有入口面，不是漏洞。须证明未授权敏感 sink（深链直接特权操作、URI/extra 当可信输入、OAuth 一次性码可截获、带登录态加载攻击者 URL）。仅唤起 / 打开默认页 / 官方登录 Custom Tab / 参数白名单 + 登录门控 → `reportable: false`。不要写成 M/L |
+| INV14 | 已发表 / 重复 |
 | INV15 | 已越狱 / root 后才能观察到的本地读取 |
-| INV16 | 非 release / debug 构建、模拟器专用行为 |
+| INV16 | 非 release / debug 构建、带 `debuggable` 的测试包、模拟器专用行为 |
 | INV17 | 环境依赖（特定设备 / ROM / 系统版本行为） |
+| INV18 | 第三方 SDK 出货路径不可达 / 项目不覆盖 |
 | INV19 | 系统层缺陷（走 `vuln-definitions-oh`）投到应用层 |
+| INV20/21 | 破坏性验证真实用户数据 / 需先装恶意 App 且该前提超范围 |
 | INV22 | 非官方渠道（侧载 / 越狱商店）版本才可复现 |
 | INV23–25 | Google 与 Google 设备项目范围除外（上游通用 Linux 无 Android/Pixel PoC、后端服务、设备 90 天内到 EOL） |
+| INV26 | **入口面本身不定漏洞**：exported launcher / MainActivity、自定义 scheme、不校验调用方是平台固有入口面，不是漏洞。须证明未授权敏感 sink（深链直接特权操作、URI/extra 当可信输入、OAuth 一次性码可截获、带登录态加载攻击者 URL）。仅唤起 / 打开默认页 / 官方登录 Custom Tab / 参数白名单 + 登录门控 → `reportable: false`。不要写成 M/L |
+
+> 编号不连续（INV23–25 为目标项目专属、INV26 回到通用），引用时以条款文字为准。
 
 完整 ADJ/INV 表见 `vuln-definitions-mobile` 的 `adjustment-and-invalid.md`。
 
@@ -141,15 +150,15 @@
 | -------- | ------ | ---------- |
 | Deep Link | 路径遍历→文件写 / RCE、验证绕过→WebView、会话劫持、CSRF | C1 / C2 / H2 / H3 |
 | WebView | `addJavascriptInterface` RCE、XSS / UXSS、JS bridge、Cookie 泄露 | C1 / H3 |
-| Intent | Redirection、劫持、重放、URI 注入、Scheme 认证绕过 | H |
+| Intent | Redirection、劫持、重放、URI 注入、Scheme 认证绕过、可变 PendingIntent 委派 | H3 / H6 |
 | 组件导出 | Activity 认证绕过、Service 越权、Provider 导出 | H |
 | Content Provider | 信息泄露、SQL 注入、路径遍历、权限重委托 | H3 / H2 |
 | 广播 | 广播劫持、隐式广播泄露、导出 Receiver | M / H |
 | 文件路径 | 路径遍历、符号链接、目录遍历 RCE、任意上传 | C1 / H2 |
 | 认证逻辑 | 2FA / OTP 绕过、短信重发缺陷、账户覆盖、令牌泄露 | H |
-| 数据存储密钥 | 明文存储、硬编码密钥、SSL 配置、日志泄露 | M3 / H4 |
+| 数据存储密钥 | 明文存储、硬编码密钥、加密实现误用（ECB / IV 复用）、SSL 配置、日志 / 通知 / 剪贴板泄露 | M3 / H4 |
 | 任务窗口 | StrandHogg、Fragment 注入、Confused Deputy、UI 覆盖 / 点按劫持、`FLAG_SECURE` 绕过 | H（按版本）/ H10 / M8 |
-| 权限与访问控制 | 权限绕过 / WIU 保留、Special App Access、跨用户与 Private Space、企业 DPC 绕过、破坏性远程 DoS（H8） | H8–H11 / M9 |
+| 权限与访问控制 | 权限绕过 / WIU 保留、Special App Access、无障碍 / 通知监听滥用、跨用户与 Private Space、企业 DPC 绕过、破坏性远程 DoS（H8） | H8–H11 / M9 |
 | 内存安全 | UAF / 堆溢出 / 越界读（JNI / 原生库） | C4 / H1 |
 
 ### iOS
@@ -159,7 +168,8 @@
 | URL Scheme / Deep Link | 劫持（授权码 / 令牌）、不当授权、CSRF、信息泄露、应用内 XSS | C2 / H |
 | OAuth 流程 | 令牌伪造（callback 缺陷）、redirection URI 劫持 | H |
 | SSL/TLS 证书 | 验证缺失 / 绕过 / 固定绕过 / 任意重定向 | H5 |
-| 数据存储隐私 | 明文存储、Keychain 误用、信息泄露 / 隐私侵犯 | M3 / H4 |
+| 数据存储隐私 | 明文存储、Keychain 误用、加密实现误用、信息泄露 / 隐私侵犯 | M3 / H4 |
+| 权限与共享容器 | entitlements 使用不符、TCC 隐私权限绕过、App Group / 共享容器越权、App Extension 越权、生物识别绕过 | H3 / H6 / H4 |
 | WebView | XSS、Stored XSS、信息泄露（深链接） | H |
 | 内存内核 | 内存破坏 / UAF / 内核损坏（偏系统层） | C / 系统层 |
 | 其他 | 不当认证、CARA、路径遍历、私有 API 滥用 | H / M |
@@ -173,7 +183,7 @@
 ## 7. 报告与定级纪律
 
 - 定级前先跑 Gate：**威胁模型 → 资产范围 → 环境合格 → 安全实害 → 可复现**（完整见 `gates.md`）
-- `severity_rule` 填本文件锚点，如 `mobile.md#H2`、`mobile.md#INV7`（完整插件亦可用 `severity-levels.md#H2`）。另填 `mobile_class`、`platform`、`component`、`attacker`、`prereq`；可选 `bounty_eligible`（见 `shared/finding-schema.md`）
+- `severity_rule` 权威锚点为 `vuln-definitions-mobile/references/severity-levels.md#H2`（本摘要的 `mobile.md#H2` 为等价锚点）。另填 `mobile_class`、`platform`、`component`、`attacker`、`prereq`；可选 `bounty_eligible`（见 `shared/finding-schema.md`）
 - 与 CVSS：本文件定性；量化用 `vuln-scoring`（默认 v3.1）。CVSS **不得**单独抬档
 - **边界情况对照 `vuln-definitions-mobile` 的 `history-patterns.md` §3 定级校准**（K1–K8：深链接→WebView 按 H3、URL Scheme 按远程前提、WebView 旧版 RCE 按版本、SSL 缺失按 MITM、明文存储默认 M、越狱前提降档、StrandHogg 按版本、入口面本身按 INV26 不报）
 - **不收录具体 case**：无 CVE / 报告清单

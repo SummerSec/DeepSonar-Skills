@@ -25,7 +25,7 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 - 审计目标为 OpenHarmony / 类移动 OS 系统层、框架层、应用层：加载 `references/openharmony.md` 对齐系统语义
 - 审计目标为 Chrome / Chromium 浏览器：加载 `references/chromium.md` 对齐浏览器四档与非安全条款
 - 审计目标为数据库引擎 / 数据库云平台（ClickHouse OSS / ClickHouse Cloud / Langfuse 等）：加载 `references/database.md` 对齐数据库四档与排除条款
-- 审计目标为 Android / iOS 应用（移动端应用层，非系统层）：加载 `references/mobile.md` 对齐移动端四档与排除条款
+- 审计目标为 Android / iOS 应用（移动端应用层，非系统层）：加载 `references/mobile.md`（**摘要索引**，权威条款在 `vuln-definitions-mobile`）对齐移动端四档与排除条款
 
 ## 全局等级定义
 
@@ -117,7 +117,7 @@ ChromeOS 系统镜像、iOS WebKit 壳不当本专项。
 | `web-blackbox-*` | 用本定义做 Web 动态验证；只产出 critical/high finding |
 | `shared/severity-policy.md` | 仓库报告策略（只报 C/H；OH / Chrome / DB 官方四档例外） |
 
-Profile 配置：**凡启用任一 wb-*/bb-*，必须同时启用本插件**；需要向量/分数时再启用 `vuln-scoring`。
+**依赖约束**：凡启用任一 `wb-*` / `bb-*`，必须同时启用本插件；需要向量 / 分数时再启用 `vuln-scoring`。
 
 ## 输出（仅定级场景）
 

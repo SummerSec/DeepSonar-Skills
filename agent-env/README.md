@@ -13,8 +13,7 @@
 ## 与 DeepSonar 集成
 
 1. 将 `tools-manifest.json` 中的工具 pin 版本后写入沙箱镜像构建脚本。  
-2. 黑盒 job 使用 **允许访问目标 scope + OOB** 的网络策略（与白盒默认断网不同）。  
-3. Profile 勾选 `web-blackbox-<type>` 模块；不要在白盒断网沙箱里跑 `bb-*`。  
+2. 黑盒 job 使用 **允许访问目标 scope + OOB** 的网络策略（与白盒默认断网不同）；**不要在断网白盒沙箱里跑 `bb-*`**。  
 
 ## 原则
 

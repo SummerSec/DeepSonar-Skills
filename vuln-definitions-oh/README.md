@@ -9,8 +9,6 @@
 /plugin install vuln-definitions-oh@DeepSonar-Skills
 ```
 
-审计时建议同时安装 `vuln-definitions`（八类机理）+ `vuln-scoring`（CVSS v3.1/v4.0）。
-
 ## 内容
 
 | 文件 | 说明 |

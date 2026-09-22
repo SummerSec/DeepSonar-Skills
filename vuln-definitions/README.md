@@ -8,8 +8,6 @@
 /plugin install vuln-definitions@DeepSonar-Skills
 ```
 
-或 DeepSonar Profile **始终勾选** 本模块 + 任一 `web-whitebox-*` / `web-blackbox-*`。
-
 ## 内容
 
 | 文件 | 说明 |
@@ -21,7 +19,7 @@
 | `references/openharmony.md` | OpenHarmony / Phone OS 定级规则（官方四档/术语/调整无效/类型摘要）；资产范围见 `vuln-definitions-oh` 的 `asset-scope.md` |
 | `references/chromium.md` | Chrome / Chromium 定级规则（官方四档/缓解/非安全/类型摘要）；完整沙箱、门禁与 VRP 资格见 `vuln-definitions-chrome` |
 | `references/database.md` | 数据库定级规则（VRT 四档/术语/调整无效/类型摘要）；完整形态、门禁与 Bugcrowd 纪律见 `vuln-definitions-db` |
-| `references/mobile.md` | 移动端（Android / iOS App）定级规则（四档/术语/调整无效/类型摘要）；完整形态、门禁与历史模式库见 `vuln-definitions-mobile` |
+| `references/mobile.md` | 移动端（Android / iOS App）定级规则摘要（四档/术语/调整无效/类型摘要，编号与插件一致；**权威条款见 `vuln-definitions-mobile`**）；完整形态、门禁与历史模式库见 `vuln-definitions-mobile` |
 
 ## 规则
 

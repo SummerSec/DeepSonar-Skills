@@ -1,6 +1,6 @@
 ---
 name: vuln-definitions-mobile
-description: "移动端（Android App + iOS App）领域漏洞定义指南。定义移动应用安全通用漏洞形态（Deep Link / URL Scheme 劫持与验证绕过、WebView XSS·RCE·JS bridge、Intent 重定向与劫持、组件导出、Content Provider 信息泄露·SQL 注入·路径遍历、广播劫持、数据存储与密钥、SSL/TLS 证书验证与固定绕过、认证与账户逻辑、权限绕过与 WIU 保留、UI 覆盖与点按劫持、跨用户与 Private Space、内存安全），并把 HackerOne 移动端赏金惯例映射为 critical/high/medium/low 四档；含调整/无效条款、Gate 门禁、Android·iOS 攻击面索引、历史漏洞模式库（案例归纳 + 定级校准 + 挖掘切入点），以及 Google Bug Hunters 的 Android 与 Google 设备项目规则（范围 / 资格 / PoC 与补丁要求 / 奖金与 SNR 纪律，不定级）。用户提到「移动端漏洞」「Android 漏洞」「iOS 漏洞」「APK」「IPA」「Deep Link」「URL Scheme」「WebView XSS」「addJavascriptInterface」「Intent 重定向」「组件导出」「Content Provider」「StrandHogg」「Task Hijacking」「证书固定绕过」「不安全数据存储」「移动端定级」「Google Bug Hunters」「Android 与 Google 设备项目」「Pixel / Nest / Fitbit」「Android Security Reward」或要给 Android / iOS 应用类审计目标定级时使用。This skill should be used when the user asks to rate a mobile app vulnerability (Android / iOS), classify deep link or URL scheme hijacking, WebView XSS or RCE, exported component or Content Provider issues, insecure data storage, certificate pinning bypass, permission bypass or WIU retention, tapjacking or FLAG_SECURE bypass, or the Android and Google Devices Security Reward Program rules, or audits Android / iOS application targets."
+description: "移动端（Android App + iOS App）领域漏洞定义指南。定义应用层通用漏洞形态（Deep Link / URL Scheme 劫持与验证绕过、WebView XSS·RCE·JS bridge、Intent 重定向与劫持、可变 PendingIntent 委派、组件导出、Content Provider 信息泄露·SQL 注入·路径遍历、广播劫持、数据存储与密钥、加密实现误用、SSL/TLS 证书验证与固定绕过、认证与账户逻辑、权限绕过与 WIU 保留、无障碍与通知监听滥用、UI 覆盖与点按劫持、跨用户与 Private Space、内存安全；iOS 另含 entitlements、TCC 隐私权限、App Group / 共享容器、App Extension、生物识别绕过），映射 HackerOne 移动端赏金惯例为 critical/high/medium/low 四档，含调整/无效条款、Gate 门禁、Android·iOS 攻击面索引、历史模式库与定级校准、Google Bug Hunters 的 Android 与 Google 设备项目规则（资格，不定级）。触发词：「移动端漏洞」「Android 漏洞」「iOS 漏洞」「APK」「IPA」「Deep Link」「URL Scheme」「WebView XSS」「addJavascriptInterface」「Intent 重定向」「PendingIntent」「组件导出」「Content Provider」「StrandHogg」「Task Hijacking」「证书固定绕过」「不安全数据存储」「加密实现误用」「无障碍服务」「App Group」「TCC」「生物识别」「移动端定级」「Google Bug Hunters」「Android 与 Google 设备项目」「Pixel / Nest / Fitbit」「Android Security Reward」。This skill should be used when rating Android / iOS app vulnerabilities (deep links, URL schemes, WebView, exported components, insecure storage, crypto misuse)."
 ---
 
 # 移动端领域漏洞定义指南
@@ -22,7 +22,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 ## 何时使用
 
 - 审计 Android / iOS **应用**目标（APK / IPA / 应用市场在架 App），或应用内 WebView / 混合栈（RN / Flutter / Cordova）
-- 涉及：Deep Link / App Links / intent scheme、URL Scheme / Universal Links、WebView 配置与 JS bridge、Intent 与组件导出、Content Provider、广播、文件与存储、密钥与凭据、SSL/TLS 与证书固定、OAuth 回调、认证与账户逻辑、权限绕过与 WIU 保留、UI 覆盖与点按劫持、跨用户与 Private Space、任务 / 窗口
+- 涉及：Deep Link / App Links / intent scheme、URL Scheme / Universal Links、WebView 配置与 JS bridge、Intent 与组件导出、可变 PendingIntent、Content Provider、广播、文件与存储、密钥与凭据、加密实现（ECB / IV 复用 / 弱随机）、SSL/TLS 与证书固定、OAuth 回调、认证与账户逻辑、权限绕过与 WIU 保留、无障碍与通知监听滥用、UI 覆盖与点按劫持、跨用户与 Private Space、任务 / 窗口；iOS 另含 entitlements、TCC 隐私权限、App Group / 共享容器、App Extension、生物识别绕过
 - 需要按移动端赏金惯例定级，或判断「这还算不算安全漏洞 / 合不合格」
 - 已授权参与 HackerOne 移动端项目：范围、平台版本门槛、测试纪律、`bounty_eligible`（不定级）
 - 目标是 **Google Bug Hunters 的 Android 与 Google 设备项目**（Pixel / Nest / Fitbit、AOSP 与设备软件栈）：程序规则、PoC 与补丁要求、奖金与 SNR 纪律见 `references/google-android-devices-rules.md`（不定级）
@@ -40,7 +40,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 | ------ | ------ |
 | 移动端四档 + 领域条款 | 本插件 `references/severity-levels.md` |
 | 术语与威胁模型 | 本插件 `references/terminology.md` |
-| 移动端形态主表 | 本插件 `references/mobile-vuln-types.md` |
+| 移动端形态主表（含逐行条款映射） | 本插件 `references/mobile-vuln-types.md` |
 | 组件 → 类型索引 | 本插件 `references/attack-surfaces.md` |
 | 调整与排除 | 本插件 `references/adjustment-and-invalid.md` |
 | 门禁与报告 | 本插件 `references/gates.md` |
@@ -61,7 +61,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 1. 攻击者模型：远程（网页 / 深链接诱导）？同设备恶意 App？邻近网络 MITM？还是需已越狱 / root？
 2. asset-scope：目标 App 是否 in-scope？是否目标项目最新支持版本？应用层还是系统层？
 3. terminology.md 认清边界：应用沙箱 / WebView 进程 / Binder IPC；隐式与显式组件语义
-4. mobile-vuln-types.md 定形态（Android AD/AW/AI/AE/AC/AB/AF/AA/AS/AT/AP/AM；iOS IU/IO/IL/ID/IW/IM/IA）
+4. mobile-vuln-types.md 定形态（Android AD/AW/AI/AE/AC/AB/AF/AA/AS/AT/AP/AM；iOS IU/IO/IL/ID/IW/IM/IA/IP）；同一行给出精确条款 ID，可直接填 `severity_rule`
 5. attack-surfaces.md 对照组件（若目标为 Android / iOS 应用）
 6. gates.md：T 威胁模型 → S 资产范围 → E 环境合格 → C 安全实害 → R 可复现
 7. 八类 references/<type>.md 确认 vuln_type 成立
@@ -76,7 +76,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 
 ```yaml
 vuln_type: <type|none>                  # 八类
-mobile_class: <如 AD2|IU1|AW2|AP1|AT4>      # 移动端形态 ID，见 mobile-vuln-types.md
+mobile_class: <如 AD2|IU1|AW2|AP1|AT4|AI7|AS5|IP2>      # 移动端形态 ID，见 mobile-vuln-types.md
 platform: android | ios
 component: <如 exported-activity|webview|content-provider|url-scheme|...>
 attacker: remote_link | malicious_app | nearby_mitm | local_rooted
@@ -96,7 +96,7 @@ bounty_eligible: true | false           # 目标项目资格，不改 severity�
 | ------ | ------ |
 | [severity-levels.md](references/severity-levels.md) | HackerOne 移动端赏金惯例 → 四档 + 前提×影响矩阵 |
 | [terminology.md](references/terminology.md) | 威胁模型与术语（攻击者位置 / 平台边界 / 组件语义） |
-| [mobile-vuln-types.md](references/mobile-vuln-types.md) | 移动端形态主表（Android + iOS 双族） |
+| [mobile-vuln-types.md](references/mobile-vuln-types.md) | 移动端形态主表（Android + iOS 双族，每行带精确条款 ID） |
 | [attack-surfaces.md](references/attack-surfaces.md) | Android / iOS 组件攻击面 → 形态索引 |
 | [adjustment-and-invalid.md](references/adjustment-and-invalid.md) | 调整 + 排除条款 |
 | [gates.md](references/gates.md) | Gate + 报告要求 |

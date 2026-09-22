@@ -1,6 +1,6 @@
 {
   "name": "vuln-definitions-db",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "数据库领域漏洞定义：DBMS 通用形态（认证/RBAC/查询处理/存储引擎/外部访问/复制/云控制面/泄露/密钥/内存安全）与 Bugcrowd VRT P1–P5 → 四档映射；含 ClickHouse Bugcrowd 项目资产范围、合格条款、赏金资格（不定级）、历史漏洞模式库（定级校准 + 挖掘切入点）与 Langfuse Cloud 厂商文件（安全架构特征 + 挖掘候选）。",
   "author": {
     "name": "DeepSonar"

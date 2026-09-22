@@ -7,32 +7,32 @@
   "plugins": [
     {
       "name": "vuln-definitions",
-      "description": "漏洞定义模块：每类漏洞定义与严重/高危/中危/无危害判定标准（白盒黑盒共用）；OpenHarmony 系统类加载 references/openharmony.md；Chrome / Chromium 加载 references/chromium.md；数据库（ClickHouse 等 DBMS / 数据库云平台）加载 references/database.md；移动端（Android / iOS App）加载 references/mobile.md（四档 + 调整/无效；项目规则见 vuln-definitions-mobile 的 google-android-devices-rules.md）。",
-      "version": "0.2.16",
+      "description": "漏洞定义模块：每类漏洞定义与严重/高危/中危/无危害判定标准（白盒黑盒共用）；OpenHarmony 系统类加载 references/openharmony.md；Chrome / Chromium 加载 references/chromium.md；数据库（ClickHouse 等 DBMS / 数据库云平台）加载 references/database.md；移动端（Android / iOS App）加载 references/mobile.md（**摘要索引**，权威条款见 vuln-definitions-mobile；项目规则见其 google-android-devices-rules.md）。",
+      "version": "0.2.18",
       "source": "./vuln-definitions"
     },
     {
       "name": "vuln-definitions-oh",
       "description": "OpenHarmony / Phone OS 系统漏洞定义：官方四档与调整/无效条款，外加移动 OS 通用漏洞类型（对齐 Android·iOS 形态）。",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "source": "./vuln-definitions-oh"
     },
     {
       "name": "vuln-definitions-chrome",
       "description": "Chrome / Chromium 浏览器漏洞定义：官方四档（S0–S3）与缓解/非安全条款，外加进程沙箱、Site Isolation、浏览器形态与 Chrome VRP 资格（不定级）。",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "source": "./vuln-definitions-chrome"
     },
     {
       "name": "vuln-definitions-db",
       "description": "数据库领域漏洞定义：DBMS 通用形态（认证/RBAC/查询处理/存储引擎/外部访问/复制/云控制面/泄露/密钥）与 Bugcrowd VRT P1–P5 → 四档映射；含 ClickHouse Bugcrowd 项目资产范围、合格条款、赏金资格（不定级）、历史漏洞模式库（定级校准 + 挖掘切入点）与 Langfuse Cloud 厂商文件（安全架构特征 + 挖掘候选）。",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "source": "./vuln-definitions-db"
     },
     {
       "name": "vuln-definitions-mobile",
-      "description": "移动端（Android App + iOS App）领域漏洞定义：形态主表（Deep Link / URL Scheme / WebView / Intent / 组件导出 / Content Provider / 广播 / 文件路径 / 认证逻辑 / 权限与 WIU / UI 覆盖与点按劫持 / 跨用户与 Private Space / 数据存储密钥 / SSL-TLS 证书 / 内存安全）与 HackerOne 移动端赏金惯例 → 四档映射；含调整/无效条款、Gate 门禁、Android·iOS 攻击面索引、历史漏洞模式库（案例归纳 + 定级校准 + 挖掘切入点），以及 Google Bug Hunters 的 Android 与 Google 设备项目规则（范围 / 资格 / PoC 与补丁要求 / 奖金与 SNR 纪律，不定级）。本地 DoS 按 INV1 不报；破坏性远程 DoS 按 H8 报。入口面本身按 INV26 不报。",
-      "version": "0.2.3",
+      "description": "移动端（Android App + iOS App）领域漏洞定义：形态主表（Deep Link / URL Scheme / WebView / Intent / 组件导出 / Content Provider / 广播 / 文件路径 / 认证逻辑 / 权限与 WIU / 无障碍与通知监听 / UI 覆盖与点按劫持 / 跨用户与 Private Space / 数据存储与加密实现 / SSL-TLS 证书 / iOS entitlements·TCC·App Group·生物识别 / 内存安全；每行带精确条款 ID）与 HackerOne 移动端赏金惯例 → 四档映射；含调整/无效条款、Gate 门禁、Android·iOS 攻击面索引、历史漏洞模式库（案例归纳 + 定级校准 + 挖掘切入点），以及 Google Bug Hunters 的 Android 与 Google 设备项目规则（范围 / 资格 / PoC 与补丁要求 / 奖金与 SNR 纪律，不定级）。本地 DoS 按 INV1 不报；破坏性远程 DoS 按 H8 报。入口面本身按 INV26 不报。",
+      "version": "0.3.0",
       "source": "./vuln-definitions-mobile"
     },
     {
