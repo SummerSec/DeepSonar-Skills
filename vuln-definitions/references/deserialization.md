@@ -12,6 +12,12 @@
 2. 存在危险类型解析/gadget/魔术方法副作用  
 3. 未使用安全替代（白名单类型、JSON 无类型、签名封装）  
 
+**不覆盖（边界）**：
+
+- 仅解析失败、报错，或只造成本地 DoS → 无危害（见 `severity-levels.md`）
+- 反序列化 gadget 已达成 RCE 时，主类型取 `rce.md`（本文件作交叉引用）
+- 移动端 App 本地序列化文件（如 `NSKeyedArchiver` 缓存）→ `vuln-definitions-mobile` 的存储形态（AS / ID）
+
 ---
 
 ## 2. 严重（Critical）

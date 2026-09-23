@@ -3,6 +3,8 @@
 发现可疑点后 **按顺序回答**；任一「否」→ 不进入深度 PoC，最多记对内缺陷。
 形态见 `db-vuln-types.md`；范围见 `asset-scope.md`；排除见 `adjustment-and-invalid.md`；Bugcrowd 纪律见 `bugcrowd-rules.md`。
 
+> **Gate 字母仅在本域内有效**（DB 用 `T`、`S`、`E`、`C`、`R`，与 mobile 同字母集）。不要套用其它域的字母含义（OH 的 `A`–`D` / `V`，Chrome 的 `P` 等）。
+
 ## Gate T · 攻击者是谁？（威胁模型）
 
 - [ ] **T1** 攻击者是：未认证远程 / 认证受限用户 / 恶意租户（云）之一？

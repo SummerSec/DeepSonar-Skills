@@ -4,6 +4,8 @@
 类型定义见 `phone-os-vuln-types.md`；OH 组件索引见 `attack-surfaces.md`；同网/分布式算远程见 `terminology.md`。  
 **落点仓必须先过资产范围**（`asset-scope.md` / 官方名单），否则后面 Gate 不必做。
 
+> **Gate 字母仅在本域内有效**（OH 用 `S` 与 `A`–`D`、`V`）。不要套用其它域的字母含义（Chrome 的 `P`、DB / Mobile 的 `E` 等）。
+
 ## Gate A · 攻击者是谁？
 
 - [ ] **A1** 攻击者可以是：**未安装 App 的远程方**（含同网 / 局域网 / **近场** / 分布式组网报文），或 **仅安装普通三方 HAP 的本地方**？

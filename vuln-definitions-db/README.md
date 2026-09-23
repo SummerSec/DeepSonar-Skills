@@ -3,7 +3,9 @@
 独立 plugin：面向 **数据库（DBMS）引擎与数据库云平台** 的定级语义源。
 定义 DBMS 通用漏洞形态（认证接入 / 权限模型 / 查询处理 / 存储引擎 / 外部访问 / 复制集群 / 云控制面 / 数据泄露 / 配置密钥 / 内存安全），并把 **Bugcrowd VRT P1–P5** 映射为四档；收录厂商实例 **ClickHouse**（OSS 引擎 + ClickHouse Cloud + Bugcrowd 项目内挂靠的 Langfuse Cloud）。
 
-**领域化原则**：新数据库目标（MySQL / PostgreSQL / MongoDB / Redis / …）进本领域时 **只加厂商 reference 文件**，不开新 plugin。
+**领域化规则**：新数据库目标（MySQL / PostgreSQL / MongoDB / Redis / …）进本领域时 **只加厂商 reference 文件**，不开新 plugin。
+
+**厂商文件现状**：ClickHouse 由 `references/asset-scope.md`（资产范围）与 `references/db-vuln-types.md`（形态）覆盖，未单列 `vendor-clickhouse.md`；Langfuse Cloud 单列 `references/vendor-langfuse.md`。后续新厂商一律用单列 `vendor-<name>.md`。
 
 **不是** `wb-*`/`bb-*` 的 Web 应用八类细则；**不是** 浏览器 / 移动 OS 领域定级。
 

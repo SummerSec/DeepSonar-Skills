@@ -3,6 +3,8 @@
 本文件为 **系统类（OpenHarmony / 类移动 OS）审计** 的定级规则。  
 审计目标为 OH **标准系统（standard）、小型系统（small）、轻量系统（mini）** 的 **系统服务层、框架层、应用层** 时，优先以本文件条款定级；与 `severity-levels.md` / `<type>.md` 冲突时，**系统语义以本文件为准**。
 
+> **与 `mobile.md` 的分界**：本文件“应用层”指 **OH 上的 HAP / 系统应用**（与内核、框架同栈）。**Android / iOS App（APK / IPA）走 `mobile.md` / `vuln-definitions-mobile`**。
+
 > 语义基线：OpenHarmony 安全漏洞奖励计划（官方口径，2026-05 版本）。  
 > 漏洞**形态**按 Phone OS 共性覆盖（见 `vuln-definitions-oh` / `phone-os-vuln-types.md`），不局限单一厂商历史披露。
 

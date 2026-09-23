@@ -3,6 +3,8 @@
 发现可疑点后 **按顺序回答**；任一「否」→ 不进入深度 PoC，最多记对内缺陷。  
 形态见 `chrome-vuln-types.md`；沙箱见 `process-sandbox.md`；范围见 `asset-scope.md`；VRP 资格见 `vrp-rules.md`。
 
+> **Gate 字母仅在本域内有效**（Chrome 用 `T`、`S`、`P`、`D`、`C`、`R`）。不要套用其它域的字母含义（OH 的 `A`–`D` / `V`，DB 与 Mobile 的 `E` 等）。
+
 ## Gate T · 攻击者是谁？（威胁模型）
 
 - [ ] **T1** 攻击者可以是：**网页内容**（打开页面 / 默认打开的远程文件），或 **已沦陷 renderer**（MojoJS 模拟）？

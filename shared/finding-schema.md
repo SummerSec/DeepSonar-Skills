@@ -9,8 +9,8 @@ mode: whitebox | blackbox
 vuln_type: injection | rce | ssrf | authz | deserialization | file-access | xxe | secrets
 title: 一句话标题（含组件/接口）
 severity: critical | high          # 默认（wb-*/bb-*）：禁止 medium/low/none
-# 例外：vuln-definitions-oh / vuln-definitions-chrome / vuln-definitions-db 官方四档为 critical|high|medium|low（低危→low；勿与 confidence: low 混淆）
-severity_rule: "injection.md#C1"  # 必填：vuln-definitions 条款号；OH 用 severity-levels.md#H5 或 openharmony.md#H5；Chrome 用 severity-levels.md#H4 或 chromium.md#H4；数据库用 severity-levels.md#H2 或 database.md#H2
+# 例外：vuln-definitions-oh / vuln-definitions-chrome / vuln-definitions-db / vuln-definitions-mobile 官方四档为 critical|high|medium|low（低危→low；勿与 confidence: low 混淆）
+severity_rule: "injection.md#C1"  # 必填：vuln-definitions 条款号；OH 用 severity-levels.md#H5 或 openharmony.md#H5；Chrome 用 severity-levels.md#H4 或 chromium.md#H4；数据库用 severity-levels.md#H2 或 database.md#H2；移动端用 severity-levels.md#H5 或 mobile.md#H5
 confidence: high | medium        # 禁止 low（含 OH）
 cwe: CWE-xxx
 cvss_hint: "9.8"                 # 可选兼容字段：粗估；新报告优先用下方 cvss 块
@@ -116,5 +116,5 @@ bounty_eligible: true              # 可选：HackerOne 惯例或 google-android
   - `4.0` → `CVSS:4.0/` + Base 11 项（含 AT 与 VC/VI/VA/SC/SI/SA）  
 - **默认**主版本 `3.1`；用户/数据源指定或需 FIRST v4 时用 `4.0`；对照时主块 + `cvss_alt`  
 - `base_score` 须与向量一致；不确定时宁可省略分数并说明，勿编造  
-- `severity` 仍以 `severity_rule` 定性为准；CVSS 不能单独把 medium 抬进 `wb-*`/`bb-*` 正式报告（OH / Chrome / DB 四档由定性条款决定，不靠分数抬档）  
+- `severity` 仍以 `severity_rule` 定性为准；CVSS 不能单独把 medium 抬进 `wb-*`/`bb-*` 正式报告（OH / Chrome / DB / Mobile 四档由定性条款决定，不靠分数抬档）  
 - 完整流程与按需加载见 `vuln-scoring` 插件  

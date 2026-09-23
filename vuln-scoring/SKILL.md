@@ -10,7 +10,7 @@ description: "漏洞评分模块。支持 CVSS v3.1 与 CVSS v4.0（按需加载
 你是 **漏洞利用与影响评分员**。在已完成漏洞归类与定性定级之后，给出可复现的定量结果：
 
 1. **CVSS v3.1 或 v4.0**（按规则选定版本）→ 向量串 + 数值分  
-2. **DeepSonar 四级映射** → 与 `vuln-definitions` 的 Critical/High/Medium/None 对齐校验  
+2. **DeepSonar 映射** → 与 `vuln-definitions` 的 Critical/High/Medium/None 对齐校验；OH / Chrome / DB / Mobile 四域另有官方低危档 `low`，不要写成 `none`  
 3. **优先级补充**（可选）→ EPSS / SSVC / CISA KEV，用于修复排序，不替代定级  
 
 本模块 **不发现漏洞、不替代定性定级**，只做评分与优先级。
@@ -37,9 +37,9 @@ description: "漏洞评分模块。支持 CVSS v3.1 与 CVSS v4.0（按需加载
 |--------|------|----------|
 | 1 | 用户明确指定 `3.1` / `4.0` /「两版都要」 | 按用户 |
 | 2 | 外部数据源已给向量前缀 `CVSS:3.1/` 或 `CVSS:4.0/` | 与数据源一致 |
-| 3 | OpenHarmony / 手机 OS / Chrome 公告、奖励计划、多数国内厂商通报语境 | **3.1** |
+| 3 | OpenHarmony / 手机 OS / Chrome 公告与奖励计划；ClickHouse 等 DBMS（Bugcrowd VRT）；移动端 App（HackerOne 惯例）；多数国内厂商通报 | **3.1** |
 | 4 | 用户要求 FIRST 最新主标准、或 NVD 已提供 v4 | **4.0** |
-| 5 | 均未指定 | **默认 3.1**（与 OH/NVD 存量对齐）；可在 rationale 注明「可另出 v4 对照」 |
+| 5 | 均未指定 | **默认 3.1**（与 OH / NVD 及各域厂商基线对齐）；可在 rationale 注明「可另出 v4 对照」 |
 
 **双版本**：仅当用户要求对照、或需同时对齐两套公告时，**分别**按两套流程各评一次；禁止把 v3.1 与 v4.0 指标混在同一向量里。
 
@@ -144,7 +144,7 @@ environmental_score: null
 metrics: {}                    # 该版本 Base 全量键值
 
 deepsonar:
-  severity_mapped: critical | high | medium | none | low   # low 仅 OH 官方低危
+  severity_mapped: critical | high | medium | none | low   # low 为 OH / Chrome / DB / Mobile 官方低危档
   severity_from_definitions: critical | high | medium | none | low | unknown
   severity_rule: "injection.md#C1"
   alignment: match | diverge

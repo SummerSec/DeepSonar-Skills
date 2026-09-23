@@ -57,7 +57,7 @@
 |------|--------|
 | HEAD / Trunk 落地未满约 **7 天** | 可对内定级；`vrp_eligible: false` |
 | 只在 Canary / 本地自编译 / 测试二进制上成立 | 范围外或对内 |
-| V8 **Experimental** 专属、SwiftShader、WebNN 未出货加固、`--single-process`、弹出风险提示的 unsafe 旗标 | `vrp_eligible: false`；仍可对内定级并标 `security_impact: none`（ADJ7） |
+| V8 **Experimental** 专属、SwiftShader、WebNN 未出货加固、`--single-process`、弹出不安全提示的 unsafe 旗标 | `vrp_eligible: false`；仍可对内定级并标 `security_impact: none`（ADJ7） |
 | MiraclePtr `PROTECTED` | **非安全**（INV1）；bypass 奖金另见 §8，不是把 PROTECTED 当洞报 |
 | 纯理论 / 静态分析无演示 | 不可行动，WontFix |
 | 站点自己的 XSS、隐私指纹、物理本机、无安全决策 UI 骗 | INV，不是 VRP |
