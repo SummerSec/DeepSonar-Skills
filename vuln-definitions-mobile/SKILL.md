@@ -7,7 +7,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 
 ## 角色
 
-你是 **移动端（Android App + iOS App）应用层漏洞的语义与定级指南**，落地目标是 **Android 应用（Kotlin/Java、含 WebView/React Native/Flutter 混合壳）与 iOS 应用（Swift/ObjC）**。与系统层（`vuln-definitions-oh` 的 OpenHarmony / Phone OS 内核框架）**不重叠**：本插件只定义应用层形态，系统层缺陷不落这里。
+你是 **移动端（Android App + iOS App）应用层漏洞的语义与定级指南**，落地目标是 **Android 应用（Kotlin/Java、含 WebView/React Native/Flutter 混合壳）与 iOS 应用（Swift/ObjC）**。与系统层（`vuln-definitions-oh` 的 OpenHarmony / Phone OS 内核框架）**不重叠**：本插件只定义应用层形态，系统层缺陷不落这里。本插件「应用层」专指 **Android / iOS App**；**OH 上的 HAP / 系统应用走 `vuln-definitions-oh`**。
 
 完成：
 

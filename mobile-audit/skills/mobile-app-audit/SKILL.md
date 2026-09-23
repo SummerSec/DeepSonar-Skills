@@ -108,7 +108,7 @@ description: "移动客户端 App（Android APK / iOS IPA）安全审计方法�
 
 ### 3. 代码与数据流（static-code）
 
-- 对高风险组件追到 sink；记录 source→sink 与中间转换  
+- 对 **exported / 深链 / JS bridge / 明文凭据** 类组件追到 sink；记录 source→sink 与中间转换  
 - 高危 API 面与调用方校验、JNI/NDK 入口  
 - 产出 `candidates.md` 草稿（见 `references/static-code.md`）
 

@@ -14,13 +14,13 @@
     {
       "name": "vuln-definitions-oh",
       "description": "OpenHarmony / Phone OS 系统漏洞定义：官方四档与调整/无效条款，外加移动 OS 通用漏洞类型（对齐 Android·iOS 形态）。",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "source": "./vuln-definitions-oh"
     },
     {
       "name": "vuln-definitions-chrome",
       "description": "Chrome / Chromium 浏览器漏洞定义：官方四档（S0–S3）与缓解/非安全条款，外加进程沙箱、Site Isolation、浏览器形态与 Chrome VRP 资格（不定级）。",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "source": "./vuln-definitions-chrome"
     },
     {
@@ -32,19 +32,19 @@
     {
       "name": "vuln-definitions-mobile",
       "description": "移动端（Android App + iOS App）领域漏洞定义：形态主表（Deep Link / URL Scheme / WebView / Intent / 组件导出 / Content Provider / 广播 / 文件路径 / 认证逻辑 / 权限与 WIU / 无障碍与通知监听 / UI 覆盖与点按劫持 / 跨用户与 Private Space / 数据存储与加密实现 / SSL-TLS 证书 / iOS entitlements·TCC·App Group·生物识别 / 内存安全；每行带精确条款 ID）与 HackerOne 移动端赏金惯例 → 四档映射；含调整/无效条款、Gate 门禁、Android·iOS 攻击面索引、历史漏洞模式库（案例归纳 + 定级校准 + 挖掘切入点），以及 Google Bug Hunters 的 Android 与 Google 设备项目规则（范围 / 资格 / PoC 与补丁要求 / 奖金与 SNR 纪律，不定级）。本地 DoS 按 INV1 不报；破坏性远程 DoS 按 H8 报。入口面本身按 INV26 不报。",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "source": "./vuln-definitions-mobile"
     },
     {
       "name": "vuln-scoring",
       "description": "漏洞评分模块：CVSS v3.1 与 v4.0 按需评分、向量串、与 DeepSonar 四级映射，以及 EPSS/SSVC/KEV 优先级。",
-      "version": "0.2.4",
+      "version": "0.2.5",
       "source": "./vuln-scoring"
     },
     {
       "name": "mobile-audit",
       "description": "移动客户端 App（Android APK / iOS IPA）安全审计方法论：静态解包与攻击面枚举、代码/数据流、混合栈与内嵌 SDK、真机动态验证、PoC 攻击者 App、证据包。不定级；定级配合 vuln-definitions 与 vuln-definitions-mobile。",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "source": "./mobile-audit"
     },
     {

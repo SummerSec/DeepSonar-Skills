@@ -12,6 +12,13 @@
 2. 解析器启用了危险特性（外部实体、DTD）  
 3. 可观察到文件内容、OOB、或内网请求等效果  
 
+**不覆盖（边界）**：
+
+- XML 格式错误、解析崩溃、实体扩展导致本地 DoS → 无危害
+- XML 反序列化到对象并触发 gadget 执行 → 主类型按 `classification.md` 优先级取 `deserialization.md`
+- XXE 转 SSRF 仍归本类型（优先级 `xxe > ssrf`），定级按 SSRF 落点实害
+- 客户端（App / 浏览器）侧 XML 解析 → 走对应域插件（`vuln-definitions-mobile` / `vuln-definitions-chrome`）
+
 ---
 
 ## 2. 严重（Critical）

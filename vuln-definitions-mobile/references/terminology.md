@@ -16,7 +16,7 @@
 **纪律**：
 - 深链接 / URL Scheme / WebView 类 **默认 `remote_link`**；CSRF 若由同机 App 触发则 `malicious_app`
 - `local_rooted` 不是漏洞的前提：默认用户设备**未越狱**
-- 「同一缺陷，不同攻击者位置 → 不同档位」是移动端定级的第一原则
+- 「同一缺陷，不同攻击者位置 → 不同档位」是移动端定级的首要规则
 
 ---
 
@@ -57,7 +57,7 @@
 | 组件 | 语义 | 攻击面 |
 |------|------|--------|
 | **URL Scheme** | `CFBundleURLTypes` 注册的自定义 scheme，任意 App / Safari 可唤起 | 劫持、不当授权、CSRF、信息泄露。**仅唤起 / 打开默认页、无未授权敏感 sink → INV26** |
-| **Universal Links** | `https://` + associated domains，系统校验 entitlement | 校验绕过 → 同 URL Scheme 风险 |
+| **Universal Links** | `https://` + associated domains，系统校验 entitlement | 校验绕过 → 同 URL Scheme 形态 |
 | **AppDelegate / SceneDelegate** | `application:openURL:options:` / `scene(_:openURLContexts:)` | URL 处理来源验证 |
 | **ASWebAuthenticationSession** | OAuth 浏览器回调会话 | Redirection URI 劫持、state 验证 |
 | **WKWebView / UIWebView** | 应用内 Web 渲染 | XSS、Stored XSS、任意 URL 加载 |

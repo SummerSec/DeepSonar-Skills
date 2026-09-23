@@ -302,7 +302,7 @@
 
 第三方 Android App 建议 **2–4 小时初筛** 顺序（可与工作流 stage 1–2 并行）：
 
-1. **包指纹与 SDK 盘点**（`recon-and-triage.md`）— 标出混合栈与高风险 SDK  
+1. **包指纹与 SDK 盘点**（`recon-and-triage.md`）— 标出混合栈与 **出货路径可达** 的 SDK  
 2. **Manifest 导出面 + Deep Link 全表**（本清单 §4–§5 + `static-manifest.md`）— 标 INV26 候选 vs 待追 sink  
 3. **WebView / Provider / Intent 二次跳转**（§6–§7）— 静态 source→sink  
 4. **本地 Token / 备份 / 日志**（§8）  

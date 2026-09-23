@@ -23,7 +23,7 @@
 
 ### 版本怎么选
 
-- **默认 v3.1**（OH/厂商公告、NVD 存量常见）  
+- **默认 v3.1**（OH / Chrome / DB / 移动端各域厂商公告，与 NVD 存量一致）  
 - 用户指定或数据源已是 `CVSS:4.0/` → **v4.0**  
 - 用户要求对照 → **两版各评一次**（`cvss` + `cvss_alt`）  
 - 细则见 `SKILL.md`「版本选择 / 按需加载」
@@ -37,12 +37,13 @@
 | `references/cvss-v4.md` | **按需**：v4.0 指标与决策 |
 | `references/vector-examples-v3.1.md` | **按需**：v3.1 示例向量 |
 | `references/vector-examples-v4.md` | **按需**：v4.0 示例向量 |
-| `references/score-mapping.md` | **共用**：分数 ↔ DeepSonar C/H/M/N |
+| `references/score-mapping.md` | **共用**：分数 ↔ DeepSonar C/H/M/N（含官方四档域的 `low`） |
 | `references/prioritization.md` | **共用**：EPSS / SSVC / KEV |
 
-## 原则
+## 规则
 
 1. **先选版本，再只加载该版本指标文件**（双版本对照除外）  
 2. **向量前缀与 version 必须一致**；禁止混用 3.1/4.0 指标集  
 3. 与 definitions 冲突时先对齐证据再改指标  
 4. 正式 finding 仍只报 Critical/High  
+5. **官方四档域**（OH / Chrome / DB / Mobile）的低危档为 `low`，不要写成 `none`；档位仍由 definitions 条款决定，分数不抬档  

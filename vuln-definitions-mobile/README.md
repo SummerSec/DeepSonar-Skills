@@ -3,7 +3,7 @@
 独立 plugin：面向 **Android App 与 iOS App 应用层** 的定级语义源。
 定义移动应用通用漏洞形态（Android：Deep Link / WebView / Intent（含 PendingIntent）/ 组件导出 / Content Provider / 广播 / 文件路径 / 认证逻辑 / 数据存储与加密实现 / 权限与访问控制（含无障碍、通知监听）/ 任务窗口 / 内存安全；iOS：URL Scheme / OAuth 流程 / SSL-TLS 证书 / 数据存储与加密实现 / 权限与共享容器（entitlements / TCC / App Group / App Extension / 生物识别）/ WebView / 内存内核 / 其他），并把 **HackerOne 移动端赏金惯例** 映射为四档；收录历史漏洞模式库（来自 [s7safe/android-h1](https://github.com/s7safe/android-h1) 的 android.md / IOS.md 案例归纳）。
 
-**领域化原则**：新移动端目标（某 App / SDK / 移动端框架）进本领域时 **只加厂商 reference 文件**，不开新 plugin。已收录的厂商 / 项目规则：Google Bug Hunters 的 Android 与 Google 设备项目（`google-android-devices-rules.md`，资格，不定级）。
+**领域化规则**：新移动端目标（某 App / SDK / 移动端框架）进本领域时 **只加厂商 reference 文件**，不开新 plugin。已收录的厂商 / 项目规则：Google Bug Hunters 的 Android 与 Google 设备项目（`google-android-devices-rules.md`，资格，不定级）。
 
 **不是** `wb-*`/`bb-*` 的 Web 应用八类细则；**不是** 浏览器 / 数据库 / 移动 OS 系统层领域定级（系统层走 `vuln-definitions-oh`）。
 

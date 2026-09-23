@@ -43,12 +43,13 @@ DeepSonar-Skills/
 │   ├── README.md
 │   └── skills/mobile-app-audit/ # SKILL.md + references/（recon…tooling）
 ├── shared/                      # 报告策略、finding 格式、授权
-│   ├── severity-policy.md       # 默认只报 C/H；OH / Chrome / DB 四档例外（细则见对应插件）
+│   ├── severity-policy.md       # 默认只报 C/H；OH / Chrome / DB / Mobile 四档例外（细则见对应插件）
 │   ├── finding-schema.md
 │   └── authorization.md
 ├── web-whitebox/<type>/         # Web 白盒 plugin ×8
 ├── web-blackbox/<type>/         # Web 黑盒 plugin ×8（类型对称）
 ├── agent-env/                   # 黑盒工具内置
+├── scripts/check-consistency.mjs # 结构一致性校验（npm run check）
 └── .claude-plugin/marketplace.json
 ```
 
@@ -176,7 +177,7 @@ OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-d
 | 9.0 – 10.0 | critical |
 | 7.0 – 8.9 | high |
 | 4.0 – 6.9 | medium（默认不报） |
-| 0.0 – 3.9 | none / medium（OH / Chrome / DB 官方低危为 `low`） |
+| 0.0 – 3.9 | none / medium（OH / Chrome / DB / Mobile 官方低危为 `low`） |
 
 ---
 
@@ -206,6 +207,26 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 **新领域**（如 Web 框架、IoT）：建新 `vuln-definitions-<domain>` plugin + `vuln-definitions` 桥接 `references/<domain>.md`。
 
 **新厂商项目**（如 MySQL、MongoDB 进数据库领域）：**只在对应领域 plugin 内加厂商 reference 文件**（资产范围 / 赏金 / 排除项），复用领域形态表与条款，不开新 plugin。
+
+---
+
+## 一致性校验
+
+```bash
+npm run check          # node scripts/check-consistency.mjs
+```
+
+零依赖（Node ≥ 18），退出码非 0 即存在不符合项。覆盖五类结构契约：
+
+| 检查 | 内容 |
+|------|------|
+| 版本对齐 | marketplace 条目 ↔ 各插件 `.claude-plugin/plugin.json`；仓库根 `package.json` / `plugin.json` / `.claude-plugin/plugin.json` 三处一致 |
+| 内部链接 | 所有 Markdown 的仓库内相对链接目标存在（外链跳过） |
+| 孤儿文件 | 每个 `references/*.md` 都被所属 plugin 的 `SKILL.md` / `README.md` 点名 |
+| 桥接条款 ID | `vuln-definitions/references/{openharmony,chromium,database,mobile}.md` 与对应域插件 `severity-levels.md` 的条款 ID 集合一致 |
+| 交叉引用 | `shared/finding-schema.md` 中 `X.md#ID` 形式的条款引用可解析 |
+
+改动 skill / 定义 / 版本后建议跑一次；本仓无构建与 lint 流程，该脚本是唯一的自动化门禁。
 
 ---
 

@@ -1,7 +1,7 @@
 {
   "name": "DeepSonar-Skills",
-  "version": "0.2.2",
-  "description": "Vulnerability definitions, CVSS v3.1/v4.0 scoring, web white-box audit and web black-box hunting skills by vuln type (Critical/High only).",
+  "version": "0.3.2",
+  "description": "Vulnerability definitions by domain (general / OpenHarmony / Chrome / database / mobile), CVSS v3.1/v4.0 scoring, web white-box audit and web black-box hunting by vuln type, plus mobile app audit methodology. wb/bb report Critical/High only; OH / Chrome / DB / Mobile use their official four tiers.",
   "author": {
     "name": "DeepSonar",
     "url": "https://github.com/SummerSec/DeepSonar"

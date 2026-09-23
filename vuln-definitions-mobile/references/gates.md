@@ -3,6 +3,8 @@
 发现可疑点后 **按顺序回答**；任一「否」→ 不进入深度 PoC，最多记对内缺陷。
 形态见 `mobile-vuln-types.md`；威胁模型见 `terminology.md`；排除见 `adjustment-and-invalid.md`。
 
+> **Gate 字母仅在本域内有效**（Mobile 用 `T`、`S`、`E`、`C`、`R`，与 db 同字母集）。不要套用其它域的字母含义（OH 的 `A`–`D` / `V`，Chrome 的 `P` 等）。
+
 ## Gate T · 攻击者是谁？（威胁模型）
 
 - [ ] **T1** 攻击者是：远程（诱导点击）/ 同设备恶意 App / 邻近网络 MITM 之一？

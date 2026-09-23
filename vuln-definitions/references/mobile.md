@@ -3,6 +3,8 @@
 本文件为 **移动端领域（Android App 与 iOS App 应用层）** 的定级**摘要索引**（供不装 `vuln-definitions-mobile` 时快速对照；条款编号与插件完全一致）。  
 **权威条款在 `vuln-definitions-mobile/references/severity-levels.md`**：与全局 `severity-levels.md` / `<type>.md` 冲突时，以插件移动端条款为准；**本摘要与插件不一致时以插件为准**。系统层缺陷（内核 / 系统服务 / 框架）走 `openharmony.md` / `vuln-definitions-oh`。
 
+> **与 `openharmony.md` 的分界**：本文件“应用层”专指 **Android / iOS App**；**OH 上的 HAP / 系统应用走 `openharmony.md` / `vuln-definitions-oh`**。
+
 > 语义基线：HackerOne 移动端赏金惯例 + OWASP Mobile Top 10（对照日 2026-08-30）。  
 > 完整形态表、攻击面索引、门禁、历史模式库与**项目规则**（`google-android-devices-rules.md`）见插件 `vuln-definitions-mobile`。赏金表 **不** 改本文件档位。
 

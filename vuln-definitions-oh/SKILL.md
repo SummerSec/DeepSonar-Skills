@@ -24,6 +24,8 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 - 涉及：内核与驱动/HDF、IPC/SA 中继、沙箱隔离、权限实现、Ability/Want/WantAgent、媒体/消息解析、Ark/Web/NAPI 桥、近场·软总线·分布式、OTA/包管理/动态共享包、锁屏与密钥、UDMF/剪贴板/广播、账号、USB/投屏等
 - 需要官方四档定级或判断是否投递
 
+> **与 `vuln-definitions-mobile` 的分界**：本插件「应用层」指 **OH 上的 HAP / 系统应用**（与内核、框架同栈）。**Android / iOS App（APK / IPA）走 `vuln-definitions-mobile`** —— 两个插件的「应用层」不是同一对象。
+
 ## 强制前置
 
 1. **读 `shared/authorization.md`** — 未授权目标不启动  

@@ -2,7 +2,7 @@
 
 ## 目标
 
-对 Manifest 标出的高风险入口，追踪到 **敏感 sink**，形成可验证的 source→sink 候选，写入 `candidates.md`（仍 **不定级**）。
+对 Manifest 中标出的 **exported / 深链 / 缺权限保护** 入口，追踪到 **敏感 sink**，形成可验证的 source→sink 候选，写入 `candidates.md`（仍 **不定级**）。
 
 ## 章节
 
