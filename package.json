@@ -1,9 +1,12 @@
 {
   "name": "DeepSonar-Skills",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
-  "description": "DeepSonar 高危安全技能仓：漏洞定义（按领域：通用/OpenHarmony/Chrome/数据库）与 CVSS v3.1/v4.0 评分 + Web 白盒审计 + Web 黑盒挖掘，按漏洞类型分 plugin；wb/bb 仅 Critical/High，OH / Chrome / DB 官方四档可报。",
+  "description": "DeepSonar 高危安全技能仓：漏洞定义（按领域：通用 / OpenHarmony / Chrome / 数据库 / 移动端）与 CVSS v3.1/v4.0 评分 + Web 白盒审计 + Web 黑盒挖掘 + 移动 App 审计方法论，按漏洞类型分 plugin；wb/bb 仅 Critical/High，OH / Chrome / DB / Mobile 官方四档均可报。",
   "license": "Apache-2.0",
+  "scripts": {
+    "check": "node scripts/check-consistency.mjs"
+  },
   "keywords": [
     "agent-skills",
     "code-audit",
@@ -12,6 +15,8 @@
     "security",
     "deepsonar",
     "bugcrowd",
-    "clickhouse"
+    "clickhouse",
+    "openharmony",
+    "mobile"
   ]
 }

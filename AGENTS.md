@@ -31,7 +31,7 @@
 
 **方法论 plugin（非 definitions 领域）**：`mobile-audit/` 是移动 App **怎么挖/复现/取证** 的执行层，**不是** 新的 `vuln-definitions-<domain>`。移动端定级语义仍只在 `vuln-definitions-mobile`；新 App/SDK 目标仍只加厂商 reference，不开新 definitions plugin。
 
-> 本仓内容几乎全是 Markdown（SKILL.md / plugin.json / references），**没有构建、测试、lint 流程**。`package.json` 仅作元数据用途，变更正确性靠结构约定与人工审查保证。
+> 本仓内容几乎全是 Markdown（SKILL.md / plugin.json / references），**没有构建与 lint 流程**。`package.json` 提供元数据与一个零依赖一致性校验脚本（`npm run check`，见 `scripts/check-consistency.mjs`）；变更正确性主要靠结构约定、该脚本与人工审查保证。
 
 ## 目录约定
 
@@ -100,6 +100,9 @@ agent-env/                # 黑盒工具内置清单与镜像（当前偏 Web；
 ## 常用命令
 
 ```bash
+# 结构一致性校验（版本对齐 / 内部链接 / 孤儿 reference / 桥接条款 ID / schema 交叉引用）
+npm run check
+
 # 查看黑盒工具清单
 cat agent-env/tools-manifest.json
 
@@ -133,8 +136,10 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 4. 报告策略（是否上报 medium）→ `shared/severity-policy.md`  
 5. 黑盒新工具 → `agent-env/tools-manifest.json` + 镜像  
 6. marketplace 条目 version 与 plugin.json 对齐  
+6b. **桥接摘要与域插件权威条款必须同时改**：`vuln-definitions/references/{openharmony,chromium,database,mobile}.md` 与对应域插件的 `severity-levels.md` / 形态表之间，**条款 ID 集合必须一致**（措辞以插件为准，摘要只可精简）；任一处改动须同步另一处，并按 1b–1e 两处 bump version  
 7. **新增漏洞类型** → `web-whitebox/<new-type>/` 与 `web-blackbox/<new-type>/` 各建插件（复制现有 type），注册进 `.claude-plugin/marketplace.json`，并在 `vuln-definitions` 中加 `references/<new-type>.md`；黑盒需新工具时同步更新 manifest；可在 `vuln-scoring/.../vector-examples.md` 补示例向量  
 8. Finding 输出必须遵守 `shared/finding-schema.md`：`wb-*`/`bb-*` 的 `severity` 只允许 `critical|high`；OH / Chrome / DB / Mobile 为官方四档 `critical|high|medium|low`。`confidence` 一律禁止 `low`（与官方 `severity: low` 勿混），`severity_rule` 必填；推荐附 CVSS `cvss` 块（`version` 为 `3.1` 或 `4.0`）
+9. **改完跑 `npm run check`**（`scripts/check-consistency.mjs`）：版本对齐、内部链接、孤儿 reference、桥接条款 ID 集合、`finding-schema` 交叉引用；退出码非 0 先修再交
 
 ## DeepSonar
 
