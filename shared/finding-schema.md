@@ -44,6 +44,10 @@ regression_of: null              # 修复绕过，指向原 finding（ADJ-B1）
 activity: null                   # 活动标签（集中活动期项目）
 report_policy: ch_only           # ch_only（默认）| program_table（见 shared/severity-policy.md）
 
+# Web 领域（目标为 Web 应用 / 控制台 / API 时推荐；见 vuln-definitions 的 web-asset-scope.md）
+web_asset: core_web              # core_web | console | api_gateway | static_frontend | marketing | mobile_webview | self_oss | third_party_hosted | edge_cdn
+web_scope: in_scope              # in_scope | in_scope_with_conditions | out_of_scope | unlisted
+
 # 影响
 impact: |
   攻击者能做什么；影响范围（用户/租户/数据/主机）

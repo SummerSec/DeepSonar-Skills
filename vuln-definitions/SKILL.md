@@ -32,6 +32,7 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 - 缺陷根因在第三方组件或其默认配置 → 加载 `references/component.md`
 - 缺陷根因在云资源策略或编排 / 运行时隔离 → 加载 `references/cloud-native.md`
 - 缺陷是数据真实性 / 完整性可被伪造（签名、密文、传输层校验）→ 加载 `references/crypto.md`
+- 目标为 **Web 应用 / 控制台 / API / 前端 + 移动 WebView**：先加载 `references/web-vuln-types.md` 定形态，再加载 `references/web-asset-scope.md` 判资产、`references/web-gates.md` 过五步门禁；目标自带程序规则时加载 `references/vendor-<program>.md`（模板见 `references/web-vendor-rules.md`）
 
 ## 全局等级定义
 
@@ -108,6 +109,19 @@ ChromeOS 系统镜像、iOS WebKit 壳不当本专项。
 
 跨类型边界与「优先归哪类」见 **[references/classification.md](references/classification.md)**。
 
+### Web 领域专项（Web 应用 / 控制台 / API）
+
+审计目标为 **Web 应用、管理控制台、对外 API、前端包与 App 内 WebView 承载的 Web 资产** 时，加载：
+
+| 文件 | 作用 |
+|------|------|
+| **[references/web-vuln-types.md](references/web-vuln-types.md)** | Web 形态主表 W1–W14：形态 → 主类型 → 条款锚点倾向 |
+| **[references/web-asset-scope.md](references/web-asset-scope.md)** | 资产分桶（`web_asset`）与合格判定（`web_scope`）、悬空资源、多域与多租户边界 |
+| **[references/web-gates.md](references/web-gates.md)** | 五步门禁 Gate T / S / E / C / R 与门禁结论 |
+| **[references/web-vendor-rules.md](references/web-vendor-rules.md)** | 目标程序规则模板与约定（`vendor-<program>.md` 只加文件不开 plugin） |
+
+程序规则文件与通用语义冲突时，**以程序规则为准**（仅限资产范围 / 环境口径 / 档位表 / 方式纪律；类型定义与档位语义不回退）。
+
 ## 定级工作流（每次 finding 必走）
 
 ```
@@ -118,6 +132,7 @@ ChromeOS 系统镜像、iOS WebKit 壳不当本专项。
 4b. 浏览器类目标（Chrome / Chromium）→ 先过资产范围（`vuln-definitions-chrome` / `asset-scope.md`），再对齐 `references/chromium.md` 的浏览器条款与非安全条款，再回到类型细则
 4c. 数据库类目标（DBMS / 数据库云平台）→ 先过资产范围（`vuln-definitions-db` / `asset-scope.md`），再对齐 `references/database.md` 的数据库条款与排除条款，再回到类型细则
 4d. 客户端 / AI / 逻辑 / 组件 / 云资源 / 密码学类目标 → 打开 `references/<type>.md`（`client-side` / `logic-flaw` / `ai-agent` / `component` / `cloud-native` / `crypto`）之一；**不得**把这几类笼统塞进 `authz`
+4e. Web 应用 / 控制台 / API 目标 → 先过 `references/web-asset-scope.md`（`web_asset` / `web_scope`）与 `references/web-gates.md`（T/S/E/C/R），再按 `references/web-vuln-types.md` 的形态簇定主类型；有 `vendor-<program>.md` 时先按其资产范围与环境口径复判
 5. 命中最高且证据充分的一级；证据不足则降级或标 none
 5b. 数据面 finding：先按 `references/severity-levels.md` §7 的规模 × 敏感度矩阵定档，再与类型条款 **取较高者**；预发 / 灰度 / DEV 环境按 §8.1 的 ADJ-E1–E3 判定
 5c. 链路与复报：链路类按 ADJ-C1 取终态可达的最高档；修复绕过按 ADJ-B1 重新定档；打包按 ADJ-C2 拆条

@@ -1,6 +1,6 @@
 ---
 name: wb-xxe
-description: "白盒 XXE 审计。仅报告 Critical/High 的 XXE 类漏洞（CWE-611）。用于白盒代码审计、source-sink 追踪、安全 code review。"
+description: "白盒 XXE 审计。仅报告 Critical/High（程序自带档位表时含 Medium，见 `report_policy`）的 XXE 类漏洞（CWE-611）。用于白盒代码审计、source-sink 追踪、安全 code review。"
 ---
 
 # 白盒 XXE 审计
@@ -8,7 +8,7 @@ description: "白盒 XXE 审计。仅报告 Critical/High 的 XXE 类漏洞（CW
 ## 角色
 
 你是 **白盒安全审计员**，专攻 **XXE**（CWE-611）。  
-只寻找可导致 **Critical / High** 影响的漏洞。中低危、风格问题、硬化建议 **一律忽略**。
+只寻找可导致 **Critical / High** 影响的漏洞（目标程序自带档位表时按 `report_policy: program_table` 处理 Medium，见 `shared/severity-policy.md`）。风格问题、硬化建议 **一律忽略**。
 
 ## 强制前置
 
@@ -24,7 +24,7 @@ description: "白盒 XXE 审计。仅报告 Critical/High 的 XXE 类漏洞（CW
 1. 阅读 `vuln-definitions` skill 与 `references/severity-levels.md`
 2. 打开本类型在 **vuln-definitions 插件内** 的 `references/<type>.md`（与本 plugin 的 type 同名）
 3. 按 **严重 / 高危 / 中危 / 无危害** 条款匹配；finding 中填写 `severity_rule`（如 `injection.md#C1`）
-4. 仅 **严重(Critical)、高危(High)** 可输出 finding；中危与无危害不报告
+4. 输出档位遵从 `shared/severity-policy.md` 的 `report_policy`：默认（`ch_only`）仅 **严重(Critical)、高危(High)** 可输出 finding；目标程序自带档位表（`program_table`）时 **中危(Medium) 一并输出**，低危(Low) 按该程序表；无危害(None) 始终不报告
 
 若未启用 vuln-definitions 插件，先停止并提示启用。
 

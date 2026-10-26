@@ -10,7 +10,7 @@
 | -------------------------------- | ---------------------- |
 | Critical（严重） | ✅ 是 |
 | High（高危） | ✅ 是 |
-| Medium（中危） | ❌ 否（可记入进度否决） |
+| Medium（中危） | ❌ 否（可记入进度否决）；`report_policy: program_table` 时 ✅ 是 |
 | None（无危害） | ❌ 否 |
 
 OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库（ClickHouse 等 DBMS / 数据库云平台）走 `vuln-definitions-db`、移动端（Android / iOS App）走 `vuln-definitions-mobile` 时见文末例外（官方四档均可报）。
@@ -22,16 +22,17 @@ OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-d
 | `ch_only`（**默认**，未指定时） | 仅 `critical` / `high` 写入正式 finding |
 | `program_table` | 目标程序自带官方档位表时，可按该表写入 `medium` / `low` |
 
-- 置 `program_table` 的前提：目标程序规则文件（`vuln-definitions/references/vendor-<program>.md`）或官方项目页给出档位表
+- 置 `program_table` 的前提：目标程序规则文件（`vuln-definitions/references/vendor-<program>.md`）或官方项目页给出档位表；模板与约定见 `vuln-definitions/references/web-vendor-rules.md`
 - 开关只决定 **是否写入**，不改 `severity`：档位仍由 `vuln-definitions` 条款决定，`none` 始终不写
 - 字段位置见 `shared/finding-schema.md`（`report_policy: ch_only | program_table`）
+- **执行层一致**：`wb-*` / `bb-*` 必须读本开关；置 `program_table` 时 **不得** 丢弃 medium/low，未置时仍按 `ch_only` 丢弃
 
 ## 强制流程
 
 1. 加载 **vuln-definitions** skill  
 2. 打开对应 `references/<vuln_type>.md`  
 3. 按 Critical → High → Medium → None 匹配  
-4. 仅 `critical`/`high` 且 `confidence` 为 high/medium 时，交给 `wb-*` / `bb-*` 输出  
+4. 仅 **可报告档** 且 `confidence` 为 high/medium 时，交给 `wb-*` / `bb-*` 输出；可报告档 = `ch_only` 下的 `critical`/`high`，或 `program_table` 下的 `critical`/`high`/`medium`/`low`  
 5. （推荐）加载 **vuln-scoring**，按 **CVSS v3.1（默认）或 v4.0（按需）** 补全 finding 的 `cvss` 向量与分数；评分不得单独把 medium 抬进正式报告
 6. 数据面 finding 填 `data_scale` / `data_sensitivity` / `environment`；命中链路终态、修复绕过或复报时按 `severity-levels.md` 的 ADJ-C1 / ADJ-B1 / ADJ-B2 处理
 7. `report_policy: program_table` 时 `medium` / `low` 可写入正式 finding；未指定时仍按 `ch_only`  
@@ -40,9 +41,9 @@ OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-d
 
 1. 是否符合该类 **漏洞定义**？  
 2. 攻击者前提与影响是否写清？  
-3. 是否命中该类 **严重/高危** 条款（写明条款号，如 `injection.md#C1`）？  
+3. 是否命中该类 **可报告档** 条款（写明条款号，如 `injection.md#C1`）？`ch_only` 时为严重/高危条款；`program_table` 时含中危/低危条款  
 4. 白盒 source→sink 或黑盒复现是否成立？  
-5. 是否误把 medium/none 抬级？  
+5. 是否误把不达该档的 finding 抬级？  
 
 任一否 → 不报告。
 

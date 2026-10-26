@@ -26,7 +26,7 @@
 | 浏览器 | `vuln-definitions-chrome` | Chrome / Chromium |
 | 数据库（DBMS + 数据库云平台） | `vuln-definitions-db` | ClickHouse（OSS + Cloud + Bugcrowd 项目内 Langfuse） |
 | 移动 App（Android / iOS 应用层） | `vuln-definitions-mobile` | （新目标只加厂商 reference 文件） |
-| Web 应用 / IoT | `vuln-definitions`（六类 Web 领域类型已内建；审计执行插件 `web-whitebox-*` / `web-blackbox-*` 按项目后补） | — |
+| Web 应用 / IoT | `vuln-definitions`（**Web 领域层已就位**：`web-vuln-types.md` 形态主表 / `web-asset-scope.md` 资产范围 / `web-gates.md` 五步门禁 / `web-vendor-rules.md` 目标程序规则模板；六类 Web 领域类型同插件内建；审计执行插件 `web-whitebox-*` / `web-blackbox-*` 按项目后补） | `vendor-<program>.md`（程序规则，只加文件不开 plugin） |
 
 > **审计 / 挖掘插件命名**：`web-whitebox-*`（源码审计）与 `web-blackbox-*`（动态挖掘）中的 `web-` 前缀表示 **Web 安全领域**；机理类型以 `vuln-definitions` 为准（八类通用机理 + 六类 Web 领域）。
 
@@ -134,6 +134,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 1c. **改 Chrome / Chromium 浏览器四档/非安全条款 / VRP 资格** → 只改 `vuln-definitions-chrome/`（及 `vuln-definitions/.../references/chromium.md` 摘要索引），同步 bump 插件与 marketplace 两处 version（改镜像则另 bump `vuln-definitions`）；赏金表不改 `severity`  
 1d. **改数据库四档/排除条款/Bugcrowd 纪律** → 只改 `vuln-definitions-db/`（及 `vuln-definitions/.../references/database.md` 摘要索引），同步 bump 插件与 marketplace 两处 version（改镜像则另 bump `vuln-definitions`）；赏金表不改 `severity`；**数据库新厂商只加 reference 文件，不开新 plugin**  
 1e. **改移动端四档/排除条款/应用层形态** → 只改 `vuln-definitions-mobile/`，bump 其 version（并同步 `vuln-definitions/references/mobile.md` 摘要，bump `vuln-definitions` version）；**移动端新目标（App / SDK）只加厂商 reference 文件，不开新 plugin**（现有厂商/项目规则：`google-android-devices-rules.md`——Google 的 Android 与 Google 设备项目，资格，不定级）  
+1f. **改 Web 领域层（形态表 / 资产范围 / 门禁 / 目标程序规则）** → 只改 `vuln-definitions/references/web-*.md`（及 `vendor-<program>.md`），bump `vuln-definitions` version；**Web 新目标（项目 / 程序）只加 `vendor-<program>.md`，不开新 plugin**，也不新建审计 plugin（另行立项）  
 2. **改 CVSS/利用评分/优先级标准** → 只改 `vuln-scoring/`，bump 其 version  
 3. 改审计手法 → 对应 `web-whitebox-*` / `web-blackbox-*`；**改移动 App 挖洞/复现/取证手法** → 只改 `mobile-audit/`（bump version；**不要**把方法写进 vuln-definitions-mobile）  
 4. 报告策略（是否上报 medium）→ `shared/severity-policy.md`  

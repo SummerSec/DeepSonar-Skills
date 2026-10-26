@@ -4,5 +4,5 @@
                },
     "description":  "白盒 SSRF 审计",
     "name":  "web-whitebox-ssrf",
-    "version":  "0.2.0"
+    "version":  "0.2.1"
 }

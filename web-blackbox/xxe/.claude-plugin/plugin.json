@@ -4,5 +4,5 @@
                },
     "description":  "黑盒 XXE 挖掘",
     "name":  "web-blackbox-xxe",
-    "version":  "0.2.0"
+    "version":  "0.2.1"
 }
