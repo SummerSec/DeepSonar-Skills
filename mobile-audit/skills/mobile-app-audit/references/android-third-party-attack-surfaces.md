@@ -357,7 +357,7 @@ adb logcat -d | rg 'POC-ATTACKER|WebView|DeepLink'
 | 导出 Provider 未授权读 Token / PII / 私有文件 | **接受** | AE4 / AC* |
 | 本地明文会话 Token（无需 root，同用户备份或其他 App 可读模型成立） | **接受** | AS1 / AA4 |
 | 硬编码且可滥用的云/支付/推送密钥 | **接受** | AS2 / M1 |
-| 后端 API 越权 / IDOR / 认证绕过（经客户端发现） | **接受** | M3 / AA* + 八类 authz |
+| 后端 API 越权 / IDOR / 认证绕过（经客户端发现） | **接受** | M3 / AA* + `authz` |
 | 出货可达 SDK 导致宿主数据外泄或任意码执行 | **接受** | M2；不可达 → INV18 |
 | 纯本地崩溃 / 杀进程 / 资源耗尽 | **不接受** | INV1 |
 | 缺 pinning / 缺加固 / 可 hook / CVE 清单无 PoC | **通常不接受** | INV11 / ADJ / 项目 OOS |

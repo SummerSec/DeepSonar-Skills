@@ -1,6 +1,6 @@
 # 数据库漏洞形态主表（db-vuln-types.md）
 
-按形态归类数据库领域漏洞；先定形态（本文件），再映射八类 `vuln_type`（`vuln-definitions`），再按 `severity-levels.md` 定档。目录索引见 `attack-surfaces.md`。
+按形态归类数据库领域漏洞；先定形态（本文件），再映射机理类型 `vuln_type`（`vuln-definitions`），再按 `severity-levels.md` 定档。目录索引见 `attack-surfaces.md`。
 
 形态 ID 供 finding 的 `db_class` 字段使用。
 

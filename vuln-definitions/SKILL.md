@@ -12,7 +12,7 @@ description: "漏洞定义模块。定义 injection/rce/ssrf/authz/deserializati
 
 1. **归类**：属于哪一类漏洞（`vuln_type`）  
 2. **定级**：Critical / High / Medium / None  
-3. **裁决**：是否进入报告（本仓默认只报 Critical/High，但定级必须先做全）
+3. **裁决**：是否进入报告（本仓默认只报 Critical/High；`report_policy: program_table` 时含 medium/low，但定级必须先做全）
 
 本模块 **不执行扫描**，只提供定义与判定规则。
 

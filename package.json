@@ -2,7 +2,7 @@
   "name": "DeepSonar-Skills",
   "version": "0.3.2",
   "private": true,
-  "description": "DeepSonar 高危安全技能仓：漏洞定义（按领域：通用 / OpenHarmony / Chrome / 数据库 / 移动端）与 CVSS v3.1/v4.0 评分 + Web 白盒审计 + Web 黑盒挖掘 + 移动 App 审计方法论，按漏洞类型分 plugin；wb/bb 仅 Critical/High，OH / Chrome / DB / Mobile 官方四档均可报。",
+  "description": "DeepSonar 高危安全技能仓：漏洞定义（按领域：通用 / Web / OpenHarmony / Chrome / 数据库 / 移动端；通用侧为八类通用机理 + 六类 Web 领域类型，Web 领域层含形态主表 / 资产范围 / 五步门禁 / 目标程序规则模板）与 CVSS v3.1/v4.0 评分 + Web 白盒审计 + Web 黑盒挖掘 + 移动 App 审计方法论，按漏洞类型分 plugin；wb/bb 默认仅 Critical/High（report_policy: program_table 时含中低档），OH / Chrome / DB / Mobile 官方四档均可报。",
   "license": "Apache-2.0",
   "scripts": {
     "check": "node scripts/check-consistency.mjs"
@@ -12,6 +12,8 @@
     "code-audit",
     "web-whitebox",
     "web-blackbox",
+    "web-domain-layer",
+    "ai-agent",
     "security",
     "deepsonar",
     "bugcrowd",

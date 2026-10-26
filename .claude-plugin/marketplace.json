@@ -1,6 +1,6 @@
 {
   "name": "DeepSonar-Skills",
-  "description": "DeepSonar security skills: vulnerability definitions by domain (general / OpenHarmony / Chrome / database / mobile), CVSS v3.1/v4.0 scoring, and `web-whitebox-*`/`web-blackbox-*` plugins by vuln type (web security; wb/bb report Critical/High only); plus mobile-audit methodology plugin for APK/IPA audit (no severity — uses vuln-definitions + vuln-definitions-mobile).",
+  "description": "DeepSonar security skills: vulnerability definitions by domain (general / Web / OpenHarmony / Chrome / database / mobile), CVSS v3.1/v4.0 scoring, and `web-whitebox-*`/`web-blackbox-*` plugins by vuln type (web security; wb/bb report Critical/High by default, Medium/Low under `report_policy: program_table`); plus the mobile-audit methodology plugin for APK/IPA audit (no severity — uses vuln-definitions + vuln-definitions-mobile). The general plugin also defines 6 Web domain types (client-side / logic-flaw / ai-agent / component / cloud-native / crypto) with a Web domain layer (type matrix / asset scope / gates / program-rule template).",
   "owner": {
     "name": "DeepSonar"
   },

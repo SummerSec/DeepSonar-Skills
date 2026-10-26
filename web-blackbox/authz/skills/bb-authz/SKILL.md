@@ -78,9 +78,9 @@ description: "黑盒鉴权与认证绕过挖掘。仅报告 Critical/High（程�
 
 ### 4. 裁定与输出
 
-- 按 **vuln-definitions** 定级；仅严重/高危可报，并填 `severity_rule`。
+- 按 **vuln-definitions** 定级，并填 `severity_rule`；可报告档按 `report_policy` 判定（`ch_only`：严重/高危；`program_table`：含中危及该程序表的低危）。
 - Finding 必须含请求/响应摘要（可打码密钥）。
-- 无结果：`No Critical/High authz issues found.`
+- 无结果：`No reportable authz issues found.`
 
 ## 参考
 

@@ -12,7 +12,7 @@
 5. **web-blackbox-*** — Web 黑盒挖掘（按漏洞类型，工具在 agent-env）  
 6. **mobile-audit** — 移动客户端 App（APK/IPA）审计**方法论**（不定级；定级依赖 vuln-definitions + vuln-definitions-mobile）  
 
-定级含 **严重 / 高危 / 中危 / 无危害**；**wb-*/bb-* 正式报告仅 Critical/High**；**vuln-definitions-oh / vuln-definitions-chrome / vuln-definitions-db / vuln-definitions-mobile 官方四档均可报**。定量分支持 **CVSS v3.1（默认）与 v4.0（按需）**。
+定级含 **严重 / 高危 / 中危 / 无危害**；**wb-*/bb-* 正式报告默认仅 Critical/High**（`report_policy: program_table` 时含 medium 及该程序表的 low）；**vuln-definitions-oh / vuln-definitions-chrome / vuln-definitions-db / vuln-definitions-mobile 官方四档均可报**。定量分支持 **CVSS v3.1（默认）与 v4.0（按需）**。
 
 ### 领域插件框架（分类纪律）
 
@@ -143,7 +143,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 6b. **桥接摘要与域插件权威条款必须同时改**：`vuln-definitions/references/{openharmony,chromium,database,mobile}.md` 与对应域插件的 `severity-levels.md` / 形态表之间，**条款 ID 集合必须一致**（措辞以插件为准，摘要只可精简）；任一处改动须同步另一处，并按 1b–1e 两处 bump version  
 7. **新增漏洞类型** → `web-whitebox/<new-type>/` 与 `web-blackbox/<new-type>/` 各建插件（复制现有 type），注册进 `.claude-plugin/marketplace.json`，并在 `vuln-definitions` 中加 `references/<new-type>.md`；黑盒需新工具时同步更新 manifest；可在 `vuln-scoring/.../vector-examples.md` 补示例向量  
 7b. **新增 Web 领域定义类型（暂无执行插件）** → 只改 `vuln-definitions/references/<new-type>.md` + `shared/finding-schema.md` 的 `vuln_type` 枚举 + `vuln-definitions/references/classification.md` + `vuln-definitions/SKILL.md` 索引（四处必须同步，`npm run check` 会校验，缺一即失败）；审计插件按实际项目后补  
-8. Finding 输出必须遵守 `shared/finding-schema.md`：`wb-*`/`bb-*` 的 `severity` 只允许 `critical|high`；OH / Chrome / DB / Mobile 为官方四档 `critical|high|medium|low`。`confidence` 一律禁止 `low`（与官方 `severity: low` 勿混），`severity_rule` 必填；推荐附 CVSS `cvss` 块（`version` 为 `3.1` 或 `4.0`）
+8. Finding 输出必须遵守 `shared/finding-schema.md`：`wb-*`/`bb-*` 的 `severity` 默认只允许 `critical|high`（`report_policy: program_table` 时含 `medium`/`low`，见 `shared/severity-policy.md`）；OH / Chrome / DB / Mobile 为官方四档 `critical|high|medium|low`。`confidence` 一律禁止 `low`（与官方 `severity: low` 勿混），`severity_rule` 必填；推荐附 CVSS `cvss` 块（`version` 为 `3.1` 或 `4.0`）
 9. **改完跑 `npm run check`**（`scripts/check-consistency.mjs`）：版本对齐、内部链接、孤儿 reference、桥接条款 ID 集合、`finding-schema` 交叉引用、`vuln_type` 枚举与 `references/<type>.md`/`SKILL.md`/`classification.md` 四处一致；退出码非 0 先修再交
 
 ## DeepSonar

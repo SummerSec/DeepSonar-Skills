@@ -11,7 +11,7 @@ description: "Chrome / Chromium 浏览器漏洞定义指南。在官方四档（
 
 完成：
 
-1. **归类**：先定浏览器形态（见 `chrome-vuln-types.md`），再映射八类 `vuln_type`
+1. **归类**：先定浏览器形态（见 `chrome-vuln-types.md`），再映射机理类型 `vuln_type`
 2. **定级**：严重 / 高危 / 中危 / 低危（`critical` / `high` / `medium` / `low`）— 以 Chromium Severity Guidelines 的 S0–S3 为准
 3. **裁定**：缓解降档、非安全条款、Gate 门禁
 4. **报告**：正式报告按官方四档；非安全漏洞与 Gate 不过不报
@@ -31,7 +31,7 @@ description: "Chrome / Chromium 浏览器漏洞定义指南。在官方四档（
 1. **读 `shared/authorization.md`** — 未授权目标不启动
 2. **读 `shared/finding-schema.md`** — 字段结构、`severity_rule` 必填；本插件 `severity` 为官方四档（`critical|high|medium|low`），`confidence` 禁止 `low`（与 `severity: low` 不是同一字段）
 3. 仓级 `shared/severity-policy.md` 的「只报 C/H」**不适用于**本插件
-4. **对齐机理类型**：`vuln_type` 仍属八类之一（`vuln-definitions`）
+4. **对齐机理类型**：`vuln_type` 取 `vuln-definitions` 的 14 类之一（八类通用机理 + 六类 Web 领域）
 
 ## 定级依赖
 
@@ -46,7 +46,7 @@ description: "Chrome / Chromium 浏览器漏洞定义指南。在官方四档（
 | 门禁与报告 | 本插件 `references/gates.md` |
 | 资产范围 | 本插件 `references/asset-scope.md` |
 | VRP 资格 / 投递 | 本插件 `references/vrp-rules.md` |
-| 八类机理定义 | `vuln-definitions` → `references/<type>.md` |
+| 机理类型定义（八类通用 + 六类 Web 领域） | `vuln-definitions` → `references/<type>.md` |
 | CVSS v3.1 / v4.0 | `vuln-scoring`（Chrome 语境默认 3.1，可按需 4.0） |
 
 官方原文（对照用，不以记忆替代）：
@@ -73,7 +73,7 @@ description: "Chrome / Chromium 浏览器漏洞定义指南。在官方四档（
 4. chrome-vuln-types.md 定形态（P/M/W/I/U/E/F/G/N/A）
 5. attack-surfaces.md 对照目录族（若有源码树）
 6. gates.md：T 威胁模型 → S 范围 → P 进程沙箱 → D 默认可达/出货 → C 安全实害 → R 可复现
-7. 八类 references/<type>.md 确认 vuln_type 成立
+7. 机理类型 references/<type>.md 确认 vuln_type 成立
 8. severity-levels.md 匹配 严重→高危→中危→低危
 9. adjustment-and-invalid.md 查降档 / 非安全
 10. 官方四档且 confidence≥medium、Gate 全过 → 输出 finding（附 CVSS，默认 v3.1）
@@ -84,7 +84,7 @@ description: "Chrome / Chromium 浏览器漏洞定义指南。在官方四档（
 ## 输出（定级场景）
 
 ```yaml
-vuln_type: <type|none>                 # 八类
+vuln_type: <type|none>                 # 八类通用机理 + 六类 Web 领域
 chrome_class: <如 P1|W2|I2|A1>         # 浏览器形态 ID
 chrome_process: browser | renderer | gpu | network | utility | kernel | other
 chrome_sandbox: unsandboxed | sandboxed | platform_dependent

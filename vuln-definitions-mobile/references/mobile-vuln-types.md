@@ -1,6 +1,6 @@
 # 移动端漏洞形态主表（mobile-vuln-types.md）
 
-按形态归类移动端（Android App + iOS App）应用层漏洞。先定形态（本文件），再映射八类 `vuln_type`（`vuln-definitions`），再按 `severity-levels.md` 定档。组件索引见 `attack-surfaces.md`。
+按形态归类移动端（Android App + iOS App）应用层漏洞。先定形态（本文件），再映射机理类型 `vuln_type`（`vuln-definitions`），再按 `severity-levels.md` 定档。组件索引见 `attack-surfaces.md`。
 
 形态 ID 供 finding 的 `mobile_class` 字段使用。平台前缀：**AD**–**AP** 为 Android，**IU**–**IP** 为 iOS。
 

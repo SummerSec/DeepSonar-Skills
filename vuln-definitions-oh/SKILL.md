@@ -11,7 +11,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 
 完成：
 
-1. **归类**：先定公告机理（见 `mechanism-types.md`），再定 Phone OS 形态（见 `phone-os-vuln-types.md`），并映射八类 `vuln_type`
+1. **归类**：先定公告机理（见 `mechanism-types.md`），再定 Phone OS 形态（见 `phone-os-vuln-types.md`），并映射机理类型 `vuln_type`
 2. **定级**：严重 / 高危 / 中危 / 低危（`critical` / `high` / `medium` / `low`）— 以 OH 官方奖励计划四档为准
 3. **裁定**：级别调整 10 条、无效 9 条、Gate 门禁
 4. **报告**：正式报告按官方四档（`critical` / `high` / `medium` / `low`）；INV 与 Gate 不过不报
@@ -31,7 +31,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 1. **读 `shared/authorization.md`** — 未授权目标不启动  
 2. **读 `shared/finding-schema.md`** — 字段结构、`severity_rule` 必填；本插件 `severity` 为官方四档（`critical|high|medium|low`），`confidence` 禁止 `low`（与 `severity: low` 不是同一字段）  
 3. 仓级 `shared/severity-policy.md` 的「只报 C/H」**不适用于**本插件  
-4. **对齐机理类型**：`vuln_type` 仍属八类之一（`vuln-definitions`）
+4. **对齐机理类型**：`vuln_type` 取 `vuln-definitions` 的 14 类之一（八类通用机理 + 六类 Web 领域）
 
 ## 定级依赖
 
@@ -44,7 +44,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 | 系统四档 / 术语 | `references/severity-levels.md`、`references/terminology.md` |
 | 调整与无效 | `references/adjustment-and-invalid.md` |
 | 门禁与报告 | `references/gates.md` |
-| 八类机理定义 | `vuln-definitions` → `references/<type>.md` |
+| 机理类型定义（八类通用 + 六类 Web 领域） | `vuln-definitions` → `references/<type>.md` |
 | CVSS v3.1 / v4.0 | `vuln-scoring`（OH 语境默认 3.1，可按需 4.0） |
 
 ## 范围与报告
@@ -62,7 +62,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 4. phone-os-vuln-types.md 定形态（K/I/S/P/E/F/B/M/W/N/U/X）
 5. attack-surfaces.md 对照 OH 组件（若目标为 OH）
 6. gates.md：**S 资产范围** → **V 活树/最新公开版本** → A 攻击者 → B 默认可达 → C 直接实害 → D 链闭合
-7. 八类 references/<type>.md 确认 `vuln_type` 成立
+7. 机理类型 references/<type>.md 确认 `vuln_type` 成立
 8. severity-levels.md 匹配 严重→高危→中危→低危
 9. adjustment-and-invalid.md 查降级/无效
 10. 官方四档且 confidence≥medium、Gate 全过 → 输出 finding（附 CVSS，默认 v3.1）
@@ -72,7 +72,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 ## 输出（定级场景）
 
 ```yaml
-vuln_type: <type|none>          # 八类
+vuln_type: <type|none>          # 八类通用机理 + 六类 Web 领域
 mechanism: <如 UAF|MW|AUTHZ>   # 公告机理，见 mechanism-types.md
 phone_os_class: <如 I1|S1|M1a> # Phone OS 形态 ID
 asset_repo: <官方名单仓名>      # 如 communication_dsoftbus

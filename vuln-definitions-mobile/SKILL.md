@@ -11,7 +11,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 
 完成：
 
-1. **归类**：先定移动端形态（见 `mobile-vuln-types.md`），再映射八类 `vuln_type`
+1. **归类**：先定移动端形态（见 `mobile-vuln-types.md`），再映射机理类型 `vuln_type`
 2. **定级**：严重 / 高危 / 中危 / 低危（`critical` / `high` / `medium` / `low`）— 按 HackerOne 移动端赏金惯例四档
 3. **裁定**：调整条款、排除条款、Gate 门禁
 4. **报告**：正式报告按官方四档；排除条款与 Gate 不过不报
@@ -32,7 +32,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 1. **读 `shared/authorization.md`** — 未授权目标不启动
 2. **读 `shared/finding-schema.md`** — 字段结构、`severity_rule` 必填；本插件 `severity` 为官方四档（`critical|high|medium|low`），`confidence` 禁止 `low`（与 `severity: low` 不是同一字段）
 3. 仓级 `shared/severity-policy.md` 的「只报 C/H」**不适用于**本插件
-4. **对齐机理类型**：`vuln_type` 仍属八类之一（`vuln-definitions`）
+4. **对齐机理类型**：`vuln_type` 取 `vuln-definitions` 的 14 类之一（八类通用机理 + 六类 Web 领域）
 
 ## 定级依赖
 
@@ -46,7 +46,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 | 门禁与报告 | 本插件 `references/gates.md` |
 | 历史模式与定级校准 | 本插件 `references/history-patterns.md` |
 | Google Bug Hunters 项目规则（资格，不定级） | 本插件 `references/google-android-devices-rules.md` |
-| 八类机理定义 | `vuln-definitions` → `references/<type>.md` |
+| 机理类型定义（八类通用 + 六类 Web 领域） | `vuln-definitions` → `references/<type>.md` |
 | CVSS v3.1 / v4.0 | `vuln-scoring`（移动端语境默认 3.1，可按需 4.0） |
 
 ## 范围与报告
@@ -64,7 +64,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 4. mobile-vuln-types.md 定形态（Android AD/AW/AI/AE/AC/AB/AF/AA/AS/AT/AP/AM；iOS IU/IO/IL/ID/IW/IM/IA/IP）；同一行给出精确条款 ID，可直接填 `severity_rule`
 5. attack-surfaces.md 对照组件（若目标为 Android / iOS 应用）
 6. gates.md：T 威胁模型 → S 资产范围 → E 环境合格 → C 安全实害 → R 可复现
-7. 八类 references/<type>.md 确认 vuln_type 成立
+7. 机理类型 references/<type>.md 确认 vuln_type 成立
 8. severity-levels.md 匹配 严重→高危→中危→低危；边界情况对照 history-patterns.md §3 校准（K1–K8）
 9. adjustment-and-invalid.md 查降档 / 排除
 10. 官方四档且 confidence≥medium、Gate 全过 → 输出 finding（附 CVSS，默认 v3.1）
@@ -75,7 +75,7 @@ description: "移动端（Android App + iOS App）领域漏洞定义指南。定
 ## 输出（定级场景）
 
 ```yaml
-vuln_type: <type|none>                  # 八类
+vuln_type: <type|none>                  # 八类通用机理 + 六类 Web 领域
 mobile_class: <如 AD2|IU1|AW2|AP1|AT4|AI7|AS5|IP2>      # 移动端形态 ID，见 mobile-vuln-types.md
 platform: android | ios
 component: <如 exported-activity|webview|content-provider|url-scheme|...>

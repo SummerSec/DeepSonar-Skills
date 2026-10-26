@@ -64,14 +64,15 @@ description: "白盒注入审计（SQL/命令/NoSQL/LDAP）。仅报告 Critical
 ### 3. 裁定
 
 - 用 **vuln-definitions** 本类型条款（C/H/M/N）定级，填写 `severity_rule`。
-- 中危/无危害或 confidence 不足 → **静默丢弃**。
+- 可报告档按 `report_policy` 判定：`ch_only`（默认）为 critical/high，`program_table` 含 medium 及该程序表的 low。
+- 未达可报告档，或无危害，或 confidence 不足 → **静默丢弃**。
 - 达到门槛 → 按 `finding-schema.md` 输出，`mode: whitebox`，`vuln_type: injection`。
 
 ### 4. 输出纪律
 
 - 每个 finding 必须有 **source + sink + 文件行号**。
 - 不要给完整武器化 exploit；给 **最小验证路径**。
-- 无合格 finding 时明确说：`No Critical/High injection issues found.`
+- 无合格 finding 时明确说：`No reportable injection issues found.`
 
 ## 参考
 

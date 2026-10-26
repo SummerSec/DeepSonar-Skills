@@ -43,7 +43,7 @@ DeepSonar-Skills/
 │   ├── README.md
 │   └── skills/mobile-app-audit/ # SKILL.md + references/（recon…tooling）
 ├── shared/                      # 报告策略、finding 格式、授权
-│   ├── severity-policy.md       # 默认只报 C/H；OH / Chrome / DB / Mobile 四档例外（细则见对应插件）
+│   ├── severity-policy.md       # 默认只报 C/H（report_policy 可放开）；OH / Chrome / DB / Mobile 四档例外（细则见对应插件）
 │   ├── finding-schema.md
 │   └── authorization.md
 ├── web-whitebox/<type>/         # Web 白盒 plugin ×8
@@ -204,7 +204,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 1. 在 `web-whitebox/<new-type>/` 与 `web-blackbox/<new-type>/` 各建 plugin（复制现有 type）。  
 2. 更新 `.claude-plugin/marketplace.json`。  
 3. 若黑盒需要新工具 → 写入 `agent-env/tools-manifest.json` 并重建镜像。  
-4. 确认仍只覆盖 Critical/High。  
+4. 确认行为与 `shared/severity-policy.md` 的 `report_policy` 一致（默认 Critical/High；`program_table` 时含中低档）。  
 
 **新领域**（如 Web 框架、IoT）：建新 `vuln-definitions-<domain>` plugin + `vuln-definitions` 桥接 `references/<domain>.md`。
 

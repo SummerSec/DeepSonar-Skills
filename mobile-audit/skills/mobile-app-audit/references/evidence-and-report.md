@@ -33,7 +33,7 @@ evidence/
 
 移交时加载（相对本 skill）：
 
-- `../../../../vuln-definitions/` — 八类机理  
+- `../../../../vuln-definitions/` — 机理类型（八类通用 + 六类 Web 领域）  
 - `../../../../vuln-definitions-mobile/references/severity-levels.md`  
 - `../../../../vuln-definitions-mobile/references/history-patterns.md` — 校准  
 - `../../../../vuln-definitions-mobile/references/gates.md` — Gate **T/S/E/C/R**  
