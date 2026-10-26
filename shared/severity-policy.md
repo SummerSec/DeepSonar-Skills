@@ -15,13 +15,26 @@
 
 OpenHarmony / Phone OS 走 `vuln-definitions-oh`、Chrome / Chromium 走 `vuln-definitions-chrome`、数据库（ClickHouse 等 DBMS / 数据库云平台）走 `vuln-definitions-db`、移动端（Android / iOS App）走 `vuln-definitions-mobile` 时见文末例外（官方四档均可报）。
 
+## 口径开关：`report_policy`
+
+| 值 | 行为 |
+| --- | ------ |
+| `ch_only`（**默认**，未指定时） | 仅 `critical` / `high` 写入正式 finding |
+| `program_table` | 目标程序自带官方档位表时，可按该表写入 `medium` / `low` |
+
+- 置 `program_table` 的前提：目标程序规则文件（`vuln-definitions/references/vendor-<program>.md`）或官方项目页给出档位表
+- 开关只决定 **是否写入**，不改 `severity`：档位仍由 `vuln-definitions` 条款决定，`none` 始终不写
+- 字段位置见 `shared/finding-schema.md`（`report_policy: ch_only | program_table`）
+
 ## 强制流程
 
 1. 加载 **vuln-definitions** skill  
 2. 打开对应 `references/<vuln_type>.md`  
 3. 按 Critical → High → Medium → None 匹配  
 4. 仅 `critical`/`high` 且 `confidence` 为 high/medium 时，交给 `wb-*` / `bb-*` 输出  
-5. （推荐）加载 **vuln-scoring**，按 **CVSS v3.1（默认）或 v4.0（按需）** 补全 finding 的 `cvss` 向量与分数；评分不得单独把 medium 抬进正式报告  
+5. （推荐）加载 **vuln-scoring**，按 **CVSS v3.1（默认）或 v4.0（按需）** 补全 finding 的 `cvss` 向量与分数；评分不得单独把 medium 抬进正式报告
+6. 数据面 finding 填 `data_scale` / `data_sensitivity` / `environment`；命中链路终态、修复绕过或复报时按 `severity-levels.md` 的 ADJ-C1 / ADJ-B1 / ADJ-B2 处理
+7. `report_policy: program_table` 时 `medium` / `low` 可写入正式 finding；未指定时仍按 `ch_only`  
 
 ## 硬性检查（报告前）
 

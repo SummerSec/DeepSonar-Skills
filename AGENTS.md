@@ -21,13 +21,14 @@
 | 领域 | plugin | 厂商实例 |
 | ------ | -------- | ---------- |
 | 通用机理（八类，跨领域） | `vuln-definitions` | — |
+| Web 领域类型（六类，定义层） | `vuln-definitions`（内建 `client-side` / `logic-flaw` / `ai-agent` / `component` / `cloud-native` / `crypto`） | — |
 | 移动 OS / Phone OS | `vuln-definitions-oh` | OpenHarmony（形态已对齐 Android·iOS） |
 | 浏览器 | `vuln-definitions-chrome` | Chrome / Chromium |
 | 数据库（DBMS + 数据库云平台） | `vuln-definitions-db` | ClickHouse（OSS + Cloud + Bugcrowd 项目内 Langfuse） |
 | 移动 App（Android / iOS 应用层） | `vuln-definitions-mobile` | （新目标只加厂商 reference 文件） |
-| Web 应用 / IoT | （预留；Web 机理暂由 `vuln-definitions` 八类覆盖） | — |
+| Web 应用 / IoT | `vuln-definitions`（六类 Web 领域类型已内建；审计执行插件 `web-whitebox-*` / `web-blackbox-*` 按项目后补） | — |
 
-> **审计 / 挖掘插件命名**：`web-whitebox-*`（源码审计）与 `web-blackbox-*`（动态挖掘）中的 `web-` 前缀表示 **Web 安全领域**；机理类型仍以 `vuln-definitions` 八类为准。
+> **审计 / 挖掘插件命名**：`web-whitebox-*`（源码审计）与 `web-blackbox-*`（动态挖掘）中的 `web-` 前缀表示 **Web 安全领域**；机理类型以 `vuln-definitions` 为准（八类通用机理 + 六类 Web 领域）。
 
 **方法论 plugin（非 definitions 领域）**：`mobile-audit/` 是移动 App **怎么挖/复现/取证** 的执行层，**不是** 新的 `vuln-definitions-<domain>`。移动端定级语义仍只在 `vuln-definitions-mobile`；新 App/SDK 目标仍只加厂商 reference，不开新 definitions plugin。
 
@@ -59,7 +60,7 @@ agent-env/                # 黑盒工具内置清单与镜像（当前偏 Web；
 
 ### 三层组织
 
-1. **`vuln-definitions/`** 是**严重度定级的唯一语义源**：八类漏洞定义 + 严重/高危/中危/无危害条款（`references/severity-levels.md` + 每类 `references/<type>.md`）。所有 `wb-*`/`bb-*` skill **不自建定级标准**，强制依赖本插件。  
+1. **`vuln-definitions/`** 是**严重度定级的唯一语义源**：八类通用机理（injection / rce / ssrf / authz / deserialization / file-access / xxe / secrets）+ 六类 Web 领域类型（client-side / logic-flaw / ai-agent / component / cloud-native / crypto）+ 全局调整条款（`references/severity-levels.md` §7 规模 × 敏感度矩阵、§8 ADJ-E/B/C）与每类 `references/<type>.md` 四级条款。所有 `wb-*`/`bb-*` skill **不自建定级标准**，强制依赖本插件。六类 Web 领域类型当前 **只有定义与定级**，无配套 `wb-*` / `bb-*`。  
    OpenHarmony 等系统类审计时：机理类型仍以本插件八类为准；**系统四档/无效条款/Phone OS 形态** 加载 `vuln-definitions/.../references/openharmony.md`，或直接用 `vuln-definitions-oh/`（完整：`phone-os-vuln-types.md` + 门禁）。  
    Chrome / Chromium 浏览器审计时：机理类型仍以本插件八类为准；**浏览器四档/非安全条款/沙箱形态** 加载 `vuln-definitions/.../references/chromium.md`，或直接用 `vuln-definitions-chrome/`（完整：`chrome-vuln-types.md` + `process-sandbox.md` + 门禁 + `vrp-rules.md`）。赏金资格不改 `severity`。  
    数据库（ClickHouse 等 DBMS / 数据库云平台）审计时：机理类型仍以本插件八类为准；**数据库四档/排除条款/DBMS 形态** 加载 `vuln-definitions/.../references/database.md`，或直接用 `vuln-definitions-db/`（完整：`db-vuln-types.md` + `asset-scope.md` + 门禁 + `bugcrowd-rules.md`）。赏金资格不改 `severity`。  
@@ -67,7 +68,7 @@ agent-env/                # 黑盒工具内置清单与镜像（当前偏 Web；
 2. **`vuln-scoring/`** 是**定量评分与利用优先级**模块：支持 **CVSS v3.1 与 v4.0**（先选版本再按需加载指标文件），并映射回四级定级；可选 EPSS / SSVC / CISA KEV 做修复排序。**不替代**定性条款，finding 的 `severity` 仍以 definitions 为准。
 3. **`web-whitebox/<type>/` 与 `web-blackbox/<type>/`** 对称分布；每个插件 = `.claude-plugin/plugin.json` + `skills/<wb|bb>-<type>/SKILL.md` + `references/`（白盒是 `sinks.md`，黑盒是 `payloads.md` + `tooling.md`）。
 3b. **`mobile-audit/`** 是移动 App **方法论** plugin（单 skill `mobile-app-audit`）：静态/动态/PoC/取证工作流；**NEVER 自产 severity**；强制依赖 `vuln-definitions` + `vuln-definitions-mobile`。不是新 definitions 领域。
-4. **`shared/`** 是仓库级契约：`severity-policy.md`（默认只报 C/H；OH / Chrome / DB / Mobile 四档例外）、`finding-schema.md`（统一 finding YAML，含 `cvss` 块）、`authorization.md`。
+4. **`shared/`** 是仓库级契约：`severity-policy.md`（默认只报 C/H；OH / Chrome / DB / Mobile 四档例外；`report_policy` 开关）、`finding-schema.md`（统一 finding YAML，含 `cvss` 块与 `data_scale` / `regression_of` / `report_policy` 等可追溯字段）、`authorization.md`。
 
 ### SKILL.md 通用骨架
 
@@ -97,10 +98,12 @@ agent-env/                # 黑盒工具内置清单与镜像（当前偏 Web；
 
 白盒与黑盒的 type 集合必须对称；`vuln_type` 字段值与目录名一致。
 
+**无执行插件的定义类型（六类，定义层）**：`client-side` / `logic-flaw` / `ai-agent` / `component` / `cloud-native` / `crypto` 定义在同一 `vuln-definitions` 内，**没有** `web-whitebox-*` / `web-blackbox-*` 配套；`severity_rule` 直接填 `<type>.md#<等级>`（如 `logic-flaw.md#H1`、`ai-agent.md#C1`）。这六类与上面八类 **同级使用**，不得把这几类笼统塞进 `authz`。
+
 ## 常用命令
 
 ```bash
-# 结构一致性校验（版本对齐 / 内部链接 / 孤儿 reference / 桥接条款 ID / schema 交叉引用）
+# 结构一致性校验（版本对齐 / 内部链接 / 孤儿 reference / 桥接条款 ID / schema 交叉引用 / vuln_type 枚举对齐）
 npm run check
 
 # 查看黑盒工具清单
@@ -138,8 +141,9 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 6. marketplace 条目 version 与 plugin.json 对齐  
 6b. **桥接摘要与域插件权威条款必须同时改**：`vuln-definitions/references/{openharmony,chromium,database,mobile}.md` 与对应域插件的 `severity-levels.md` / 形态表之间，**条款 ID 集合必须一致**（措辞以插件为准，摘要只可精简）；任一处改动须同步另一处，并按 1b–1e 两处 bump version  
 7. **新增漏洞类型** → `web-whitebox/<new-type>/` 与 `web-blackbox/<new-type>/` 各建插件（复制现有 type），注册进 `.claude-plugin/marketplace.json`，并在 `vuln-definitions` 中加 `references/<new-type>.md`；黑盒需新工具时同步更新 manifest；可在 `vuln-scoring/.../vector-examples.md` 补示例向量  
+7b. **新增 Web 领域定义类型（暂无执行插件）** → 只改 `vuln-definitions/references/<new-type>.md` + `shared/finding-schema.md` 的 `vuln_type` 枚举 + `vuln-definitions/references/classification.md` + `vuln-definitions/SKILL.md` 索引（四处必须同步，`npm run check` 会校验，缺一即失败）；审计插件按实际项目后补  
 8. Finding 输出必须遵守 `shared/finding-schema.md`：`wb-*`/`bb-*` 的 `severity` 只允许 `critical|high`；OH / Chrome / DB / Mobile 为官方四档 `critical|high|medium|low`。`confidence` 一律禁止 `low`（与官方 `severity: low` 勿混），`severity_rule` 必填；推荐附 CVSS `cvss` 块（`version` 为 `3.1` 或 `4.0`）
-9. **改完跑 `npm run check`**（`scripts/check-consistency.mjs`）：版本对齐、内部链接、孤儿 reference、桥接条款 ID 集合、`finding-schema` 交叉引用；退出码非 0 先修再交
+9. **改完跑 `npm run check`**（`scripts/check-consistency.mjs`）：版本对齐、内部链接、孤儿 reference、桥接条款 ID 集合、`finding-schema` 交叉引用、`vuln_type` 枚举与 `references/<type>.md`/`SKILL.md`/`classification.md` 四处一致；退出码非 0 先修再交
 
 ## DeepSonar
 

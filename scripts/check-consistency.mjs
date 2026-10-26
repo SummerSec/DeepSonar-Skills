@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 // 仓库一致性校验（零依赖，Node >= 18）。
-// 覆盖五类结构契约：
+// 覆盖六类结构契约：
 //   1. marketplace.json 条目 version ↔ 各插件 plugin.json；仓库根三处元数据版本一致
 //   2. 内部 Markdown 链接目标存在（外链跳过）
 //   3. references/*.md 无孤儿（被所属 plugin 的 SKILL.md / README.md 点名）
 //   4. 桥接摘要与域插件权威条款的条款 ID 集合一致
 //   5. shared/finding-schema.md 中 `X.md#ID` 形式的交叉引用可解析
+//   6. finding-schema 的 vuln_type 枚举 ↔ vuln-definitions 的 references/<type>.md ↔ SKILL.md 索引 ↔ classification.md 三处一致
 // 用法：npm run check   （退出码非 0 表示存在不符合项）
 
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
@@ -174,6 +175,38 @@ check("finding-schema 的 `X.md#ID` 交叉引用可解析", () => {
     }
     const hit = candidates.some((p) => new RegExp(`\\b${id}\\b`).test(text(join(ROOT, p))));
     if (!hit) out.push(`${schema}: ${key} 在 ${file} 中查不到该 ID`);
+  }
+  return out;
+});
+
+// ---------- 6. vuln_type 枚举 ↔ references/<type>.md ↔ SKILL.md ↔ classification.md ----------
+check("vuln_type 枚举 ↔ references/<type>.md ↔ SKILL.md ↔ classification.md 一致", () => {
+  const out = [];
+  const schema = "shared/finding-schema.md";
+  const skill = "vuln-definitions/SKILL.md";
+  const cls = "vuln-definitions/references/classification.md";
+  for (const p of [schema, skill, cls]) {
+    if (!existsSync(join(ROOT, p))) out.push(`缺少文件：${p}`);
+  }
+  if (out.length) return out;
+  const enumMatch = text(join(ROOT, schema)).match(/^vuln_type:\s*(.+)$/m);
+  if (!enumMatch) return [`${schema}: 未找到 vuln_type 枚举行`];
+  const types = enumMatch[1]
+    .split("|")
+    .map((t) => t.replace(/\(.*?\)/g, "").trim())
+    .filter(Boolean);
+  const skillBody = text(join(ROOT, skill));
+  const clsBody = text(join(ROOT, cls));
+  for (const t of types) {
+    if (!/^[a-z][a-z0-9-]*$/.test(t)) {
+      out.push(`${schema}: vuln_type 枚举项格式异常 → ${t}`);
+      continue;
+    }
+    const ref = `vuln-definitions/references/${t}.md`;
+    if (!existsSync(join(ROOT, ref))) out.push(`${schema} 声明了 ${t}，但缺少 ${ref}`);
+    const link = `${t}.md`;
+    if (!skillBody.includes(link)) out.push(`${t}: ${skill} 索引未点名 ${link}`);
+    if (!clsBody.includes(link)) out.push(`${t}: ${cls} 未点名 ${link}`);
   }
   return out;
 });

@@ -23,7 +23,7 @@ DeepSonar / Agent 用的 **高危安全技能仓**（单仓库）：
 DeepSonar-Skills/
 ├── vuln-definitions/            # 【独立插件】漏洞定义模块（必装）
 │   ├── SKILL.md
-│   └── references/              # 全局等级 + 八类四级条款
+│   └── references/              # 全局等级（含规模矩阵 / ADJ 调整条款）+ 八类机理 + 六类 Web 领域四级条款
 ├── vuln-definitions-oh/         # 【独立插件】OH / Phone OS 系统四档
 │   ├── SKILL.md
 │   └── references/
@@ -63,7 +63,7 @@ DeepSonar-Skills/
 
 | Plugin | Skill | 职责 |
 |--------|-------|------|
-| **vuln-definitions** | `vuln-definitions` | 八类漏洞的定义；严重/高危/中危/无危害判定；归类规则 |
+| **vuln-definitions** | `vuln-definitions` | 八类通用机理 + 六类 Web 领域类型（client-side / logic-flaw / ai-agent / component / cloud-native / crypto）的定义；严重/高危/中危/无危害判定；归类规则 |
 
 凡启用任一审计/挖洞 plugin，**应同时启用本插件**。
 
@@ -110,7 +110,9 @@ DeepSonar-Skills/
 与上表 **type 一一对应**，skill 名为 `bb-<type>`。  
 运行依赖 `agent-env` 预装工具（httpx、ffuf、nuclei、sqlmap、interactsh-client 等）。
 
-> **命名约定**：`web-whitebox-<type>` / `web-blackbox-<type>` 中 `web-` 前缀表示 **Web 安全领域**（源码审计 / 动态挖掘）；`<type>` 与 `vuln-definitions` 八类机理一致，skill 名仍为 `wb-<type>` / `bb-<type>`。
+> **命名约定**：`web-whitebox-<type>` / `web-blackbox-<type>` 中 `web-` 前缀表示 **Web 安全领域**（源码审计 / 动态挖掘）；`<type>` 与 `vuln-definitions` 的通用机理八类一致，skill 名仍为 `wb-<type>` / `bb-<type>`。
+>
+> **无执行插件的定义类型**：`client-side` / `logic-flaw` / `ai-agent` / `component` / `cloud-native` / `crypto` 定义在同一 `vuln-definitions` 内，当前 **只有定义与定级**，按项目需要再补 `web-whitebox/<type>` + `web-blackbox/<type>`。
 
 ---
 

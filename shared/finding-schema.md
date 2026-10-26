@@ -6,11 +6,15 @@
 ```yaml
 id: VULN-001
 mode: whitebox | blackbox
-vuln_type: injection | rce | ssrf | authz | deserialization | file-access | xxe | secrets
+vuln_type: injection | rce | ssrf | authz | deserialization | file-access | xxe | secrets | client-side | logic-flaw | ai-agent | component | cloud-native | crypto
+# 前 8 个为通用机理（跨领域）；后 6 个为 Web 领域类型（仅定义与定级，无 wb-*/bb-* 执行插件）
 title: 一句话标题（含组件/接口）
-severity: critical | high          # 默认（wb-*/bb-*）：禁止 medium/low/none
+severity: critical | high          # 默认（wb-*/bb-*）：禁止 medium/low/none；report_policy: program_table 时medium/low 可写
 # 例外：vuln-definitions-oh / vuln-definitions-chrome / vuln-definitions-db / vuln-definitions-mobile 官方四档为 critical|high|medium|low（低危→low；勿与 confidence: low 混淆）
+# 例外：report_policy: program_table 且目标程序自带档位表时，vuln-definitions 路径可写 medium/low（见 shared/severity-policy.md）
 severity_rule: "injection.md#C1"  # 必填：vuln-definitions 条款号；OH 用 severity-levels.md#H5 或 openharmony.md#H5；Chrome 用 severity-levels.md#H4 或 chromium.md#H4；数据库用 severity-levels.md#H2 或 database.md#H2；移动端用 severity-levels.md#H5 或 mobile.md#H5
+# Web 领域类型示例：ai-agent.md#C1 / client-side.md#H3 / logic-flaw.md#H1 / component.md#H2 / cloud-native.md#C2 / crypto.md#C2
+# 定级调整器示例：severity-levels.md#ADJ-C1（链路终态）/ severity-levels.md#ADJ-B1（修复绕过）/ severity-levels.md#ADJ-E1（预发同构）
 confidence: high | medium        # 禁止 low（含 OH）
 cwe: CWE-xxx
 cvss_hint: "9.8"                 # 可选兼容字段：粗估；新报告优先用下方 cvss 块
@@ -25,6 +29,20 @@ cvss_alt:                        # 可选：另一版本对照
   vector: "CVSS:4.0/..."
   base_score: 9.3
   nomenclature: CVSS-B
+
+# 定级可复现字段（vuln-definitions 路径推荐必填；规模 × 敏感度矩阵见 severity-levels.md §7）
+data_scale: full_dump            # none | single | enumerable | full_dump
+data_sensitivity: high           # low | medium | high
+environment: prod                # prod | preprod | dev（调整条款 ADJ-E1–E3）
+chain_terminal_severity: null    # critical | high | medium | null；ADJ-C1 链路终态用
+
+# 台账字段（关联与复报，见 severity-levels.md §8）
+related_findings: []             # 同根因 / 打包内的兄弟 finding id
+related: null                    # 同源或互补服务端的 id（如 hardcoded key 与其服务端硬编码实现）
+duplicate_of: null               # 完全重复（ADJ-B2）
+regression_of: null              # 修复绕过，指向原 finding（ADJ-B1）
+activity: null                   # 活动标签（集中活动期项目）
+report_policy: ch_only           # ch_only（默认）| program_table（见 shared/severity-policy.md）
 
 # 影响
 impact: |
@@ -100,14 +118,16 @@ bounty_eligible: true              # 可选：HackerOne 惯例或 google-android
 
 ## 命名约定
 
-- `rule_id` / `vuln_type` 使用 plugin 目录名：`injection`、`rce`、`ssrf`、`authz`、`deserialization`、`file-access`、`xxe`、`secrets`
-- 白盒 skill 名：`wb-<type>`；黑盒：`bb-<type>`
+- `rule_id` / `vuln_type` 使用 plugin 目录名：`injection`、`rce`、`ssrf`、`authz`、`deserialization`、`file-access`、`xxe`、`secrets`（通用机理八类）与 `client-side`、`logic-flaw`、`ai-agent`、`component`、`cloud-native`、`crypto`（Web 领域六类，定义见 `vuln-definitions/references/<type>.md`）
+- 白盒 skill 名：`wb-<type>`；黑盒：`bb-<type>`（当前仅通用机理八类有成对插件；Web 领域六类只有定义与定级，`severity_rule` 直接填 `<type>.md#<等级>`）
 - 严重度语义：`vuln-definitions`；数值评分：`vuln-scoring`（**CVSS v3.1 或 v4.0**）
 - 系统类（OH / Phone OS）另填 `mechanism`、`phone_os_class`、`asset_repo`、`asset_scope`；名单与分桶见 `vuln-definitions-oh` 的 `asset-scope.md`。`asset_scope` 不是 `in_list_first_party` 时默认不进正式报告（三方/上游内核仅默认路径独立 e2e 可例外）
 - 浏览器类（Chrome / Chromium）另填 `chrome_class`、`chrome_process`、`chrome_sandbox`、`security_impact`；可选 `vrp_eligible`。沙箱、分桶与 VRP 资格见 `vuln-definitions-chrome` 的 `process-sandbox.md` / `asset-scope.md` / `vrp-rules.md`
 - 数据库类（ClickHouse 等 DBMS / 数据库云平台）另填 `db_class`、`target_asset`、`vrt_priority`；可选 `bounty_eligible`。形态表、资产范围与 Bugcrowd 纪律见 `vuln-definitions-db` 的 `db-vuln-types.md` / `asset-scope.md` / `bugcrowd-rules.md`
 - 移动端类（Android / iOS App 应用层）另填 `mobile_class`、`platform`、`component`、`attacker`、`prereq`；可选 `bounty_eligible`。形态表、攻击面与项目规则见 `vuln-definitions-mobile` 的 `mobile-vuln-types.md` / `attack-surfaces.md` / `google-android-devices-rules.md`
 - **报告门槛**：`wb-*` / `bb-*` 只写 `critical|high`；`vuln-definitions-oh`、`vuln-definitions-chrome`、`vuln-definitions-db` 与 `vuln-definitions-mobile` 写官方四档 `critical|high|medium|low`。四种路径 `confidence` 均禁止 `low`（官方 `severity: low` 是低危档，不是置信度）
+- **口径开关**：默认 `report_policy: ch_only`（仅 critical/high 进正式 finding）；目标程序自带官方档位表时可置 `program_table`，此时 `vuln-definitions` 路径的 `medium`/`low` 可写入正式 finding（`none` 仍不写）。开关只决定「是否写入」，不改 `severity`；见 `shared/severity-policy.md`
+- **定级可追溯**：数据面 finding 另填 `data_scale` / `data_sensitivity` / `environment`；链路类填 `chain_terminal_severity`；复报与绕过填 `related_findings` / `duplicate_of` / `regression_of`；活动期项目填 `activity`
 
 ## CVSS 字段纪律
 
