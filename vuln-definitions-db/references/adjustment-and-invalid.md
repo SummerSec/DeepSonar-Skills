@@ -29,7 +29,7 @@
 
 | # | 条款 |
 |---|------|
-| INV1 | DoS / DDoS；资源耗尽、纯崩溃、crash-only 内存破坏 |
+| INV1 | 纯 DoS / DDoS；资源耗尽、纯崩溃、**无可利用内存破坏原语** 的 crash-only。预认证可达的越界写 / 溢出 / 长度混淆等原语不落本条 → `severity-levels.md#H9` |
 | INV2 | 缺限速且无具体安全实害 |
 | INV3 | 缺安全头（CSP / X-Frame-Options / cookie flag 等）且无利用展示 |
 | INV4 | 版本披露 / 软件指纹 |
@@ -66,7 +66,7 @@
 
 | 误判 | 纠正 |
 |------|------|
-| 「crash = 高危内存破坏」 | 纯 crash 是 DoS，INV1 排除；只有能演示受控执行流 / 泄露原语才进 F 族 |
+| 「crash = 高危内存破坏」 | 纯 crash 才是 DoS（INV1）；**可控输入可达的越界写 / 长度混淆 / 反序列化长度混淆等原语按 H9 定档**，不得因 PoC 仅表现为崩溃而判 none |
 | 「default 用户无密码 = critical」 | default 无密码本身是配置基线；须展示现实暴露 + 现实影响才定档 |
 | 「SSRF 探测到内网 = high」 | 盲探测是 M6；拿到 metadata 凭据或打管理面才是 H5 |
 | 「泄露 API key 前缀 / 组织名 = high」 | 低敏元数据 M1/M2；可接管级凭据才是 H6 |

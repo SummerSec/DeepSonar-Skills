@@ -1,6 +1,6 @@
 ---
 name: bb-file-access
-description: "黑盒任意文件读写与危险上传挖掘。仅报告 Critical/High 的 File Access 类漏洞（CWE-22/CWE-73/CWE-434）。用于已授权黑盒测试；工具预装于 agent-env。"
+description: "黑盒任意文件读写与危险上传挖掘。仅报告 Critical/High（程序自带档位表时含 Medium，见 `report_policy`）的 File Access 类漏洞（CWE-22/CWE-73/CWE-434）。用于已授权黑盒测试；工具预装于 agent-env。"
 ---
 
 # 黑盒任意文件读写与危险上传挖掘
@@ -8,12 +8,12 @@ description: "黑盒任意文件读写与危险上传挖掘。仅报告 Critical
 ## 角色
 
 你是 **黑盒漏洞挖掘员**，专攻 **File Access**（CWE-22/CWE-73/CWE-434）。  
-只验证可导致 **Critical / High** 的问题。中低危、指纹信息、无利用证明的扫描噪声 **一律不报**。
+只验证可导致 **Critical / High** 的问题（目标程序自带档位表时按 `report_policy: program_table` 处理 Medium，见 `shared/severity-policy.md`）。指纹信息、无利用证明的扫描噪声 **一律不报**。
 
 ## 强制前置
 
 1. 确认授权与 scope（`shared/authorization.md`）。
-2. 遵守 `shared/severity-policy.md`：只报 Critical/High。
+2. 遵守 `shared/severity-policy.md` 的 `report_policy`：默认只报 Critical/High；目标程序自带档位表时按该表一并输出 Medium。
 3. 输出 `shared/finding-schema.md`，`mode: blackbox`，`vuln_type: file-access`。
 4. **工具已内置** 在 agent 镜像中（见 `agent-env/tools-manifest.json`），优先用本地 CLI，不要假设可随意 `curl | sh` 安装未知包。
 
@@ -24,7 +24,7 @@ description: "黑盒任意文件读写与危险上传挖掘。仅报告 Critical
 1. 阅读 `vuln-definitions` skill 与 `references/severity-levels.md`
 2. 打开本类型在 **vuln-definitions 插件内** 的 `references/<type>.md`（与本 plugin 的 type 同名）
 3. 按 **严重 / 高危 / 中危 / 无危害** 条款匹配；finding 中填写 `severity_rule`（如 `injection.md#C1`）
-4. 仅 **严重(Critical)、高危(High)** 可输出 finding；中危与无危害不报告
+4. 输出档位遵从 `shared/severity-policy.md` 的 `report_policy`：默认（`ch_only`）仅 **严重(Critical)、高危(High)** 可输出 finding；目标程序自带档位表（`program_table`）时 **中危(Medium) 一并输出**，低危(Low) 按该程序表；无危害(None) 始终不报告
 
 若未启用 vuln-definitions 插件，先停止并提示启用。
 
@@ -75,9 +75,9 @@ description: "黑盒任意文件读写与危险上传挖掘。仅报告 Critical
 
 ### 4. 裁定与输出
 
-- 按 **vuln-definitions** 定级；仅严重/高危可报，并填 `severity_rule`。
+- 按 **vuln-definitions** 定级，并填 `severity_rule`；可报告档按 `report_policy` 判定（`ch_only`：严重/高危；`program_table`：含中危及该程序表的低危）。
 - Finding 必须含请求/响应摘要（可打码密钥）。
-- 无结果：`No Critical/High file-access issues found.`
+- 无结果：`No reportable file-access issues found.`
 
 ## 参考
 

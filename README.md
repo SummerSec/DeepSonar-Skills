@@ -23,7 +23,7 @@ DeepSonar / Agent 用的 **高危安全技能仓**（单仓库）：
 DeepSonar-Skills/
 ├── vuln-definitions/            # 【独立插件】漏洞定义模块（必装）
 │   ├── SKILL.md
-│   └── references/              # 全局等级 + 八类四级条款
+│   └── references/              # 全局等级（含规模矩阵 / ADJ 调整条款）+ 八类机理 + 六类 Web 领域四级条款
 ├── vuln-definitions-oh/         # 【独立插件】OH / Phone OS 系统四档
 │   ├── SKILL.md
 │   └── references/
@@ -43,7 +43,7 @@ DeepSonar-Skills/
 │   ├── README.md
 │   └── skills/mobile-app-audit/ # SKILL.md + references/（recon…tooling）
 ├── shared/                      # 报告策略、finding 格式、授权
-│   ├── severity-policy.md       # 默认只报 C/H；OH / Chrome / DB / Mobile 四档例外（细则见对应插件）
+│   ├── severity-policy.md       # 默认只报 C/H（report_policy 可放开）；OH / Chrome / DB / Mobile 四档例外（细则见对应插件）
 │   ├── finding-schema.md
 │   └── authorization.md
 ├── web-whitebox/<type>/         # Web 白盒 plugin ×8
@@ -63,7 +63,7 @@ DeepSonar-Skills/
 
 | Plugin | Skill | 职责 |
 |--------|-------|------|
-| **vuln-definitions** | `vuln-definitions` | 八类漏洞的定义；严重/高危/中危/无危害判定；归类规则 |
+| **vuln-definitions** | `vuln-definitions` | 八类通用机理 + 六类 Web 领域类型（client-side / logic-flaw / ai-agent / component / cloud-native / crypto）的定义；严重/高危/中危/无危害判定；归类规则 |
 
 凡启用任一审计/挖洞 plugin，**应同时启用本插件**。
 
@@ -110,7 +110,9 @@ DeepSonar-Skills/
 与上表 **type 一一对应**，skill 名为 `bb-<type>`。  
 运行依赖 `agent-env` 预装工具（httpx、ffuf、nuclei、sqlmap、interactsh-client 等）。
 
-> **命名约定**：`web-whitebox-<type>` / `web-blackbox-<type>` 中 `web-` 前缀表示 **Web 安全领域**（源码审计 / 动态挖掘）；`<type>` 与 `vuln-definitions` 八类机理一致，skill 名仍为 `wb-<type>` / `bb-<type>`。
+> **命名约定**：`web-whitebox-<type>` / `web-blackbox-<type>` 中 `web-` 前缀表示 **Web 安全领域**（源码审计 / 动态挖掘）；`<type>` 与 `vuln-definitions` 的通用机理八类一致，skill 名仍为 `wb-<type>` / `bb-<type>`。
+>
+> **无执行插件的定义类型**：`client-side` / `logic-flaw` / `ai-agent` / `component` / `cloud-native` / `crypto` 定义在同一 `vuln-definitions` 内，当前 **只有定义与定级**，按项目需要再补 `web-whitebox/<type>` + `web-blackbox/<type>`。
 
 ---
 
@@ -202,7 +204,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 1. 在 `web-whitebox/<new-type>/` 与 `web-blackbox/<new-type>/` 各建 plugin（复制现有 type）。  
 2. 更新 `.claude-plugin/marketplace.json`。  
 3. 若黑盒需要新工具 → 写入 `agent-env/tools-manifest.json` 并重建镜像。  
-4. 确认仍只覆盖 Critical/High。  
+4. 确认行为与 `shared/severity-policy.md` 的 `report_policy` 一致（默认 Critical/High；`program_table` 时含中低档）。  
 
 **新领域**（如 Web 框架、IoT）：建新 `vuln-definitions-<domain>` plugin + `vuln-definitions` 桥接 `references/<domain>.md`。
 
@@ -216,7 +218,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 npm run check          # node scripts/check-consistency.mjs
 ```
 
-零依赖（Node ≥ 18），退出码非 0 即存在不符合项。覆盖五类结构契约：
+零依赖（Node ≥ 18），退出码非 0 即存在不符合项。覆盖六类结构契约：
 
 | 检查 | 内容 |
 |------|------|
@@ -225,6 +227,7 @@ npm run check          # node scripts/check-consistency.mjs
 | 孤儿文件 | 每个 `references/*.md` 都被所属 plugin 的 `SKILL.md` / `README.md` 点名 |
 | 桥接条款 ID | `vuln-definitions/references/{openharmony,chromium,database,mobile}.md` 与对应域插件 `severity-levels.md` 的条款 ID 集合一致 |
 | 交叉引用 | `shared/finding-schema.md` 中 `X.md#ID` 形式的条款引用可解析 |
+| 类型枚举 | `finding-schema` 的 `vuln_type` 枚举 ↔ `vuln-definitions/references/<type>.md` ↔ `vuln-definitions/SKILL.md` 索引 ↔ `classification.md` 四处一致（新增类型必须四处同步） |
 
 改动 skill / 定义 / 版本后建议跑一次；本仓无构建与 lint 流程，该脚本是唯一的自动化门禁。
 

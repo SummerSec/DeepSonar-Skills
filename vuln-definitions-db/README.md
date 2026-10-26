@@ -7,7 +7,7 @@
 
 **厂商文件现状**：ClickHouse 由 `references/asset-scope.md`（资产范围）与 `references/db-vuln-types.md`（形态）覆盖，未单列 `vendor-clickhouse.md`；Langfuse Cloud 单列 `references/vendor-langfuse.md`。后续新厂商一律用单列 `vendor-<name>.md`。
 
-**不是** `wb-*`/`bb-*` 的 Web 应用八类细则；**不是** 浏览器 / 移动 OS 领域定级。
+**不是** `wb-*`/`bb-*` 的 Web 应用机理细则；**不是** 浏览器 / 移动 OS 领域定级。
 
 ## 安装
 
@@ -43,7 +43,7 @@
 
 ## 与 vuln-definitions 的关系
 
-- **机理**（injection/rce/ssrf/authz/…）→ `vuln-definitions`（八类）
+- **机理**（injection/rce/ssrf/authz/…）→ `vuln-definitions`（八类通用机理 + 六类 Web 领域）
 - **数据库四档 + 形态** → 本插件（`database.md` 为精简镜像）
 
 ## 语义基线

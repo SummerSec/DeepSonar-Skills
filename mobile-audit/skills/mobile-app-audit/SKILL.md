@@ -1,6 +1,6 @@
 ---
 name: mobile-app-audit
-description: "移动客户端 App（Android APK / iOS IPA）安全审计方法论。触发词：APK 审计、IPA 审计、APK 反编译、AndroidManifest 组件导出、Deep Link、WebView JS bridge、Content Provider、BLEService、加固脱壳、真机复现、logcat 证据、移动 App 渗透测试、移动 App 安全评估；英文同等：APK audit、IPA audit、APK decompile、exported components、deep link、WebView JavaScript bridge、content provider、BLE service、unpack/unpacker、device reproduction、logcat evidence、mobile app pentest、mobile app security assessment。负责怎么找/复现/取证并把候选点交给定级模块；NEVER 自产 severity。定级必须配合 vuln-definitions（八类机理）与 vuln-definitions-mobile（移动端四档 + 形态 + INV）。"
+description: "移动客户端 App（Android APK / iOS IPA）安全审计方法论。触发词：APK 审计、IPA 审计、APK 反编译、AndroidManifest 组件导出、Deep Link、WebView JS bridge、Content Provider、BLEService、加固脱壳、真机复现、logcat 证据、移动 App 渗透测试、移动 App 安全评估；英文同等：APK audit、IPA audit、APK decompile、exported components、deep link、WebView JavaScript bridge、content provider、BLE service、unpack/unpacker、device reproduction、logcat evidence、mobile app pentest、mobile app security assessment。负责怎么找/复现/取证并把候选点交给定级模块；NEVER 自产 severity。定级必须配合 vuln-definitions（八类通用机理 + 六类 Web 领域）与 vuln-definitions-mobile（移动端四档 + 形态 + INV）。"
 ---
 
 # 移动客户端 App 通用审计（mobile-app-audit）
@@ -12,13 +12,13 @@ description: "移动客户端 App（Android APK / iOS IPA）安全审计方法�
 
 所有 `severity` / `vuln_type` / `mobile_class` 必须引用：
 
-- **vuln-definitions** — 八类机理  
+- **vuln-definitions** — 机理类型（八类通用 + 六类 Web 领域）  
 - **vuln-definitions-mobile** — 移动端四档 + 形态 + INV  
 
 本 skill **NEVER** 产出 severity（不写 `critical`/`high`/`medium`/`low`，不自建档位表）。
 
 你覆盖：静态解包与攻击面枚举、代码/数据流、混合栈与内嵌 SDK、真机动态验证、PoC 攻击者 App、证据包。  
-你不覆盖：定级条款、类型表、系统层（内核/系统服务/TEE → 路由 `vuln-definitions-oh`）、Web 域（路由 `vuln-definitions` 八类 + `wb-*`/`bb-*`）。
+你不覆盖：定级条款、类型表、系统层（内核/系统服务/TEE → 路由 `vuln-definitions-oh`）、Web 域（路由 `vuln-definitions` 机理类型 + `wb-*`/`bb-*`）。
 
 为什么单独建 plugin：definitions 是语义/定级源；方法论是执行层，随工具频繁迭代。生命周期不同，不可混。
 
@@ -31,7 +31,7 @@ description: "移动客户端 App（Android APK / iOS IPA）安全审计方法�
 - 未授权目标（立即停止）  
 - 仅需定级释义（用 definitions，不用本 skill）  
 - 系统层 / 内核 / TEE（`vuln-definitions-oh`）  
-- 纯 Web 应用八类（`wb-*`/`bb-*`）  
+- 纯 Web 应用类型（`wb-*`/`bb-*`）  
 - 需要武器化 exploit、CVE 目录、免杀或免脱壳对抗细节（Out of Scope）
 
 ## 强制前置
@@ -45,7 +45,7 @@ description: "移动客户端 App（Android APK / iOS IPA）安全审计方法�
 
 本 skill **不自建** 严重度定义，**NEVER 产出 severity**。审计前后必须加载：
 
-1. **vuln-definitions** — `../../../vuln-definitions/`（八类机理 + `references/severity-levels.md` + 相关 `references/<type>.md`）  
+1. **vuln-definitions** — `../../../vuln-definitions/`（机理类型 + `references/severity-levels.md` + 相关 `references/<type>.md`）  
 2. **vuln-definitions-mobile** — `../../../vuln-definitions-mobile/`（`references/severity-levels.md`、`mobile-vuln-types.md`、`attack-surfaces.md`、`adjustment-and-invalid.md`、`gates.md`、`history-patterns.md` 等）
 
 工作方式：
@@ -146,7 +146,7 @@ description: "移动客户端 App（Android APK / iOS IPA）安全审计方法�
 | `components.json` | 组件与 Deep Link / Provider 等攻击面清单（可复核） |
 | `evidence/` | 每条候选的 logcat / 截图 / 最小 PoC 步骤 / 相关文件片段 |
 
-Finding 字段按 `../../../shared/finding-schema.md` 准备；`mode` 可用 `blackbox` 或约定的 mobile 标注；`vuln_type` 对齐八类机理，移动形态写入约定扩展字段或证据说明中的 `mobile_class` 引用。
+Finding 字段按 `../../../shared/finding-schema.md` 准备；`mode` 可用 `blackbox` 或约定的 mobile 标注；`vuln_type` 对齐机理类型（八类通用 + 六类 Web 领域），移动形态写入约定扩展字段或证据说明中的 `mobile_class` 引用。
 
 **禁止**：把 exported / 自定义 scheme / `START` 成功直接写成 finding（**INV26**）。
 
@@ -164,7 +164,7 @@ Finding 字段按 `../../../shared/finding-schema.md` 准备；`mode` 可用 `bl
 - `references/poc-attacker-app.md` — 攻击者 App PoC  
 - `references/evidence-and-report.md` — 证据与定级移交  
 - `references/tooling.md` — 工具边界与供应链  
-- `../../../vuln-definitions/` — 八类机理与定级  
+- `../../../vuln-definitions/` — 机理类型（八类通用 + 六类 Web 领域）与定级  
 - `../../../vuln-definitions-mobile/` — 移动端四档 / 形态 / INV / Gate  
 - `../../../vuln-definitions-mobile/references/attack-surfaces.md` — 攻击面索引（引用不复制）  
 - `../../../shared/authorization.md`  

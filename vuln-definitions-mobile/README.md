@@ -5,7 +5,7 @@
 
 **领域化规则**：新移动端目标（某 App / SDK / 移动端框架）进本领域时 **只加厂商 reference 文件**，不开新 plugin。已收录的厂商 / 项目规则：Google Bug Hunters 的 Android 与 Google 设备项目（`google-android-devices-rules.md`，资格，不定级）。
 
-**不是** `wb-*`/`bb-*` 的 Web 应用八类细则；**不是** 浏览器 / 数据库 / 移动 OS 系统层领域定级（系统层走 `vuln-definitions-oh`）。
+**不是** `wb-*`/`bb-*` 的 Web 应用机理细则；**不是** 浏览器 / 数据库 / 移动 OS 系统层领域定级（系统层走 `vuln-definitions-oh`）。
 
 ## 安装
 
@@ -40,7 +40,7 @@
 
 ## 与 vuln-definitions 的关系
 
-- **机理**（injection/rce/ssrf/authz/…）→ `vuln-definitions`（八类）
+- **机理**（injection/rce/ssrf/authz/…）→ `vuln-definitions`（八类通用机理 + 六类 Web 领域）
 - **移动端四档 + 形态** → 本插件（`vuln-definitions/references/mobile.md` 为**摘要**，与其不一致时以本插件为准）
 
 ## 语义基线

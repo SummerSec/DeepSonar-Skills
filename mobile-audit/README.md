@@ -2,7 +2,7 @@
 
 独立 **方法论** plugin：面向 **Android APK / iOS IPA** 应用层安全审计的「怎么找、怎么复现、怎么取证、怎么把候选点交给定级模块」。
 
-**不是** 定级语义源（定级走 `vuln-definitions` 八类机理 + `vuln-definitions-mobile` 移动端四档 / 形态 / INV）；**不是** 系统层（内核 / 系统服务 / TEE → `vuln-definitions-oh`）；**不是** Web 域八类细则（仍由 `vuln-definitions` + `wb-*`/`bb-*` 覆盖）。
+**不是** 定级语义源（定级走 `vuln-definitions` 八类通用机理 + 六类 Web 领域类型 + `vuln-definitions-mobile` 移动端四档 / 形态 / INV）；**不是** 系统层（内核 / 系统服务 / TEE → `vuln-definitions-oh`）；**不是** Web 域机理细则（仍由 `vuln-definitions` + `wb-*`/`bb-*` 覆盖）。
 
 definitions 是语义/定级源；本 plugin 是执行层，随工具与 harness 频繁迭代——生命周期不同，不可混。
 
@@ -14,7 +14,7 @@ definitions 是语义/定级源；本 plugin 是执行层，随工具与 harness
 
 审计时 **必须同时启用**：
 
-- `vuln-definitions`（八类机理）
+- `vuln-definitions`（八类通用机理 + 六类 Web 领域）
 - `vuln-definitions-mobile`（移动端四档 + 形态 + INV）
 
 推荐同时安装 `vuln-scoring`（CVSS v3.1/v4.0）。未启用两定义插件时本 skill **停止并提示启用**，不自行产 severity。
@@ -52,7 +52,7 @@ definitions 是语义/定级源；本 plugin 是执行层，随工具与 harness
 | ------ | ------ |
 | 怎么挖 / 复现 / 取证 | **本 skill** |
 | 是不是漏洞、哪一档 | `vuln-definitions-mobile` |
-| 八类机理 | `vuln-definitions` |
+| 机理类型（八类通用 + 六类 Web 领域） | `vuln-definitions` |
 | 系统层（内核 / 系统服务 / TEE） | `vuln-definitions-oh` |
 | 厂商 OOS / 资格 | Bugcrowd Android：`skills/mobile-app-audit/references/bugcrowd-android-oos-rules.md`；Google 设备：`vuln-definitions-mobile/.../google-android-devices-rules.md` |
 | 攻击面条款索引 | `vuln-definitions-mobile/references/attack-surfaces.md`（**引用不复制**） |

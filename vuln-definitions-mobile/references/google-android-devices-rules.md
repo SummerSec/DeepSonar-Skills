@@ -201,7 +201,7 @@
 ```
 
 - `INV19` 约束的是 **档位来源**（系统层缺陷不得按应用层四档定），与资格无关：在 Google 设备项目里这类目标照样在范围内，只是定级走 `vuln-definitions-oh`
-- 八类机理（injection / rce / ssrf / authz / deserialization / file-access / xxe / secrets）仍以 `vuln-definitions` 为准
+- 八类通用机理（injection / rce / ssrf / authz / deserialization / file-access / xxe / secrets）+ 六类 Web 领域类型仍以 `vuln-definitions` 为准
 - 目标项目页有明文排除项时 **以项目页为准**，并写进 `rationale`
 
 ---

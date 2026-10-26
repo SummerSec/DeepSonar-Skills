@@ -5,7 +5,7 @@ OpenHarmony 本质是 **移动/嵌入式操作系统**。本文件定义 **Phone
 - 审计时「洞落在哪一类系统面」  
 - 与公告机理交叉：机理（越界写/UAF/权限绕过等）见 **`mechanism-types.md`**，必须先定机理再定本文件形态  
 - 现象归类后映射到 `severity-levels.md` 四档条款  
-- 与 `vuln-definitions` 八类交叉：本文件偏 **系统层落点**，八类偏 **利用语义**
+- 与 `vuln-definitions` 机理类型交叉：本文件偏 **系统层落点**，机理类型偏 **利用语义**
 
 **纪律**：只写类型与判定规则；**不写**具体 CVE、公告条目、历史样板 ID。  
 定级以 `severity-levels.md` + `adjustment-and-invalid.md` 为准；本文件不单独抬级。
@@ -35,7 +35,7 @@ OpenHarmony 本质是 **移动/嵌入式操作系统**。本文件定义 **Phone
 3. 在本文件命中 **形态**（可多选，取危害最高且证据充分的）  
 4. 用类型表中的 **条款倾向** 打开 `severity-levels.md` 精匹配  
 5. 过 Gate（`gates.md`）与 ADJ/INV  
-6. 回填 `mechanism` + `vuln_type`（八类之一，见 §13）
+6. 回填 `mechanism` + `vuln_type`（14 类之一，见 §13）
 
 ---
 
@@ -98,7 +98,7 @@ OpenHarmony 本质是 **移动/嵌入式操作系统**。本文件定义 **Phone
 |----|------|------|----------|------|----------|
 | E1 | **导出组件未鉴权** | 任意 App 调起导出 Activity/Service/Provider/Receiver（或 OH Ability/Extension）完成敏感操作 | 明确设计为公开且无敏感后果 | 本地 | M5/M6；导致隔离破 → H3 |
 | E2 | **Deeplink / URL Scheme / App Link / App Domain Verify 劫持或越权** | 恶意链接打开敏感页、带 token 参数、错误校验来源；或域名校验组件自身可被打到 ACE/鉴权失效 | 需用户确认的无害跳转 | 远程（点链）/本地 | 未鉴权读数据 → H5；本地数据 → M5；社工主导 → INV3；组件内 ACE 按进程档 |
-| E3 | **Intent / Want / 参数注入** | 可控 extra/Want 参数导致 SQL/路径/命令/逻辑越权 | 仅影响恶意方自己 | 本地/远程 | 按最终 sink 归八类 + 本表影响 |
+| E3 | **Intent / Want / 参数注入** | 可控 extra/Want 参数导致 SQL/路径/命令/逻辑越权 | 仅影响恶意方自己 | 本地/远程 | 按最终 sink 归机理类型 + 本表影响 |
 | E4 | **Ability / 元能力运行时越权** | Ability 拉起、跨 Ability 传参、Extension 回调未校验调用方，完成敏感操作或数据读取 | 同应用内导航；用户可见且须确认的跳转 | 本地 | M5/M6；隔离破 → H3 |
 | E5 | **WantAgent / 待处理意图误授** | 系统或预置服务把可代表用户/他 App 行事的 WantAgent、PendingIntent 同类对象交给普通调用方，被重放或改 extra 后完成敏感操作 | 仅触发自己登记的无害回调；用户每次可见确认 | 本地 | 数据 → M5/H3；能力开关 → M6；静默装/敏感操作无确认 → 按 U1/H10 |
 | E6 | **任务栈 / Ability 劫持** | 恶意 Ability 插入、覆盖或旁路前台任务，截获登录页、支付页或授权页输入 | 纯丑 UI、无敏感窗；用户明确切到该 App | 本地 | 能读输入/授权 → M5/H3；偏钓鱼文案 → INV3 |
@@ -200,7 +200,7 @@ OpenHarmony 本质是 **移动/嵌入式操作系统**。本文件定义 **Phone
 
 ---
 
-## 13. 与八类 `vuln_type` 的映射
+## 13. 与机理类型的映射
 
 | Phone OS 类型（例） | 优先 `vuln_type` |
 |--------------------|------------------|

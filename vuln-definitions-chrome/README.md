@@ -4,7 +4,7 @@
 以 Chromium 官方 [Severity Guidelines](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/severity-guidelines.md) 的四档（Critical S0 / High S1 / Medium S2 / Low S3）为准，并补上进程沙箱、威胁模型与「不算安全漏洞」条款。  
 范围、投递与赏金资格对齐 [Chrome VRP Rules](https://bughunters.google.com/about/rules/chrome-friends/chrome-vulnerability-reward-program-rules)（**赏金不定级**）。
 
-**不是** ChromeOS 系统定级（ChromeOS 另有文档）。**不是** `wb-*`/`bb-*` 的 Web 应用八类细则。
+**不是** ChromeOS 系统定级（ChromeOS 另有文档）。**不是** `wb-*`/`bb-*` 的 Web 应用机理细则。
 
 ## 安装
 

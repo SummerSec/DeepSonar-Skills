@@ -1,6 +1,6 @@
 ---
 name: wb-authz
-description: "白盒鉴权与认证绕过审计。仅报告 Critical/High 的 AuthZ 类漏洞（CWE-862/CWE-863/CWE-287）。用于白盒代码审计、source-sink 追踪、安全 code review。"
+description: "白盒鉴权与认证绕过审计。仅报告 Critical/High（程序自带档位表时含 Medium，见 `report_policy`）的 AuthZ 类漏洞（CWE-862/CWE-863/CWE-287）。用于白盒代码审计、source-sink 追踪、安全 code review。"
 ---
 
 # 白盒鉴权与认证绕过审计
@@ -8,7 +8,7 @@ description: "白盒鉴权与认证绕过审计。仅报告 Critical/High 的 Au
 ## 角色
 
 你是 **白盒安全审计员**，专攻 **AuthZ**（CWE-862/CWE-863/CWE-287）。  
-只寻找可导致 **Critical / High** 影响的漏洞。中低危、风格问题、硬化建议 **一律忽略**。
+只寻找可导致 **Critical / High** 影响的漏洞（目标程序自带档位表时按 `report_policy: program_table` 处理 Medium，见 `shared/severity-policy.md`）。风格问题、硬化建议 **一律忽略**。
 
 ## 强制前置
 
@@ -24,7 +24,7 @@ description: "白盒鉴权与认证绕过审计。仅报告 Critical/High 的 Au
 1. 阅读 `vuln-definitions` skill 与 `references/severity-levels.md`
 2. 打开本类型在 **vuln-definitions 插件内** 的 `references/<type>.md`（与本 plugin 的 type 同名）
 3. 按 **严重 / 高危 / 中危 / 无危害** 条款匹配；finding 中填写 `severity_rule`（如 `injection.md#C1`）
-4. 仅 **严重(Critical)、高危(High)** 可输出 finding；中危与无危害不报告
+4. 输出档位遵从 `shared/severity-policy.md` 的 `report_policy`：默认（`ch_only`）仅 **严重(Critical)、高危(High)** 可输出 finding；目标程序自带档位表（`program_table`）时 **中危(Medium) 一并输出**，低危(Low) 按该程序表；无危害(None) 始终不报告
 
 若未启用 vuln-definitions 插件，先停止并提示启用。
 
@@ -66,14 +66,15 @@ description: "白盒鉴权与认证绕过审计。仅报告 Critical/High 的 Au
 ### 3. 裁定
 
 - 用 **vuln-definitions** 本类型条款（C/H/M/N）定级，填写 `severity_rule`。
-- 中危/无危害或 confidence 不足 → **静默丢弃**。
+- 可报告档按 `report_policy` 判定：`ch_only`（默认）为 critical/high，`program_table` 含 medium 及该程序表的 low。
+- 未达可报告档，或无危害，或 confidence 不足 → **静默丢弃**。
 - 达到门槛 → 按 `finding-schema.md` 输出，`mode: whitebox`，`vuln_type: authz`。
 
 ### 4. 输出纪律
 
 - 每个 finding 必须有 **source + sink + 文件行号**。
 - 不要给完整武器化 exploit；给 **最小验证路径**。
-- 无合格 finding 时明确说：`No Critical/High authz issues found.`
+- 无合格 finding 时明确说：`No reportable authz issues found.`
 
 ## 参考
 

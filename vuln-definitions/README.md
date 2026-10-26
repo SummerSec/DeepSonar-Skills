@@ -15,7 +15,12 @@
 | `SKILL.md` | 入口：何时用、定级流程 |
 | `references/severity-levels.md` | 严重/高危/中危/无危害 全局定义 |
 | `references/classification.md` | 多类型冲突时如何归类 |
-| `references/injection.md` 等 | 八类漏洞各自的定义与四级条款 |
+| `references/injection.md` 等 | 八类通用机理（injection / rce / ssrf / authz / deserialization / file-access / xxe / secrets）的定义与四级条款 |
+| `references/client-side.md`、`logic-flaw.md`、`ai-agent.md`、`component.md`、`cloud-native.md`、`crypto.md` | Web 领域六类（客户端跨域 / 业务逻辑 / AI·Agent / 组件默认配置 / 云资源与编排 / 密码学完整性）的定义与四级条款；**暂无配套 `wb-*` / `bb-*` 插件** |
+| `references/web-vuln-types.md` | Web 形态主表 W1–W14（形态 → 主类型 → 条款锚点倾向） |
+| `references/web-asset-scope.md` | Web 资产分桶（`web_asset`）与合格判定（`web_scope`）、悬空资源、多域与多租户边界 |
+| `references/web-gates.md` | Web 五步门禁 Gate T / S / E / C / R |
+| `references/web-vendor-rules.md` | 目标程序规则模板与约定（`vendor-<program>.md`，只加文件不开 plugin） |
 | `references/openharmony.md` | OpenHarmony / Phone OS 定级规则**摘要**（官方四档/术语/调整无效/类型摘要，编号与插件一致；**权威条款见 `vuln-definitions-oh`**）；资产范围见该插件的 `asset-scope.md` |
 | `references/chromium.md` | Chrome / Chromium 定级规则**摘要**（官方四档/缓解/非安全/类型摘要，编号与插件一致；**权威条款见 `vuln-definitions-chrome`**）；完整沙箱、门禁与 VRP 资格见该插件 |
 | `references/database.md` | 数据库定级规则**摘要**（VRT 四档/术语/调整无效/类型摘要，编号与插件一致；**权威条款见 `vuln-definitions-db`**）；完整形态、门禁与 Bugcrowd 纪律见该插件 |
@@ -25,4 +30,4 @@
 
 - **定义清楚**：每类「是什么 / 不是什么」  
 - **四级齐全**：Critical / High / Medium / None 均有可操作条款  
-- **报告策略分离**：本插件负责定级；仓库 `shared/severity-policy.md` 规定默认只报 C/H（**例外**：`vuln-definitions-oh` / `vuln-definitions-chrome` / `vuln-definitions-db` / `vuln-definitions-mobile` 官方四档均可报）  
+- **报告策略分离**：本插件负责定级；仓库 `shared/severity-policy.md` 规定默认只报 C/H（**例外**：`vuln-definitions-oh` / `vuln-definitions-chrome` / `vuln-definitions-db` / `vuln-definitions-mobile` 官方四档均可报；目标程序自带档位表时可用 `report_policy: program_table` 放开 medium/low）  
