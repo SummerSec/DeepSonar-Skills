@@ -204,8 +204,8 @@ cvss:
 |------|--------|
 | [cvss-v3.1.md](references/cvss-v3.1.md) | version=3.1 |
 | [cvss-v4.md](references/cvss-v4.md) | version=4.0 |
-| [vector-examples-v3.1.md](references/vector-examples-v3.1.md) | 3.1 需锚定示例时 |
-| [vector-examples-v4.md](references/vector-examples-v4.md) | 4.0 需锚定示例时 |
+| [vector-examples-v3.1.md](references/vector-examples-v3.1.md) | 3.1 需锚定示例时（14 类：八类机理 + 六类 Web 领域） |
+| [vector-examples-v4.md](references/vector-examples-v4.md) | 4.0 需锚定示例时（14 类：八类机理 + 六类 Web 领域） |
 | [score-mapping.md](references/score-mapping.md) | 映射 DeepSonar 时（共用） |
 | [prioritization.md](references/prioritization.md) | 修优先级时（共用） |
 

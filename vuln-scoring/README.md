@@ -35,8 +35,8 @@
 | `SKILL.md` | 入口：版本选择、按需加载、流程、输出 |
 | `references/cvss-v3.1.md` | **按需**：v3.1 指标与决策 |
 | `references/cvss-v4.md` | **按需**：v4.0 指标与决策 |
-| `references/vector-examples-v3.1.md` | **按需**：v3.1 示例向量 |
-| `references/vector-examples-v4.md` | **按需**：v4.0 示例向量 |
+| `references/vector-examples-v3.1.md` | **按需**：v3.1 示例向量（14 类：八类机理 + 六类 Web 领域） |
+| `references/vector-examples-v4.md` | **按需**：v4.0 示例向量（14 类：八类机理 + 六类 Web 领域） |
 | `references/score-mapping.md` | **共用**：分数 ↔ DeepSonar C/H/M/N（含官方四档域的 `low`） |
 | `references/prioritization.md` | **共用**：EPSS / SSVC / KEV |
 
