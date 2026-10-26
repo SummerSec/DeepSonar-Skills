@@ -218,7 +218,7 @@ docker build -f agent-env/Dockerfile.blackbox -t deepsonar-blackbox-agent:0.1 .
 npm run check          # node scripts/check-consistency.mjs
 ```
 
-零依赖（Node ≥ 18），退出码非 0 即存在不符合项。覆盖五类结构契约：
+零依赖（Node ≥ 18），退出码非 0 即存在不符合项。覆盖六类结构契约：
 
 | 检查 | 内容 |
 |------|------|
@@ -227,6 +227,7 @@ npm run check          # node scripts/check-consistency.mjs
 | 孤儿文件 | 每个 `references/*.md` 都被所属 plugin 的 `SKILL.md` / `README.md` 点名 |
 | 桥接条款 ID | `vuln-definitions/references/{openharmony,chromium,database,mobile}.md` 与对应域插件 `severity-levels.md` 的条款 ID 集合一致 |
 | 交叉引用 | `shared/finding-schema.md` 中 `X.md#ID` 形式的条款引用可解析 |
+| 类型枚举 | `finding-schema` 的 `vuln_type` 枚举 ↔ `vuln-definitions/references/<type>.md` ↔ `vuln-definitions/SKILL.md` 索引 ↔ `classification.md` 四处一致（新增类型必须四处同步） |
 
 改动 skill / 定义 / 版本后建议跑一次；本仓无构建与 lint 流程，该脚本是唯一的自动化门禁。
 
