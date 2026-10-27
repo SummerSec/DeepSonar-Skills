@@ -1,6 +1,6 @@
 {
   "name": "DeepSonar-Skills",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "DeepSonar security skills marketplace root. Install vuln-definitions (+ -oh / -chrome / -db / -mobile), vuln-scoring, mobile-audit, and per-vuln-type web-whitebox/web-blackbox plugins.",
   "author": {
     "name": "DeepSonar"

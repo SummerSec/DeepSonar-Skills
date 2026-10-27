@@ -1,6 +1,6 @@
 {
   "name": "DeepSonar-Skills",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Vulnerability definitions by domain (general / Web / OpenHarmony / Chrome / database / mobile), CVSS v3.1/v4.0 scoring, web white-box audit and web black-box hunting by vuln type, plus mobile app audit methodology. The general plugin carries 8 cross-domain mechanisms plus 6 Web domain types (client-side / logic-flaw / ai-agent / component / cloud-native / crypto) and a Web domain layer (type matrix / asset scope / gates / program-rule template). wb/bb report Critical/High by default (Medium/Low under report_policy: program_table); OH / Chrome / DB / Mobile use their official four tiers.",
   "author": {
     "name": "DeepSonar",

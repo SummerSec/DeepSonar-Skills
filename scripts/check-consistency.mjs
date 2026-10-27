@@ -211,6 +211,57 @@ check("vuln_type 枚举 ↔ references/<type>.md ↔ SKILL.md ↔ classification
   return out;
 });
 
+// ---------- 7. Web 资产枚举 ↔ web-asset-scope 表 ----------
+check("web_asset / web_scope 枚举 ↔ web-asset-scope 表一致", () => {
+  const out = [];
+  const schema = join(ROOT, "shared/finding-schema.md");
+  const scope = join(ROOT, "vuln-definitions/references/web-asset-scope.md");
+  for (const p of [schema, scope]) if (!existsSync(p)) return [`缺少文件：${rel(p)}`];
+  const schemaBody = text(schema);
+  const scopeBody = text(scope);
+
+  // schema 里的 `field: <默认值>   # a | b | c`（选项走字面量切分，不拼 RegExp）
+  const enumOf = (field) => {
+    const line = schemaBody.split("\n").find((l) => l.startsWith(`${field}:`));
+    if (!line) return null;
+    const hash = line.indexOf("#");
+    if (hash < 0) return null;
+    return line
+      .slice(hash + 1)
+      .split("|")
+      .map((t) => t.replace(/[*`]/g, "").replace(/[\(（].*$/, "").trim())
+      .filter((t) => /^[a-z][a-z0-9_]*$/.test(t));
+  };
+
+  // web-asset-scope 里某段落表格的首列反引号值
+  const rowsOf = (heading) => {
+    const idx = scopeBody.indexOf(`## ${heading}`);
+    if (idx < 0) return null;
+    const rest = scopeBody.slice(idx);
+    const next = rest.indexOf("\n## ", 1);
+    const block = next < 0 ? rest : rest.slice(0, next);
+    return [...block.matchAll(/^\|\s*`([a-z][a-z0-9_]*)`\s*\|/gm)].map((m) => m[1]);
+  };
+
+  for (const [field, heading] of [
+    ["web_asset", "1. 资产分桶"],
+    ["web_scope", "2. 判定结论"],
+  ]) {
+    const enumVals = enumOf(field);
+    const tableVals = rowsOf(heading);
+    if (!enumVals?.length) out.push(`${rel(schema)}: 未找到 ${field} 枚举（格式：${field}: <默认>  # a | b`);
+    if (!tableVals?.length) out.push(`${rel(scope)}: 未找到「${heading}」表格行`);
+    if (!enumVals?.length || !tableVals?.length) continue;
+    const a = new Set(enumVals);
+    const b = new Set(tableVals);
+    const miss = [...b].filter((x) => !a.has(x)).sort();
+    const extra = [...a].filter((x) => !b.has(x)).sort();
+    if (miss.length) out.push(`${field}: ${rel(schema)} 缺表内值 → ${miss.join(", ")}`);
+    if (extra.length) out.push(`${field}: ${rel(scope)} 缺枚举值 → ${extra.join(", ")}`);
+  }
+  return out;
+});
+
 console.log(
   failures.length
     ? `\n一致性校验未通过：${failures.length} 项。`
