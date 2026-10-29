@@ -61,6 +61,7 @@
 | 情形 | 主类型 |
 |------|--------|
 | 可控输入进入 SQL / shell / 模板引擎 / XML 解析 | `injection.md` / `rce.md` / `xxe.md` |
+| 提示词 / 编排参数注入，LLM 输出或模型后处理到达服务端执行 sink（`eval` / `exec` / 解释器） | `rce.md`（形态与污点通路要件见 `ai-agent.md#A7`；**无执行 sink** 时回落 `ai-agent.md`） |
 | 可控输入只作用于模型上下文或工具通道 | `ai-agent.md` |
 | 可控内容在浏览器 / WebView 中被当作脚本执行 | `client-side.md`（移动端应用层形态见 `mobile.md`） |
 | 服务端被诱导致出站请求（含打到云 metadata） | `ssrf.md`；云资源自身策略暴露归 `cloud-native.md` |

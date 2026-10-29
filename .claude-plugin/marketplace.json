@@ -8,7 +8,7 @@
     {
       "name": "vuln-definitions",
       "description": "漏洞定义模块：每类漏洞定义与严重/高危/中危/无危害判定标准（白盒黑盒共用）；OpenHarmony 系统类加载 references/openharmony.md；Chrome / Chromium 加载 references/chromium.md；数据库（ClickHouse 等 DBMS / 数据库云平台）加载 references/database.md；移动端（Android / iOS App）加载 references/mobile.md（**摘要索引**，权威条款见 vuln-definitions-mobile；项目规则见其 google-android-devices-rules.md）。",
-      "version": "0.4.1",
+      "version": "0.5.0",
       "source": "./vuln-definitions"
     },
     {

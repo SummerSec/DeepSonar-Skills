@@ -27,7 +27,7 @@
 | W5 | 服务端解析与执行 | SQL / NoSQL / 命令 / 表达式注入、SSTI、不安全反序列化、XXE | `injection.md` / `rce.md` / `deserialization.md` / `xxe.md` | 各文件 C 族 |
 | W6 | 文件与上传 | 路径遍历、任意文件读写、危险上传、压缩包穿越 | `file-access.md` | 该文件 C / H 族 |
 | W7 | 出站请求 | SSRF、webhook 与 URL 预览、metadata、DNS rebinding | `ssrf.md`；云资源自身暴露归 `cloud-native.md` | C1–C4 / H1–H4 |
-| W8 | AI / Agent | 提示词注入、内部规则外泄、MCP / 工具越权、记忆与会话跨用户、计费与风控滥用、执行环境隔离失效 | `ai-agent.md` | C1–C3 / H1–H5 / M1–M3 |
+| W8 | AI / Agent | 提示词注入、内部规则外泄、MCP / 工具越权、记忆与会话跨用户、计费与风控滥用、执行环境隔离失效、**提示词 / 编排参数注入导向服务端代码执行**（节点参数 → LLM 输出 → `eval` / 解释器） | `ai-agent.md`（A7 桥接 `rce.md`） | C1–C3 / H1–H5 / M1–M3；**A7 主类型取 `rce.md#C2`–`#C3`** |
 | W9 | 业务逻辑 | 资金损失、权益与配额逃逸、风控与内容合规可绕、并发超发与状态机跳步 | `logic-flaw.md` | C1–C3 / H1–H4 / M1–M4 |
 | W10 | 组件与供应链 | 组件 CVE、框架默认配置、私有源与制品链路 | `component.md` | C1–C2 / H1–H3 / M1–M3 |
 | W11 | 云与运行时 | 对象存储 / STS 策略、编排面未授权、容器与沙箱隔离、镜像仓库可写 | `cloud-native.md` | C1–C3 / H1–H4 / M1–M3 |
@@ -41,6 +41,7 @@
 ## 3. 归类纪律
 
 - **根因优先**：同一请求链命中多行时，取 **根因** 所在行；影响只在同级消歧时使用（`classification.md` §0–§2）
+- **A7 消歧**：根因在「LLM 输出 / 模型后处理进入执行 sink」→ 主类型取 `rce.md`（四档按 `rce.md` C/H/M/N 判定）；根因仅在上下文窃密 / 越权 / 规则外泄（**无执行 sink**）→ `ai-agent.md`，按 A1–A6 与 C1–C5 判定
 - **终态定档**：链式利用取终态可达的最高档（`severity-levels.md#ADJ-C1`）；跨根因打包每根因一条（`#ADJ-C2`）
 - **不塞 `authz`**：W4 / W8 / W9 / W10 / W11 / W12 六类不得因「有越权感」而笼统归入 `authz.md`
 - **配置面与组件分开**：自研代码放行管理端点 → `authz.md`；组件自身默认配置或版本缺陷 → `component.md`（W3 两列）
