@@ -42,6 +42,8 @@ https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories
 
 `kernel_liteos_*`、`kernel_uniproton` 视为 **在册自研**（不是 INV4 上游树）。
 
+> **与官方月度公告的关系**：在册只回答「算不算 bounty 资产」。**该仓处于活跃安全响应**的实证参考是当月公告仍在向该仓发修复 PR（近月高频在修：`kernel_liteos_a/m`、`drivers_peripheral`、`drivers_hdf_core`、`multimedia_*`、`filemanagement_storage_service` 等）；长期不在公告中出现不等于不在册。在册产线分支以当月公告维护线为准（见 `gates.md` Gate V1b）。
+
 ---
 
 ## 3. 与类型表 / INV4 的关系
