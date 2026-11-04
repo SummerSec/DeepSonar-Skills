@@ -22,7 +22,7 @@ description: "OpenHarmony / Phone OS 系统漏洞定义指南。在官方四档�
 > 1. **高频披露面集中在本地内存安全与资源生命周期**：`kernel_liteos_a` / `kernel_liteos_m`（越界写 / 越界读 / 条件竞争 / 权限管理不当）、`drivers_peripheral` / `drivers_hdf_core`（越界读写 / 失败路径未回滚）、`arkui_ace_engine` / `arkcompiler_ets_runtime`、`multimedia_camera_framework` / `multimedia_audio_framework`；本地触发为绝对主流，远程公告极少（近期仅 `web_webview` 两条）
 > 2. **本地内核 ACE 的档位带在高危（H1）**：公告同仓同机理会出现高危 / 中危 / 低危并存（如 `kernel_liteos_a` 同月 7.8 / 5.5 / 3.3 并列）——差异来自**可达性与后果**（能否控制执行流 / 是否仅 crash），不来自机理；本仓按 `severity-levels.md` 前提×落点判，**不得**把公告 CVSS 直接当档位，也不得为贴近公告分数抬档或压档
 > 3. **整月多为低危盘时**：多数月份公告以本地 DoS 与低敏感泄露为主（CVSS 3.3 云集）。不因该月节奏低就抬高候选门槛，也不把「仅堆栈读、单进程 crash」往 C/H 抬；按本仓条款自评
-> 4. **停维护分支不作「最新公开版本」**：官方每月公告把修复 PR 列到各维护线（当前活跃线 `5.1.0-Release`、`6.0-Release`、`6.1-Release` / `6.1-LTS`），且逐月声明已停维护分支；`5.0.x` 系分支已停止维护，不得当「最新公开版本」复现投递（见 `gates.md` V1b）
+> 4. **最优目标是最新的发布大版本**：`7.0-Release`（2026-08-21 发布，API 26）是当前最新公开版本，不因月度公告尚未出现其补丁条目而排除；仍在生命周期的维护线（`5.1.0-Release` / `6.0-Release` / `6.1-Release` / `6.1-LTS`，公告每月对其发补丁）同样在范围；`5.0.x` 系已宣告停维护，不得当「最新公开版本」复现投递（见 `gates.md` V1b）
 
 ## 何时使用
 

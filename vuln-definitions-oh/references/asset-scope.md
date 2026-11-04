@@ -42,7 +42,9 @@ https://bugbounty.openharmony.cn/bug-bounty/openharmony/sync/repositories
 
 `kernel_liteos_*`、`kernel_uniproton` 视为 **在册自研**（不是 INV4 上游树）。
 
-> **与官方月度公告的关系**：在册只回答「算不算 bounty 资产」。**该仓处于活跃安全响应**的实证参考是当月公告仍在向该仓发修复 PR（近月高频在修：`kernel_liteos_a/m`、`drivers_peripheral`、`drivers_hdf_core`、`multimedia_*`、`filemanagement_storage_service` 等）；长期不在公告中出现不等于不在册。在册产线分支以当月公告维护线为准（见 `gates.md` Gate V1b）。
+> **与官方月度公告的关系**：在册只回答「算不算 bounty 资产」。**该仓处于活跃安全响应**的实证参考是当月公告仍在向该仓发修复 PR（近月高频在修：`kernel_liteos_a/m`、`drivers_peripheral`、`drivers_hdf_core`、`multimedia_*`、`filemanagement_storage_service` 等）；长期不在公告中出现不等于不在册。
+>
+> **最新发布线优先**：官方最新 Release（当前 **`7.0-Release`**，2026-08-21 发布；API 26）不因月度公告尚未出现其补丁条目而排除——新发布大版本是「最新公开版本 + 标准默认配置」复现门槛下的**第一优先目标**；仍在生命周期内的维护线（当前 6.x 系与 5.1.0）同样在范围，停维护分支（5.0.x 系）排除（见 `gates.md` Gate V1b）。
 
 ---
 
